@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CyberBackground from '../../components/CyberBackground.astro';
+import CategoryCard from '../../components/CategoryCard.astro';
+import ThreatCard from '../../components/ThreatCard.astro';
+import { getCollection } from 'astro:content';
+import { useTranslations } from '../../i18n/ui';
+
+const currentLang = 'ru';
+const t = useTranslations(currentLang);
+
+const allThreats = await getCollection('threats', ({ id }) => id.startsWith('ru/'));
+
+const categories = [
+  {
+    slug: 'account-security',
+    title: 'Безопасность аккаунта',
+    description: 'Аппаратные ключи, аутентификаторы, уникальные пароли и надежная защита привязанной почты.',
+    icon: 'shield-check',
+  },
+  {
+    slug: 'phishing',
+    title: 'Фишинг и поддельные сайты',
+    description: 'Ошибки в доменных именах, фальшивые окна входа и фиктивные турнирные платформы.',
+    icon: 'globe',
+  },
+  {
+    slug: 'trading-and-items',
+    title: 'Торговля и предметы',
+    description: 'Утечки ключей Steam API, подмена скинов при обмене, фейковые гаранты и защита инвентаря.',
+    icon: 'repeat',
+  },
+  {
+    slug: 'currency-and-payments',
+    title: 'Валюта и платежи',
+    description: 'Серый донат, подарки с краденых банковских карт и защита от отрицательного баланса.',
+    icon: 'credit-card',
+  },
+  {
+    slug: 'fake-giveaways',
+    title: 'Фейковые раздачи',
+    description: 'Скам с бесплатным Discord Nitro, фейковые стримы и кража сессий через QR-коды.',
+    icon: 'gift',
+  },
+  {
+    slug: 'fake-support',
+    title: 'Поддельная поддержка',
+    description: 'Шантаж случайным репортом, лже-админы в Discord и платный обман на возврате аккаунтов.',
+    icon: 'headset',
+  },
+  {
+    slug: 'social-engineering',
+    title: 'Социальная инженерия',
+    description: 'Втирание в доверие, «дай скин на катку», фиктивные античиты и зараженные голосовые клиенты.',
+    icon: 'users',
+  },
+  {
+    slug: 'incident-response',
+    title: 'Реагирование на инциденты',
+    description: 'Изоляция угрозы, сброс всех сессий, сбор доказательств и официальные тикеты издателям.',
+    icon: 'alert-triangle',
+  },
+];
+---
+
+<BaseLayout
+  title={`Центр безопасности — SafeInGame`}
+  description="Изучайте структурированные материалы по защите игровых аккаунтов, предотвращению фишинга и восстановлению доступа."
+  currentLang={currentLang}
+  canonicalSlug="safety/"
+>
+  <div class="relative overflow-hidden py-12">
+    <CyberBackground variant="dense" />
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+    <div class="max-w-3xl mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-800 dark:text-cyan text-xs font-semibold mb-4">
+        Образовательный центр
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight mb-4">
+        Центр безопасности в играх
+      </h1>
+      <p class="text-base text-slate-600 dark:text-cloud-muted leading-relaxed">
+        Образовательные модули, структурированные по векторам угроз. Освойте практические навыки защиты аккаунтов, предметов инвентаря и платежных данных.
+      </p>
+    </div>
+
+    <!-- Category Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+      {categories.map((cat) => (
+        <CategoryCard
+          slug={cat.slug}
+          title={cat.title}
+          description={cat.description}
+          icon={cat.icon}
+          currentLang={currentLang}
+        />
+      ))}
+    </div>
+
+    <!-- All Safety Guides Preview -->
+    <div class="pt-8 border-t border-slate-200 dark:border-navy-800">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="text-2xl font-heading font-bold text-slate-900 dark:text-cloud mb-1">
+            Все руководства по угрозам ({allThreats.length})
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-cloud-muted">
+            Подробный разбор популярных сценариев атак на игроков.
+          </p>
+        </div>
+        <a
+          href="/ru/threats/"
+          class="text-xs font-semibold text-cyan-700 dark:text-cyan hover:underline"
+        >
+          Открыть интерактивный поиск и фильтры →
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {allThreats.map((item) => {
+          const rawSlug = item.id.replace('ru/', '').replace(/\.md$/, '');
+          return (
+            <ThreatCard
+              slug={rawSlug}
+              title={item.data.title}
+              description={item.data.description}
+              category={item.data.category}
+              categoryTitle={item.data.category_title}
+              readingTime={item.data.reading_time}
+              warningSignsCount={item.data.warning_signs.length}
+              currentLang={currentLang}
+            />
+          );
+        })}
+      </div>
+    </div>
+    </div>
+  </div>
+</BaseLayout>

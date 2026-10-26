@@ -1,0 +1,409 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CyberBackground from '../../components/CyberBackground.astro';
+import GameCard from '../../components/GameCard.astro';
+import ScamPatterns from '../../components/ScamPatterns.astro';
+import ScamQuiz from '../../components/ScamQuiz.astro';
+import ThreatCard from '../../components/ThreatCard.astro';
+import CategoryCard from '../../components/CategoryCard.astro';
+import SocialLinks from '../../components/SocialLinks.astro';
+import { getAllGames } from '../../data/games';
+import { getCollection } from 'astro:content';
+import { useTranslations } from '../../i18n/ui';
+
+const currentLang = 'en';
+const t = useTranslations(currentLang);
+
+// Games list
+const games = getAllGames(currentLang);
+
+// Get threat articles for English
+const allThreats = await getCollection('threats', ({ id }) => id.startsWith('en/'));
+const sortedThreats = allThreats.sort(
+  (a, b) => new Date(b.data.published_date).getTime() - new Date(a.data.published_date).getTime()
+);
+
+// Featured guides (first 3)
+const featuredGuides = sortedThreats.slice(0, 3);
+
+// Categories definitions
+const categories = [
+  {
+    slug: 'account-security',
+    title: 'Account Security',
+    description: 'Authenticators, unique passwords, and recovery email hardening.',
+    icon: 'shield-check',
+  },
+  {
+    slug: 'phishing',
+    title: 'Phishing & Fake Sites',
+    description: 'Browser-in-the-browser popups, deceptive links, and lookalike domains.',
+    icon: 'globe',
+  },
+  {
+    slug: 'trading-and-items',
+    title: 'Trading & Virtual Items',
+    description: 'API key interception, condition swapping, and counterfeit bots.',
+    icon: 'repeat',
+  },
+  {
+    slug: 'currency-and-payments',
+    title: 'Currency & Payments',
+    description: 'Stolen card gifts, cheap regional top-ups, and chargeback bans.',
+    icon: 'credit-card',
+  },
+  {
+    slug: 'fake-giveaways',
+    title: 'Fake Giveaways',
+    description: 'Bogus Nitro promotions, hacked stream loops, and rogue QR codes.',
+    icon: 'gift',
+  },
+  {
+    slug: 'fake-support',
+    title: 'Fake Support & Recovery',
+    description: 'Imposter Discord admins and advance-fee recovery hackers.',
+    icon: 'headset',
+  },
+  {
+    slug: 'social-engineering',
+    title: 'Social Engineering',
+    description: 'Clan pressure, malicious voice clients, and skin borrowing tricks.',
+    icon: 'users',
+  },
+  {
+    slug: 'incident-response',
+    title: 'Incident Response',
+    description: 'Emergency isolation, session revoking, and official ticket submission.',
+    icon: 'alert-triangle',
+  },
+];
+---
+
+<BaseLayout
+  title={`${t('site.title')} — ${t('site.tagline')}`}
+  description={t('hero.subtitle')}
+  currentLang={currentLang}
+>
+  <!-- Hero Section with Animated Cyber Environment & Floating Emblems -->
+  <section class="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 border-b border-slate-200 dark:border-navy-800 bg-slate-50/80 dark:bg-navy-950/90">
+    <CyberBackground variant="hero" />
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <!-- Left Column: Copy & Actions -->
+        <div class="lg:col-span-7 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-800 dark:text-cyan text-xs font-semibold mb-6 shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-cyan-dark dark:bg-cyan animate-pulse"></span>
+            <span>Independent Gaming Cybersecurity Platform</span>
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight leading-[1.1] mb-6">
+            Play smart. <span class="bg-gradient-to-r from-cyan-600 via-cyan-500 to-cyan-400 dark:from-cyan dark:via-cyan-light dark:to-cyan bg-clip-text text-transparent">Stay safe.</span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-600 dark:text-cloud-muted leading-relaxed mb-8 max-w-2xl mx-auto lg:mx-0">
+            {t('hero.subtitle')}
+          </p>
+
+          <!-- Primary Actions -->
+          <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-4 mb-10">
+            <a
+              href="/en/games/"
+              class="w-full sm:w-auto px-8 py-4 rounded-xl bg-cyan-dark dark:bg-cyan text-white dark:text-navy-950 font-heading font-bold text-sm tracking-wide hover:bg-cyan hover:shadow-glow-cyan transition-all duration-200 flex items-center justify-center gap-2.5 shadow-md hover:scale-[1.02]"
+            >
+              <span>🎮 Explore Games Hub</span>
+              <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </a>
+            <a
+              href="#scam-quiz"
+              class="w-full sm:w-auto px-7 py-4 rounded-xl border border-slate-300 dark:border-navy-700 bg-white dark:bg-navy-850 hover:bg-slate-50 dark:hover:bg-navy-800 text-slate-900 dark:text-cloud font-heading font-bold text-sm tracking-wide transition-all shadow-sm hover:border-cyan/50 hover:scale-[1.02] flex items-center justify-center gap-2"
+            >
+              <span>🎯 Take Awareness Quiz</span>
+            </a>
+            <a
+              href="#scam-patterns"
+              class="text-xs sm:text-sm font-semibold text-slate-600 dark:text-cloud-muted hover:text-cyan-dark dark:hover:text-cyan transition-colors px-2 py-2"
+            >
+              Spot 9 Scam Patterns ↓
+            </a>
+          </div>
+
+          <!-- Social Channels Callout under Hero -->
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-6 border-t border-slate-200 dark:border-navy-800/80">
+            <span class="text-xs text-slate-500 dark:text-cloud-subtle font-medium">{t('social.follow')}:</span>
+            <SocialLinks variant="header" />
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive 3D Cyber Shield Illustration -->
+        <div class="lg:col-span-5 relative flex items-center justify-center">
+          <div class="relative w-72 h-72 sm:w-96 sm:h-96 flex items-center justify-center select-none">
+            <!-- Background Radial Glow -->
+            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan/25 via-violet/20 to-orange/15 blur-2xl animate-pulse-subtle"></div>
+            
+            <!-- Central Shield Graphic with Vector Precision -->
+            <div class="relative z-10 w-52 h-52 sm:w-64 sm:h-64 rounded-3xl border border-slate-200 dark:border-cyan/40 bg-white/90 dark:bg-navy-850/90 backdrop-blur-md shadow-2xl flex items-center justify-center p-6 group transition-transform duration-500 hover:rotate-1 hover:scale-105">
+              <img
+                src="/images/logo.svg"
+                alt="SafeInGame Master Shield"
+                class="w-full h-full object-contain filter drop-shadow-[0_0_16px_rgba(34,211,238,0.4)]"
+                width="256"
+                height="256"
+              />
+            </div>
+
+            <!-- Floating Badge 1: 5 Core Games (Top Left) -->
+            <div class="absolute -top-3 left-0 sm:-left-4 z-20 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-navy-700 bg-white/95 dark:bg-navy-900/95 shadow-lg backdrop-blur-sm flex items-center gap-2 animate-float-slow">
+              <span class="text-base">🎮</span>
+              <span class="text-xs font-heading font-bold text-slate-900 dark:text-cloud">5 Core Games Hub</span>
+            </div>
+
+            <!-- Floating Badge 2: 2FA Token Shield (Bottom Right) -->
+            <div class="absolute -bottom-4 right-0 sm:-right-4 z-20 px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-navy-700 bg-white/95 dark:bg-navy-900/95 shadow-lg backdrop-blur-sm flex items-center gap-2.5 animate-float-reverse">
+              <span class="text-base">🔐</span>
+              <div>
+                <div class="text-[10px] text-slate-500 dark:text-cloud-subtle font-medium leading-none">Cyber Hygiene</div>
+                <div class="text-xs font-heading font-bold text-cyan-dark dark:text-cyan">Zero Password Sharing</div>
+              </div>
+            </div>
+
+            <!-- Floating Badge 3: Anti-Scam Shield (Top Right) -->
+            <div class="absolute top-6 -right-2 sm:-right-6 z-20 px-3 py-1.5 rounded-lg border border-lime-500/40 bg-lime-500/10 text-lime-700 dark:text-lime text-xs font-bold backdrop-blur-sm shadow-md animate-pulse-subtle flex items-center gap-1.5">
+              <span>✓</span>
+              <span>100% Educational</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Games Security Hub Showcase Section -->
+  <section class="py-16 sm:py-20 border-b border-slate-200 dark:border-navy-800 bg-slate-50/50 dark:bg-navy-950/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
+        <div class="max-w-3xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-orange-500/40 bg-orange-500/10 text-orange-700 dark:text-orange text-xs font-semibold mb-3">
+            Game-Specific Threat Profiles
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight mb-3">
+            {t('nav.games')} Security Hub
+          </h2>
+          <p class="text-sm sm:text-base text-slate-600 dark:text-cloud-muted leading-relaxed">
+            Every game ecosystem attracts distinct scam mechanics. Select your game to discover how deceptive trade offers, fake login popups, and currency exploits operate.
+          </p>
+        </div>
+        <a
+          href="/en/games/"
+          class="flex-shrink-0 inline-flex items-center gap-2 text-sm font-heading font-bold text-cyan-dark dark:text-cyan hover:text-cyan transition-colors"
+        >
+          <span>Browse all 5 game centers</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- 5 Games Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {games.map((g) => (
+          <GameCard game={g} currentLang={currentLang} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Scam Patterns Section -->
+  <ScamPatterns currentLang={currentLang} />
+
+  <!-- Interactive Scam-Awareness Quiz Section -->
+  <ScamQuiz currentLang={currentLang} />
+
+  <!-- Featured Safety Guides -->
+  <section class="py-16 sm:py-20 border-b border-slate-200 dark:border-navy-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-800 dark:text-cyan text-xs font-semibold mb-3">
+            Essential Reading
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+            {t('section.featured.title')}
+          </h2>
+          <p class="text-sm text-slate-600 dark:text-cloud-muted">
+            {t('section.featured.subtitle')}
+          </p>
+        </div>
+        <a
+          href="/en/threats/"
+          class="text-xs font-semibold text-cyan-dark dark:text-cyan hover:text-cyan inline-flex items-center gap-1 transition-colors"
+        >
+          <span>View all guides ({allThreats.length})</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {featuredGuides.map((guide) => {
+          const rawSlug = guide.id.replace('en/', '').replace(/\.md$/, '');
+          return (
+            <ThreatCard
+              slug={rawSlug}
+              title={guide.data.title}
+              description={guide.data.description}
+              category={guide.data.category}
+              categoryTitle={guide.data.category_title}
+              readingTime={guide.data.reading_time}
+              warningSignsCount={guide.data.warning_signs.length}
+              currentLang={currentLang}
+            />
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- Threat Categories Hub -->
+  <section class="py-16 bg-slate-50/50 dark:bg-navy-950/30 border-b border-slate-200 dark:border-navy-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-12">
+        <h2 class="text-2xl sm:text-3xl font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          {t('section.categories.title')}
+        </h2>
+        <p class="text-sm text-slate-600 dark:text-cloud-muted">
+          {t('section.categories.subtitle')}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {categories.map((cat) => (
+          <CategoryCard
+            slug={cat.slug}
+            title={cat.title}
+            description={cat.description}
+            icon={cat.icon}
+            currentLang={currentLang}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Emergency Response Banner -->
+  <section class="py-16 border-b border-slate-200 dark:border-navy-800 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-r from-red-500/10 via-transparent to-orange/10 pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="rounded-3xl border border-red-500/30 bg-white dark:bg-navy-850 p-8 sm:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-sm">
+        <div class="max-w-2xl">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-red-500/40 bg-red-500/10 text-red-600 dark:text-red-400 mb-4">
+            {t('section.emergency.badge')}
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-heading font-bold text-slate-900 dark:text-cloud mb-3">
+            {t('section.emergency.title')}
+          </h2>
+          <p class="text-sm text-slate-600 dark:text-cloud-muted leading-relaxed">
+            {t('section.emergency.text')}
+          </p>
+        </div>
+        <div class="flex-shrink-0">
+          <a
+            href="/en/threats/what-to-do-after-a-gaming-scam"
+            class="inline-block px-8 py-4 rounded-xl bg-orange text-navy-950 font-heading font-bold text-sm hover:bg-orange-light transition-all shadow-glow-orange"
+          >
+            {t('section.emergency.cta')}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission & Principles -->
+  <section class="py-16 border-b border-slate-200 dark:border-navy-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <h2 class="text-2xl sm:text-3xl font-heading font-bold text-slate-900 dark:text-cloud mb-3">
+          {t('section.mission.title')}
+        </h2>
+        <p class="text-sm text-slate-600 dark:text-cloud-muted">
+          {t('section.mission.subtitle')}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 shadow-sm">
+          <div class="w-12 h-12 rounded-xl bg-cyan-500/15 text-cyan-700 dark:text-cyan flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+            {t('section.mission.p1.title')}
+          </h3>
+          <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+            {t('section.mission.p1.text')}
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 shadow-sm">
+          <div class="w-12 h-12 rounded-xl bg-lime-500/15 text-lime-700 dark:text-lime flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+            {t('section.mission.p2.title')}
+          </h3>
+          <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+            {t('section.mission.p2.text')}
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 shadow-sm">
+          <div class="w-12 h-12 rounded-xl bg-violet-500/15 text-violet-700 dark:text-violet flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+            {t('section.mission.p3.title')}
+          </h3>
+          <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+            {t('section.mission.p3.text')}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feedback CTA -->
+  <section class="py-16 text-center">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl sm:text-3xl font-heading font-bold text-slate-900 dark:text-cloud mb-3">
+        Have feedback or discovered a new scam tactic?
+      </h2>
+      <p class="text-sm text-slate-600 dark:text-cloud-muted leading-relaxed mb-8">
+        Help us keep educational guides accurate and relevant. Contact the founder directly or connect on our social channels.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a
+          href="/en/contact/"
+          class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-cyan-dark dark:bg-cyan text-white dark:text-navy-950 font-heading font-bold text-sm hover:bg-cyan transition-all shadow-glow-cyan"
+        >
+          {t('nav.contact')}
+        </a>
+        <a
+          href="https://t.me/SafeInGame"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-full sm:w-auto px-8 py-3.5 rounded-xl border border-slate-300 dark:border-navy-700 bg-white dark:bg-navy-850 hover:bg-slate-50 dark:hover:bg-navy-800 text-slate-900 dark:text-cloud font-heading font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-sm"
+        >
+          <span>Join Telegram (@SafeInGame)</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

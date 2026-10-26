@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { useTranslations } from '../../i18n/ui';
+
+const currentLang = 'ru';
+const t = useTranslations(currentLang);
+---
+
+<BaseLayout
+  title="Условия использования — SafeInGame"
+  description="Условия использования образовательных материалов SafeInGame, ограничения ответственности и права на интеллектуальную собственность."
+  currentLang={currentLang}
+  canonicalSlug="terms/"
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-8">
+      <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-slate-300 dark:border-navy-700 bg-slate-100 dark:bg-navy-850 text-slate-600 dark:text-cloud-subtle mb-3">
+        Проект документа • Версия 1.0 (Март 2026)
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900 dark:text-cloud mb-4">
+        Условия использования
+      </h1>
+      <p class="text-sm text-slate-600 dark:text-cloud-muted leading-relaxed">
+        Пожалуйста, ознакомьтесь с условиями перед использованием материалов SafeInGame.
+      </p>
+    </div>
+
+    <div class="space-y-8 text-sm text-slate-600 dark:text-cloud-muted leading-relaxed">
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          1. Образовательный характер платформы
+        </h2>
+        <p>
+          SafeInGame — независимый информационно-образовательный ресурс. Материалы сайта носят ознакомительный характер и не являются юридической или сертификационной консультацией. Несмотря на фактчекинг, методы атак постоянно видоизменяются.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          2. Отсутствие гарантии абсолютной защиты
+        </h2>
+        <p>
+          Соблюдение рекомендаций кардинально снижает риск компрометации, однако ни одна инструкция не гарантирует полную неуязвимость при масштабных сбоях платформ или уязвимостях нулевого дня.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          3. Допустимое и запрещенное использование
+        </h2>
+        <p class="mb-2">
+          Вы вправе свободно изучать, цитировать и распространять материалы в личных или образовательных целях со ссылкой на SafeInGame.
+        </p>
+        <p class="mb-2">
+          Запрещается:
+        </p>
+        <ul class="list-disc list-inside space-y-1 text-xs">
+          <li>Использовать материалы сайта для организации или проведения атак и создания фишинга.</li>
+          <li>Совершать спам-атаки, флуд или отправлять вредоносные данные через формы и API.</li>
+          <li>Выдавать себя за официального представителя или сотрудника SafeInGame.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          4. Товарные знаки и отказ от аффилированности
+        </h2>
+        <p>
+          Названия и логотипы «Steam», «Valve», «Epic Games», «Discord», «PlayStation», «Xbox», «Riot Games», «Roblox», «Minecraft», «PUBG», «Brawl Stars» являются собственностью их владельцев. Их упоминание носит исключительно образовательный характер и не означает партнерства или одобрения со стороны правообладателей.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          5. Изменения условий
+        </h2>
+        <p>
+          Условия могут дополняться по мере развития проекта. Изменения вступают в силу с момента публикации на данной странице.
+        </p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

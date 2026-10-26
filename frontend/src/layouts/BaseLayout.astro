@@ -1,0 +1,115 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  currentLang: 'en' | 'ru';
+  canonicalSlug?: string;
+  ogType?: 'website' | 'article';
+  publishedTime?: string;
+}
+
+const {
+  title,
+  description,
+  currentLang,
+  canonicalSlug = '',
+  ogType = 'website',
+  publishedTime,
+} = Astro.props;
+
+const canonicalUrl = new URL(`/${currentLang}/${canonicalSlug}`, Astro.site || 'https://safeingame.org').href;
+const enAltUrl = new URL(`/en/${canonicalSlug}`, Astro.site || 'https://safeingame.org').href;
+const ruAltUrl = new URL(`/ru/${canonicalSlug}`, Astro.site || 'https://safeingame.org').href;
+const ogImage = new URL('/images/logo.png', Astro.site || 'https://safeingame.org').href;
+---
+
+<!doctype html>
+<html lang={currentLang} class="scroll-smooth dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Theme Initialization Script (Prevents FOUC) -->
+    <script is:inline>
+      (function() {
+        try {
+          const stored = localStorage.getItem('safeingame_theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const theme = stored ? stored : (prefersDark ? 'dark' : 'light');
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+          }
+        } catch (e) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+
+    <!-- Favicon & Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/images/logo.png" />
+
+    <!-- Hreflang alternates -->
+    <link rel="alternate" hreflang="en" href={enAltUrl} />
+    <link rel="alternate" hreflang="ru" href={ruAltUrl} />
+    <link rel="alternate" hreflang="x-default" href={enAltUrl} />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={currentLang === 'ru' ? 'ru_RU' : 'en_US'} />
+    <meta property="og:site_name" content="SafeInGame" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@SafeInGame" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'EducationalOrganization',
+      name: 'SafeInGame',
+      url: 'https://safeingame.org',
+      logo: ogImage,
+      description: 'Independent gaming safety education platform helping players recognize scams and protect virtual assets.',
+      sameAs: [
+        'https://x.com/SafeInGame',
+        'https://t.me/SafeInGame',
+        'https://instagram.com/SafeInGame',
+        'https://tiktok.com/@SafeInGame'
+      ]
+    })} />
+
+    <!-- Google Fonts Preconnect & Space Grotesk / Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="flex flex-col min-h-screen bg-slate-50 dark:bg-navy-900 text-slate-900 dark:text-cloud selection:bg-cyan selection:text-navy-950 transition-colors duration-200">
+    <Header currentLang={currentLang} />
+    <main class="flex-grow">
+      <slot />
+    </main>
+    <Footer currentLang={currentLang} />
+  </body>
+</html>

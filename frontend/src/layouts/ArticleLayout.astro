@@ -1,0 +1,257 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import ThreatCard from '../components/ThreatCard.astro';
+import CyberBackground from '../components/CyberBackground.astro';
+import { useTranslations } from '../i18n/ui';
+
+interface OfficialSource {
+  title: string;
+  url: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  category: string;
+  categoryTitle: string;
+  publishedDate: string;
+  lastReviewed?: string;
+  readingTime: string;
+  warningSigns: string[];
+  preventionSteps: string[];
+  recoverySteps: string[];
+  officialSources: OfficialSource[];
+  relatedArticles: any[];
+  currentLang: 'en' | 'ru';
+  slug: string;
+}
+
+const {
+  title,
+  description,
+  category,
+  categoryTitle,
+  publishedDate,
+  lastReviewed,
+  readingTime,
+  warningSigns,
+  preventionSteps,
+  recoverySteps,
+  officialSources,
+  relatedArticles,
+  currentLang,
+  slug,
+} = Astro.props;
+
+const t = useTranslations(currentLang);
+---
+
+<BaseLayout
+  title={`${title} — SafeInGame`}
+  description={description}
+  currentLang={currentLang}
+  canonicalSlug={`threats/${slug}`}
+  ogType="article"
+  publishedTime={publishedDate}
+>
+  <div class="relative overflow-hidden">
+    <CyberBackground variant="minimal" />
+    <article class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-xs text-slate-500 dark:text-cloud-subtle mb-6" aria-label="Breadcrumb">
+      <a href={`/${currentLang}/`} class="hover:text-cyan-dark dark:hover:text-cyan transition-colors">{t('nav.home')}</a>
+      <span>/</span>
+      <a href={`/${currentLang}/threats/`} class="hover:text-cyan-dark dark:hover:text-cyan transition-colors">{t('nav.threats')}</a>
+      <span>/</span>
+      <span class="text-slate-800 dark:text-cloud-muted truncate max-w-xs">{title}</span>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="mb-10 pb-8 border-b border-slate-200 dark:border-navy-800">
+      <div class="flex flex-wrap items-center gap-3 mb-4">
+        <a
+          href={`/${currentLang}/threats/?category=${category}`}
+          class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-cyan-500/40 bg-cyan-500/10 text-cyan-800 dark:text-cyan hover:bg-cyan-500/20 transition-colors"
+        >
+          {categoryTitle}
+        </a>
+        <span class="text-xs text-slate-500 dark:text-cloud-subtle font-medium">
+          {readingTime}
+        </span>
+        <span class="text-xs text-slate-400 dark:text-cloud-subtle">•</span>
+        <span class="text-xs text-slate-500 dark:text-cloud-subtle font-medium">
+          {t('article.published')}: {publishedDate}
+        </span>
+        {lastReviewed && (
+          <>
+            <span class="text-xs text-slate-400 dark:text-cloud-subtle">•</span>
+            <span class="text-xs text-lime-700 dark:text-lime font-medium">
+              {t('article.reviewed')}: {lastReviewed}
+            </span>
+          </>
+        )}
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900 dark:text-cloud leading-tight mb-4">
+        {title}
+      </h1>
+
+      <p class="text-lg text-slate-600 dark:text-cloud-muted leading-relaxed">
+        {description}
+      </p>
+    </header>
+
+    <!-- Key Warning Signs Highlight Box -->
+    {warningSigns && warningSigns.length > 0 && (
+      <section class="mb-10 rounded-2xl border border-orange-500/40 bg-orange-500/5 p-6 md:p-8" aria-labelledby="warning-signs-heading">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-600 dark:text-orange flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <h2 id="warning-signs-heading" class="text-xl font-heading font-bold text-orange-600 dark:text-orange">
+            {t('article.warning_signs')}
+          </h2>
+        </div>
+        <ul class="space-y-3">
+          {warningSigns.map((sign) => (
+            <li class="flex items-start gap-3 text-sm text-slate-700 dark:text-cloud-muted leading-relaxed">
+              <span class="text-orange-600 dark:text-orange font-bold text-base leading-none mt-0.5">•</span>
+              <span>{sign}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <!-- Main Educational Prose Content -->
+    <div class="prose max-w-none mb-12 dark:prose-invert prose-headings:font-heading prose-headings:text-slate-900 dark:prose-headings:text-cloud prose-p:text-slate-700 dark:prose-p:text-cloud-muted prose-p:leading-relaxed prose-li:text-slate-700 dark:prose-li:text-cloud-muted prose-strong:text-slate-900 dark:prose-strong:text-cloud prose-a:text-cyan-600 dark:prose-a:text-cyan">
+      <slot />
+    </div>
+
+    <!-- Prevention Guidance Box -->
+    {preventionSteps && preventionSteps.length > 0 && (
+      <section class="mb-10 rounded-2xl border border-cyan-500/40 bg-cyan-500/5 p-6 md:p-8" aria-labelledby="prevention-heading">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-700 dark:text-cyan flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <h2 id="prevention-heading" class="text-xl font-heading font-bold text-cyan-700 dark:text-cyan">
+            {t('article.prevention')}
+          </h2>
+        </div>
+        <ol class="space-y-3 list-decimal list-inside">
+          {preventionSteps.map((step) => (
+            <li class="text-sm text-slate-700 dark:text-cloud-muted leading-relaxed pl-1">
+              <span class="text-slate-900 dark:text-cloud">{step}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    <!-- Recovery Steps Box -->
+    {recoverySteps && recoverySteps.length > 0 && (
+      <section class="mb-10 rounded-2xl border border-lime-500/40 bg-lime-500/5 p-6 md:p-8" aria-labelledby="recovery-heading">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-lime-500/20 text-lime-700 dark:text-lime flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </div>
+          <h2 id="recovery-heading" class="text-xl font-heading font-bold text-lime-700 dark:text-lime">
+            {t('article.recovery')}
+          </h2>
+        </div>
+        <ul class="space-y-3">
+          {recoverySteps.map((step) => (
+            <li class="flex items-start gap-3 text-sm text-slate-700 dark:text-cloud-muted leading-relaxed">
+              <span class="text-lime-700 dark:text-lime font-bold text-base leading-none mt-0.5">✓</span>
+              <span>{step}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <!-- Official Sources & Documentation -->
+    {officialSources && officialSources.length > 0 && (
+      <section class="mb-12 rounded-2xl border border-slate-200 dark:border-navy-700 bg-slate-50 dark:bg-navy-850 p-6 md:p-8 shadow-sm">
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-4 flex items-center gap-2">
+          <svg class="w-5 h-5 text-violet-600 dark:text-violet" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+          </svg>
+          <span>{t('article.sources')}</span>
+        </h2>
+        <p class="text-xs text-slate-500 dark:text-cloud-subtle mb-4">
+          {currentLang === 'en'
+            ? 'We reference official platform documentation and cybersecurity authorities for verification:'
+            : 'Материал составлен на основе официальной документации игровых платформ и организаций по кибербезопасности:'}
+        </p>
+        <ul class="space-y-2">
+          {officialSources.map((source) => (
+            <li>
+              <a
+                href={source.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 text-sm text-cyan-700 dark:text-cyan hover:underline hover:text-cyan-600 dark:hover:text-cyan-light"
+              >
+                <span>{source.title}</span>
+                <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <!-- Back to Library CTA -->
+    <div class="mb-12 pt-6 border-t border-slate-200 dark:border-navy-800 flex justify-between items-center">
+      <a
+        href={`/${currentLang}/threats/`}
+        class="inline-flex items-center gap-2 text-sm font-semibold text-cyan-700 dark:text-cyan hover:text-cyan-600 dark:hover:text-cyan-light transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span>{t('article.back_to_library')}</span>
+      </a>
+      <a
+        href={`/${currentLang}/safety/`}
+        class="text-xs text-slate-500 dark:text-cloud-subtle hover:text-slate-700 dark:hover:text-cloud-muted transition-colors"
+      >
+        {t('nav.safety')}
+      </a>
+    </div>
+
+    <!-- Related Articles -->
+    {relatedArticles && relatedArticles.length > 0 && (
+      <section class="mt-12 pt-8 border-t border-slate-200 dark:border-navy-800">
+        <h2 class="text-2xl font-heading font-bold text-slate-900 dark:text-cloud mb-6">
+          {t('article.related')}
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {relatedArticles.map((rel) => (
+            <ThreatCard
+              slug={rel.slug}
+              title={rel.data.title}
+              description={rel.data.description}
+              category={rel.data.category}
+              categoryTitle={rel.data.category_title}
+              readingTime={rel.data.reading_time}
+              warningSignsCount={rel.data.warning_signs.length}
+              currentLang={currentLang}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+  </article>
+  </div>
+</BaseLayout>

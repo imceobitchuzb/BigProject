@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="cs2Grad" x1="20" y1="20" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFAD66"/>
+      <stop offset="50%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="steamGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#22D3EE"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+    <filter id="cs2Shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Dark Background Rounded Container -->
+  <rect width="200" height="200" rx="36" fill="#111827" stroke="#29384D" stroke-width="4"/>
+
+  <!-- Tactical Target / Radar Grid Lines -->
+  <circle cx="100" cy="100" r="76" stroke="#29384D" stroke-width="2" stroke-dasharray="6 4"/>
+  <circle cx="100" cy="100" r="48" stroke="#FFAD66" stroke-width="1.5" stroke-opacity="0.4"/>
+  <line x1="100" y1="20" x2="100" y2="180" stroke="#FFAD66" stroke-width="1.5" stroke-opacity="0.3"/>
+  <line x1="20" y1="100" x2="180" y2="100" stroke="#FFAD66" stroke-width="1.5" stroke-opacity="0.3"/>
+
+  <!-- Iconic CS Counter-Terrorist Operator Silhouette -->
+  <g filter="url(#cs2Shadow)">
+    <!-- Helmet & Visor -->
+    <path d="M94 50 C86 50 78 56 77 64 C76 70 74 74 71 78 L68 83 C66 86 67 90 71 91 L79 93 L83 103 L80 120 L72 142 L66 160 H112 L108 136 L112 118 L114 96 L124 93 C127 92 129 88 127 85 L124 80 C120 74 120 68 119 63 C118 55 106 50 94 50 Z" 
+          fill="url(#cs2Grad)"/>
+    <!-- Visor Accent -->
+    <path d="M84 66 H108 L104 73 H87 Z" fill="#111827"/>
+    <!-- Weapon Barrel Angle -->
+    <path d="M110 88 L142 80 L144 85 L112 94 Z" fill="#F3F4F6"/>
+  </g>
+
+  <!-- Official Steam Piston / Gear Emblem Badge (Bottom-Right) -->
+  <g transform="translate(142, 142)" filter="url(#cs2Shadow)">
+    <circle cx="0" cy="0" r="28" fill="#111827" stroke="url(#steamGrad)" stroke-width="3"/>
+    <!-- Steam Logo Piston Arms -->
+    <circle cx="-6" cy="-6" r="10" stroke="#22D3EE" stroke-width="3" fill="#111827"/>
+    <line x1="2" y1="2" x2="14" y2="10" stroke="#22D3EE" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="14" cy="10" r="6" fill="#22D3EE"/>
+    <circle cx="-6" cy="-6" r="4" fill="#22D3EE"/>
+  </g>
+
+  <!-- "CS2" Bold Tactical Badge -->
+  <rect x="24" y="24" width="46" height="20" rx="6" fill="#FFAD66" fill-opacity="0.2" stroke="#FFAD66" stroke-width="1.5"/>
+  <text x="47" y="38" font-family="'Space Grotesk', system-ui, sans-serif" font-size="12" font-weight="900" fill="#FFAD66" text-anchor="middle" letter-spacing="1">CS2</text>
+</svg>

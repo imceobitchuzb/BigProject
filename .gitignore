@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# Builds & Cache
+dist/
+.astro/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local databases & logs
+*.db
+*.sqlite3
+*.log
+safeingame.db
+
+# Environment variables
+.env
+.env.local
+.env.*.local

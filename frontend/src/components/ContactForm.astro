@@ -1,0 +1,278 @@
+---
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  currentLang: 'en' | 'ru';
+}
+
+const { currentLang } = Astro.props;
+const t = useTranslations(currentLang);
+---
+
+<div class="rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 p-6 md:p-8 max-w-2xl mx-auto shadow-xl">
+  <!-- Feedback Alert Boxes -->
+  <div id="contact-success" class="hidden mb-6 p-4 rounded-xl border border-lime-500/40 bg-lime-500/10 text-slate-900 dark:text-cloud text-sm">
+    <div class="flex items-start gap-3">
+      <svg class="w-5 h-5 text-lime-600 dark:text-lime flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <div>
+        <p class="font-bold text-lime-700 dark:text-lime mb-1">
+          {currentLang === 'en' ? 'Submission Received' : 'Сообщение успешно принято'}
+        </p>
+        <p id="contact-success-msg" class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+          {t('contact.notice')}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div id="contact-error" class="hidden mb-6 p-4 rounded-xl border border-red-500/40 bg-red-500/10 text-slate-900 dark:text-cloud text-sm">
+    <div class="flex items-start gap-3">
+      <svg class="w-5 h-5 text-red-500 dark:text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <div>
+        <p class="font-bold text-red-600 dark:text-red-400 mb-1">
+          {currentLang === 'en' ? 'Submission Error' : 'Ошибка отправки'}
+        </p>
+        <p id="contact-error-msg" class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+          {currentLang === 'en' ? 'Please check your inputs and try again.' : 'Пожалуйста, проверьте заполненные поля и попробуйте снова.'}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <form id="safeingame-contact-form" class="space-y-5" novalidate>
+    <!-- Hidden Honeypot field for anti-bot trap -->
+    <div class="hidden" aria-hidden="true">
+      <label for="honeypot_field">Leave this field blank</label>
+      <input type="text" id="honeypot_field" name="honeypot" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <!-- Category & Subject -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label for="form-category" class="block text-xs font-semibold text-slate-700 dark:text-cloud-muted uppercase tracking-wider mb-2">
+          {t('contact.form.category')} *
+        </label>
+        <select
+          id="form-category"
+          name="category"
+          required
+          class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-navy-700 bg-slate-50 dark:bg-navy-900 text-slate-900 dark:text-cloud text-sm focus:border-cyan-500 dark:focus:border-cyan focus:ring-1 focus:ring-cyan transition-all"
+        >
+          <option value="general">{t('contact.form.category.general')}</option>
+          <option value="scam_report">{t('contact.form.category.scam_report')}</option>
+          <option value="feedback">{t('contact.form.category.feedback')}</option>
+          <option value="correction">{t('contact.form.category.correction')}</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="form-subject" class="block text-xs font-semibold text-slate-700 dark:text-cloud-muted uppercase tracking-wider mb-2">
+          {t('contact.form.subject')} *
+        </label>
+        <input
+          type="text"
+          id="form-subject"
+          name="subject"
+          required
+          minlength="2"
+          maxlength="128"
+          placeholder={currentLang === 'en' ? 'Brief summary...' : 'Краткая тема...'}
+          class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-navy-700 bg-slate-50 dark:bg-navy-900 text-slate-900 dark:text-cloud text-sm placeholder-slate-400 dark:placeholder-cloud-subtle focus:border-cyan-500 dark:focus:border-cyan focus:ring-1 focus:ring-cyan transition-all"
+        />
+        <span class="error-text text-[11px] text-red-500 hidden mt-1"></span>
+      </div>
+    </div>
+
+    <!-- Email (Optional) -->
+    <div>
+      <label for="form-email" class="block text-xs font-semibold text-slate-700 dark:text-cloud-muted uppercase tracking-wider mb-2">
+        {t('contact.form.email')}
+      </label>
+      <input
+        type="email"
+        id="form-email"
+        name="email"
+        maxlength="255"
+        placeholder={currentLang === 'en' ? 'name@domain.com (only if you want a reply)' : 'name@domain.com (только если нужен ответ)'}
+        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-navy-700 bg-slate-50 dark:bg-navy-900 text-slate-900 dark:text-cloud text-sm placeholder-slate-400 dark:placeholder-cloud-subtle focus:border-cyan-500 dark:focus:border-cyan focus:ring-1 focus:ring-cyan transition-all"
+      />
+      <span class="error-text text-[11px] text-red-500 hidden mt-1"></span>
+    </div>
+
+    <!-- Message -->
+    <div>
+      <label for="form-message" class="block text-xs font-semibold text-slate-700 dark:text-cloud-muted uppercase tracking-wider mb-2">
+        {t('contact.form.message')} *
+      </label>
+      <textarea
+        id="form-message"
+        name="message"
+        required
+        rows="5"
+        minlength="10"
+        maxlength="2000"
+        placeholder={currentLang === 'en' ? 'Provide details, context, or links...' : 'Опишите ситуацию, детали или ссылки...'}
+        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-navy-700 bg-slate-50 dark:bg-navy-900 text-slate-900 dark:text-cloud text-sm placeholder-slate-400 dark:placeholder-cloud-subtle focus:border-cyan-500 dark:focus:border-cyan focus:ring-1 focus:ring-cyan transition-all resize-y"
+      ></textarea>
+      <div class="flex justify-between items-center mt-1">
+        <span class="error-text text-[11px] text-red-500 hidden"></span>
+        <span id="char-count" class="text-[11px] text-slate-400 dark:text-cloud-subtle ml-auto">0 / 2000</span>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div>
+      <button
+        type="submit"
+        id="submit-btn"
+        class="w-full py-3.5 px-6 rounded-xl font-heading font-bold text-sm tracking-wide bg-cyan text-navy-950 hover:bg-cyan-light transition-all duration-200 flex items-center justify-center gap-2 shadow-glow-cyan"
+      >
+        <span id="btn-text">{t('contact.form.submit')}</span>
+        <svg id="btn-spinner" class="w-4 h-4 animate-spin hidden" viewBox="0 0 24 24" fill="none">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Security & Privacy Disclaimer -->
+    <p class="text-[11px] text-slate-500 dark:text-cloud-subtle text-center leading-relaxed">
+      {t('contact.notice')}
+    </p>
+  </form>
+</div>
+
+<script>
+  function setupContactForm() {
+    const form = document.getElementById('safeingame-contact-form') as HTMLFormElement | null;
+    if (!form) return;
+
+    const textarea = document.getElementById('form-message') as HTMLTextAreaElement | null;
+    const charCount = document.getElementById('char-count');
+    const successBox = document.getElementById('contact-success');
+    const successMsg = document.getElementById('contact-success-msg');
+    const errorBox = document.getElementById('contact-error');
+    const errorMsg = document.getElementById('contact-error-msg');
+    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+    const btnText = document.getElementById('btn-text');
+    const btnSpinner = document.getElementById('btn-spinner');
+
+    // Live character counter
+    if (textarea && charCount) {
+      textarea.addEventListener('input', () => {
+        charCount.textContent = `${textarea.value.length} / 2000`;
+      });
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Reset alerts
+      if (successBox) successBox.classList.add('hidden');
+      if (errorBox) errorBox.classList.add('hidden');
+
+      const formData = new FormData(form);
+      const category = (formData.get('category') as string) || 'general';
+      const subject = ((formData.get('subject') as string) || '').trim();
+      const message = ((formData.get('message') as string) || '').trim();
+      const email = ((formData.get('email') as string) || '').trim();
+      const honeypot = (formData.get('honeypot') as string) || '';
+
+      // Client-side quick checks
+      if (subject.length < 2) {
+        showError('Subject must be at least 2 characters.');
+        return;
+      }
+      if (message.length < 10) {
+        showError('Message must be at least 10 characters.');
+        return;
+      }
+
+      // Check honeypot trap
+      if (honeypot.length > 0) {
+        showSuccess('Submission received.');
+        form.reset();
+        return;
+      }
+
+      setLoading(true);
+
+      const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://127.0.0.1:8000/api/v1/contact'
+        : '/api/v1/contact';
+
+      try {
+        const payload: Record<string, string> = {
+          category,
+          subject,
+          message,
+        };
+        if (email.length > 0) {
+          payload.email = email;
+        }
+
+        const resp = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (resp.status === 201) {
+          const data = await resp.json();
+          showSuccess(data.message || 'Your message has been stored safely for review.');
+          form.reset();
+          if (charCount) charCount.textContent = '0 / 2000';
+        } else if (resp.status === 429) {
+          showError('Rate limit exceeded. Please wait a few minutes before submitting another inquiry.');
+        } else if (resp.status === 422) {
+          const data = await resp.json();
+          const detail = Array.isArray(data.detail) ? data.detail.map((d: any) => d.msg).join(', ') : 'Validation error.';
+          showError(`Validation failed: ${detail}`);
+        } else {
+          showError('The server could not process the submission at this time. Please try again later.');
+        }
+      } catch (err) {
+        showError('Could not connect to SafeInGame backend service. Please check your network or try again shortly.');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    function setLoading(isLoading: boolean) {
+      if (!submitBtn || !btnText || !btnSpinner) return;
+      submitBtn.disabled = isLoading;
+      if (isLoading) {
+        btnText.textContent = 'Sending...';
+        btnSpinner.classList.remove('hidden');
+      } else {
+        btnText.textContent = 'Send Securely';
+        btnSpinner.classList.add('hidden');
+      }
+    }
+
+    function showSuccess(msg: string) {
+      if (successBox && successMsg) {
+        successMsg.textContent = msg;
+        successBox.classList.remove('hidden');
+        successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function showError(msg: string) {
+      if (errorBox && errorMsg) {
+        errorMsg.textContent = msg;
+        errorBox.classList.remove('hidden');
+        errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  }
+
+  setupContactForm();
+  document.addEventListener('astro:page-load', setupContactForm);
+</script>

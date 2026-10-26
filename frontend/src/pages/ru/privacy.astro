@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { useTranslations } from '../../i18n/ui';
+
+const currentLang = 'ru';
+const t = useTranslations(currentLang);
+---
+
+<BaseLayout
+  title="Политика конфиденциальности — SafeInGame"
+  description="Политика конфиденциальности SafeInGame: принципы минимизации данных, обработка обращений и гарантии защиты пользователей."
+  currentLang={currentLang}
+  canonicalSlug="privacy/"
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-8">
+      <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-slate-300 dark:border-navy-700 bg-slate-100 dark:bg-navy-850 text-slate-600 dark:text-cloud-subtle mb-3">
+        Проект документа • Версия 1.0 (Март 2026)
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900 dark:text-cloud mb-4">
+        Политика конфиденциальности
+      </h1>
+      <p class="text-sm text-slate-600 dark:text-cloud-muted leading-relaxed">
+        SafeInGame придерживается принципа строгой минимизации данных. Настоящий документ разъясняет, какая информация обрабатывается и как обеспечивается безопасность.
+      </p>
+    </div>
+
+    <div class="space-y-8 text-sm text-slate-600 dark:text-cloud-muted leading-relaxed">
+      <section class="rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 p-6 shadow-sm">
+        <h2 class="text-base font-heading font-bold text-cyan-700 dark:text-cyan mb-2">
+          1. Данные, которые мы НИКОГДА не собираем
+        </h2>
+        <ul class="list-disc list-inside space-y-1 text-xs">
+          <li>Мы никогда не запрашиваем и не храним пароли от игр, резервные коды или секреты 2FA.</li>
+          <li>Мы не формируем маркетинговые профили пользователей и не отслеживаем поведение на других сайтах.</li>
+          <li>Мы не продаем и не передаем данные брокерам данных или рекламодателям.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          2. Информация, собираемая через форму обратной связи
+        </h2>
+        <p class="mb-3">
+          При отправке сообщения через форму на сайте передаются:
+        </p>
+        <ul class="list-disc list-inside space-y-1 mb-3 text-xs">
+          <li><strong>Тема и категория сообщения:</strong> для классификации запроса.</li>
+          <li><strong>Текст сообщения:</strong> добровольно предоставленная вами информация.</li>
+          <li><strong>Опциональный email:</strong> только если вы хотите получить ответ.</li>
+          <li><strong>Псевдонимизированный хэш IP-адреса:</strong> необратимый хэш SHA-256 с солью, используемый исключительно для защиты от спам-атак и ограничения частоты запросов. Исходный IP-адрес в базе не сохраняется.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          3. Хранение и безопасность
+        </h2>
+        <p>
+          Обращения хранятся в защищенной базе данных, доступ к которой имеет исключительно автор проекта для улучшения образовательных материалов. Сообщения удаляются по истечении 12 месяцев.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          4. Внешние ссылки
+        </h2>
+        <p>
+          Статьи SafeInGame содержат ссылки на официальные ресурсы Valve, Epic Games, Discord, CISA и др. SafeInGame не несет ответственности за политику конфиденциальности внешних сайтов.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          5. Контакты по вопросам данных
+        </h2>
+        <p>
+          Для удаления ранее отправленного сообщения свяжитесь с нами через <a href="/ru/contact/" class="text-cyan-700 dark:text-cyan underline">форму контактов</a> или в официальном Telegram-канале <a href="https://t.me/SafeInGame" class="text-cyan-700 dark:text-cyan underline">@SafeInGame</a>.
+        </p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

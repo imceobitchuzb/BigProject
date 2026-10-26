@@ -1,0 +1,49 @@
+---
+import ArticleLayout from '../../../layouts/ArticleLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const threats = await getCollection('threats', ({ id }) => id.startsWith('en/'));
+  return threats.map((entry) => {
+    const slug = entry.id.replace('en/', '').replace(/\.md$/, '');
+    return {
+      params: { slug },
+      props: { entry, slug },
+    };
+  });
+}
+
+const { entry, slug } = Astro.props;
+const { Content } = await entry.render();
+
+// Find related articles
+const allThreats = await getCollection('threats', ({ id }) => id.startsWith('en/'));
+const relatedArticles = allThreats
+  .filter((item) => {
+    const itemSlug = item.id.replace('en/', '').replace(/\.md$/, '');
+    return entry.data.related_slugs.includes(itemSlug);
+  })
+  .map((item) => ({
+    slug: item.id.replace('en/', '').replace(/\.md$/, ''),
+    data: item.data,
+  }));
+---
+
+<ArticleLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  category={entry.data.category}
+  categoryTitle={entry.data.category_title}
+  publishedDate={entry.data.published_date}
+  lastReviewed={entry.data.last_reviewed}
+  readingTime={entry.data.reading_time}
+  warningSigns={entry.data.warning_signs}
+  preventionSteps={entry.data.prevention_steps}
+  recoverySteps={entry.data.recovery_steps}
+  officialSources={entry.data.official_sources}
+  relatedArticles={relatedArticles}
+  currentLang="en"
+  slug={slug}
+>
+  <Content />
+</ArticleLayout>

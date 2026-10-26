@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CyberBackground from '../../components/CyberBackground.astro';
+import CategoryCard from '../../components/CategoryCard.astro';
+import ThreatCard from '../../components/ThreatCard.astro';
+import { getCollection } from 'astro:content';
+import { useTranslations } from '../../i18n/ui';
+
+const currentLang = 'en';
+const t = useTranslations(currentLang);
+
+const allThreats = await getCollection('threats', ({ id }) => id.startsWith('en/'));
+
+const categories = [
+  {
+    slug: 'account-security',
+    title: 'Account Security',
+    description: 'Hardware tokens, authenticator apps, master password best practices, and recovery verification.',
+    icon: 'shield-check',
+  },
+  {
+    slug: 'phishing',
+    title: 'Phishing & Fake Sites',
+    description: 'Deceptive domain names, counterfeit Steam/Discord login overlays, and rogue tournament leagues.',
+    icon: 'globe',
+  },
+  {
+    slug: 'trading-and-items',
+    title: 'Trading & Virtual Items',
+    description: 'Steam API key attacks, trade swap tricks, fake middlemen, and skin inventory safeguards.',
+    icon: 'repeat',
+  },
+  {
+    slug: 'currency-and-payments',
+    title: 'Currency & Payments',
+    description: 'Grey-market top-up hazards, stolen credit card gift chargebacks, and payment card safety.',
+    icon: 'credit-card',
+  },
+  {
+    slug: 'fake-giveaways',
+    title: 'Fake Giveaways',
+    description: 'Fraudulent Discord Nitro promotions, fake creator raffles, and QR authorization hijacking.',
+    icon: 'gift',
+  },
+  {
+    slug: 'fake-support',
+    title: 'Fake Support & Recovery',
+    description: 'Accidental report threats, imposter staff on Discord, and fee-based recovery traps.',
+    icon: 'headset',
+  },
+  {
+    slug: 'social-engineering',
+    title: 'Social Engineering',
+    description: 'Long-con friendships, item borrowing manipulation, and infected tournament voice clients.',
+    icon: 'users',
+  },
+  {
+    slug: 'incident-response',
+    title: 'Incident Response',
+    description: 'Rapid containment, session deauthorization, evidence capture, and official publisher appeals.',
+    icon: 'alert-triangle',
+  },
+];
+---
+
+<BaseLayout
+  title={`Safety Center — SafeInGame`}
+  description="Explore organized gaming safety topics from account security and phishing prevention to emergency incident response."
+  currentLang={currentLang}
+  canonicalSlug="safety/"
+>
+  <div class="relative overflow-hidden py-12">
+    <CyberBackground variant="dense" />
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+    <div class="max-w-3xl mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-800 dark:text-cyan text-xs font-semibold mb-4">
+        Educational Center
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight mb-4">
+        Gaming Safety Center
+      </h1>
+      <p class="text-base text-slate-600 dark:text-cloud-muted leading-relaxed">
+        Comprehensive educational modules organized by threat vector. Learn practical defense strategies to keep your gaming profiles, inventory items, and digital identities secure.
+      </p>
+    </div>
+
+    <!-- Category Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+      {categories.map((cat) => (
+        <CategoryCard
+          slug={cat.slug}
+          title={cat.title}
+          description={cat.description}
+          icon={cat.icon}
+          currentLang={currentLang}
+        />
+      ))}
+    </div>
+
+    <!-- All Safety Guides Preview -->
+    <div class="pt-8 border-t border-slate-200 dark:border-navy-800">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="text-2xl font-heading font-bold text-slate-900 dark:text-cloud mb-1">
+            All Threat Guides ({allThreats.length})
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-cloud-muted">
+            In-depth documentation for common attack techniques.
+          </p>
+        </div>
+        <a
+          href="/en/threats/"
+          class="text-xs font-semibold text-cyan-700 dark:text-cyan hover:underline"
+        >
+          Open Interactive Search & Filters →
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {allThreats.map((item) => {
+          const rawSlug = item.id.replace('en/', '').replace(/\.md$/, '');
+          return (
+            <ThreatCard
+              slug={rawSlug}
+              title={item.data.title}
+              description={item.data.description}
+              category={item.data.category}
+              categoryTitle={item.data.category_title}
+              readingTime={item.data.reading_time}
+              warningSignsCount={item.data.warning_signs.length}
+              currentLang={currentLang}
+            />
+          );
+        })}
+      </div>
+    </div>
+    </div>
+  </div>
+</BaseLayout>

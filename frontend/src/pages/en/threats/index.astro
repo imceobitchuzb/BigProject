@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import CyberBackground from '../../../components/CyberBackground.astro';
+import ThreatSearch from '../../../components/ThreatSearch.astro';
+import { getCollection } from 'astro:content';
+import { useTranslations } from '../../../i18n/ui';
+
+const currentLang = 'en';
+const t = useTranslations(currentLang);
+
+const allThreats = await getCollection('threats', ({ id }) => id.startsWith('en/'));
+
+const articleItems = allThreats.map((item) => ({
+  slug: item.id.replace('en/', '').replace(/\.md$/, ''),
+  title: item.data.title,
+  description: item.data.description,
+  category: item.data.category,
+  categoryTitle: item.data.category_title,
+  readingTime: item.data.reading_time,
+  warningSignsCount: item.data.warning_signs.length,
+}));
+
+const categories = [
+  { slug: 'account-security', title: 'Account Security' },
+  { slug: 'phishing', title: 'Phishing' },
+  { slug: 'trading-and-items', title: 'Trading & Items' },
+  { slug: 'currency-and-payments', title: 'Currency & Payments' },
+  { slug: 'fake-giveaways', title: 'Fake Giveaways' },
+  { slug: 'fake-support', title: 'Fake Support' },
+  { slug: 'social-engineering', title: 'Social Engineering' },
+  { slug: 'incident-response', title: 'Incident Response' },
+];
+
+const selectedCategory = Astro.url.searchParams.get('category') || '';
+const searchQuery = Astro.url.searchParams.get('q') || '';
+---
+
+<BaseLayout
+  title="Threat Library — SafeInGame"
+  description="Explore the SafeInGame educational threat library. Search scam scenarios, review warning signs, and learn verified prevention steps."
+  currentLang={currentLang}
+  canonicalSlug="threats/"
+>
+  <div class="relative overflow-hidden py-12">
+    <CyberBackground variant="dense" />
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+    <div class="max-w-3xl mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-800 dark:text-cyan text-xs font-semibold mb-4">
+        Educational Knowledge Base
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight mb-4">
+        Gaming Threat Library
+      </h1>
+      <p class="text-base text-slate-600 dark:text-cloud-muted leading-relaxed">
+        Search our verified educational guides. Learn to spot the indicators of compromise before your accounts or virtual items are lost.
+      </p>
+    </div>
+
+    <!-- Interactive Search & Filtering Component -->
+    <ThreatSearch
+      articles={articleItems}
+      categories={categories}
+      currentLang={currentLang}
+      initialCategory={selectedCategory}
+      initialQuery={searchQuery}
+    />
+    </div>
+  </div>
+</BaseLayout>

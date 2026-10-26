@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { useTranslations } from '../../i18n/ui';
+
+const currentLang = 'en';
+const t = useTranslations(currentLang);
+---
+
+<BaseLayout
+  title="Terms of Use — SafeInGame"
+  description="Terms of Use for SafeInGame educational materials, service limitations, and intellectual property."
+  currentLang={currentLang}
+  canonicalSlug="terms/"
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-8">
+      <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-slate-300 dark:border-navy-700 bg-slate-100 dark:bg-navy-850 text-slate-600 dark:text-cloud-subtle mb-3">
+        Draft for Founder Review • Version 1.0 (March 2026)
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900 dark:text-cloud mb-4">
+        Terms of Use
+      </h1>
+      <p class="text-sm text-slate-600 dark:text-cloud-muted leading-relaxed">
+        Please read these terms before using the educational materials on SafeInGame.
+      </p>
+    </div>
+
+    <div class="space-y-8 text-sm text-slate-600 dark:text-cloud-muted leading-relaxed">
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          1. Educational Nature of the Service
+        </h2>
+        <p>
+          SafeInGame is an independent informational and educational platform. The content provided is for informational awareness purposes only and does not constitute formal legal, financial, or certified cybersecurity audit advice. While we strive for absolute accuracy, digital threat landscapes evolve rapidly.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          2. No Guarantee of Total Immunity
+        </h2>
+        <p>
+          Implementing our educational recommendations substantially mitigates the risk of account compromise, but no system or behavioral guideline guarantees complete immunity against targeted intrusions or platform-wide zero-day vulnerabilities.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          3. Permitted & Prohibited Use
+        </h2>
+        <p class="mb-2">
+          You are welcome to read, link to, and share our educational guides for personal, community, or guild safety purposes.
+        </p>
+        <p class="mb-2">
+          You agree not to:
+        </p>
+        <ul class="list-disc list-inside space-y-1 text-xs">
+          <li>Use SafeInGame materials to facilitate, plan, or test malicious attacks or phishing campaigns.</li>
+          <li>Scrape, flood, or submit abusive payloads to our contact forms or API endpoints.</li>
+          <li>Represent yourself as an authorized agent, spokesperson, or employee of SafeInGame.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          4. Trademarks & Brand Disclaimer
+        </h2>
+        <p>
+          "Steam", "Valve", "Epic Games", "Discord", "PlayStation", "Xbox", "Riot Games", and related trademarks or logos cited in educational materials are the property of their respective trademark holders. Mention of these brands does not imply endorsement, sponsorship, or partnership with SafeInGame.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          5. Modifications to Terms
+        </h2>
+        <p>
+          We may update these terms as new educational features (such as interactive training drills) are added. Changes take effect upon publication on this page.
+        </p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

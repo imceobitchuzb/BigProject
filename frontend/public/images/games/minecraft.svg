@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <filter id="mcShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Deep Slate Container -->
+  <rect width="200" height="200" rx="36" fill="#131C18" stroke="#1E3A2F" stroke-width="4"/>
+
+  <!-- Pixel Grid Lines -->
+  <path d="M40 40 H160 M40 80 H160 M40 120 H160 M40 160 H160" stroke="#10B981" stroke-width="1" stroke-opacity="0.1"/>
+  <path d="M40 40 V160 M80 40 V160 M120 40 V160 M160 40 V160" stroke="#10B981" stroke-width="1" stroke-opacity="0.1"/>
+
+  <!-- Iconic Minecraft Isometric 3D Grass Block -->
+  <g filter="url(#mcShadow)" transform="translate(100, 94)">
+    <!-- Top Grass Face (Isometric diamond) -->
+    <polygon points="0,-46 48,-20 0,6 -48,-20" fill="#5BAE37" stroke="#3D7A22" stroke-width="2"/>
+    <!-- Top Grass Pixels variation -->
+    <polygon points="0,-46 24,-33 0,-20 -24,-33" fill="#6CC443"/>
+    <polygon points="12,-27 36,-14 24,-7 0,-20" fill="#4A932B"/>
+    <polygon points="-24,-7 0,-20 -12,-27 -36,-14" fill="#6CC443"/>
+
+    <!-- Left Dirt/Grass Face -->
+    <polygon points="-48,-20 0,6 0,58 -48,32" fill="#866043" stroke="#5C3E28" stroke-width="2"/>
+    <!-- Grass Dripping Overhang on Left -->
+    <path d="M-48 -20 L0 6 V18 L-8 14 V22 L-18 16 V26 L-30 18 V24 L-48 14 Z" fill="#4A932B"/>
+    <!-- Dirt Pixels on Left -->
+    <rect x="-36" y="24" width="8" height="8" fill="#5C3E28" transform="skewY(30)"/>
+    <rect x="-20" y="34" width="8" height="8" fill="#6D4E35" transform="skewY(30)"/>
+
+    <!-- Right Dirt/Grass Face (Shadowed) -->
+    <polygon points="0,6 48,-20 48,32 0,58" fill="#6D4E35" stroke="#48311F" stroke-width="2"/>
+    <!-- Grass Dripping Overhang on Right -->
+    <path d="M0 6 L48 -20 V-12 L36 -6 V0 L24 -6 V6 L12 0 V12 L0 16 Z" fill="#3D7A22"/>
+    <!-- Dirt Pixels on Right -->
+    <rect x="12" y="18" width="8" height="8" fill="#48311F" transform="skewY(-30)"/>
+    <rect x="28" y="10" width="8" height="8" fill="#5C3E28" transform="skewY(-30)"/>
+  </g>
+
+  <!-- Iconic Creeper Face Security Badge (Bottom Right) -->
+  <g transform="translate(144, 144)" filter="url(#mcShadow)">
+    <circle cx="0" cy="0" r="26" fill="#111827" stroke="#10B981" stroke-width="3"/>
+    <rect x="-14" y="-14" width="28" height="28" rx="4" fill="#10B981"/>
+    <!-- Creeper Face Features (Black Pixel Grid) -->
+    <!-- Eyes -->
+    <rect x="-10" y="-10" width="6" height="6" fill="#111827"/>
+    <rect x="4" y="-10" width="6" height="6" fill="#111827"/>
+    <!-- Nose & Mouth Bridge -->
+    <rect x="-4" y="-4" width="8" height="10" fill="#111827"/>
+    <rect x="-8" y="2" width="4" height="8" fill="#111827"/>
+    <rect x="4" y="2" width="4" height="8" fill="#111827"/>
+  </g>
+
+  <!-- "MC" Badge -->
+  <rect x="24" y="24" width="42" height="20" rx="6" fill="#10B981" fill-opacity="0.2" stroke="#10B981" stroke-width="1.5"/>
+  <text x="45" y="38" font-family="'Space Grotesk', system-ui, sans-serif" font-size="11" font-weight="900" fill="#34D399" text-anchor="middle" letter-spacing="1">MC</text>
+</svg>

@@ -1,0 +1,46 @@
+---
+interface Props {
+  type: 'cs2' | 'brawlstars' | 'pubg' | 'roblox' | 'minecraft';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  class?: string;
+}
+
+const { type, size = 'md', class: extraClass = '' } = Astro.props;
+
+const dimensions = {
+  sm: 'w-12 h-12',
+  md: 'w-20 h-20',
+  lg: 'w-28 h-28',
+  xl: 'w-36 h-36',
+}[size];
+
+const fileMap: Record<string, string> = {
+  cs2: 'cs2-steam.svg',
+  brawlstars: 'brawl-stars.svg',
+  pubg: 'pubg.svg',
+  roblox: 'roblox.svg',
+  minecraft: 'minecraft.svg',
+};
+
+const altMap: Record<string, string> = {
+  cs2: 'Counter-Strike 2 & Steam',
+  brawlstars: 'Brawl Stars',
+  pubg: 'PUBG Battlegrounds',
+  roblox: 'Roblox',
+  minecraft: 'Minecraft',
+};
+
+const fileName = fileMap[type] || 'cs2-steam.svg';
+const altText = altMap[type] || 'Game Security Profile';
+---
+
+<div class={`relative ${dimensions} flex items-center justify-center flex-shrink-0 select-none ${extraClass}`}>
+  <img
+    src={`/images/games/${fileName}`}
+    alt={`${altText} Vector Emblem`}
+    class="w-full h-full object-contain filter drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)] transition-transform duration-300 group-hover:scale-105"
+    width="128"
+    height="128"
+    loading="lazy"
+  />
+</div>

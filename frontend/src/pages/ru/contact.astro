@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CyberBackground from '../../components/CyberBackground.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import SocialLinks from '../../components/SocialLinks.astro';
+import { useTranslations } from '../../i18n/ui';
+
+const currentLang = 'ru';
+const t = useTranslations(currentLang);
+---
+
+<BaseLayout
+  title="Контакты и Обратная связь — SafeInGame"
+  description="Отправьте вопрос, сообщите о новой схеме скама или предложите фактическое исправление напрямую основателю SafeInGame."
+  currentLang={currentLang}
+  canonicalSlug="contact/"
+>
+  <div class="relative overflow-hidden py-12">
+    <CyberBackground variant="minimal" />
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-800 dark:text-cyan text-xs font-semibold mb-4">
+        Прямая связь
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight mb-4">
+        {t('contact.title')}
+      </h1>
+      <p class="text-base text-slate-600 dark:text-cloud-muted leading-relaxed">
+        {t('contact.subtitle')}
+      </p>
+    </div>
+
+    <!-- Active Form -->
+    <div class="mb-16">
+      <ContactForm currentLang={currentLang} />
+    </div>
+
+    <!-- Social Channels Alternative -->
+    <div class="rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 p-6 sm:p-8 text-center max-w-2xl mx-auto shadow-sm">
+      <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+        Официальные социальные сети
+      </h2>
+      <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-6">
+        Предпочитаете соцсети? Присоединяйтесь к нашим каналам под ником <strong class="text-cyan-700 dark:text-cyan">@SafeInGame</strong> для оперативных предупреждений и новостей.
+      </p>
+      <div class="flex justify-center">
+        <SocialLinks variant="card" />
+      </div>
+    </div>
+    </div>
+  </div>
+</BaseLayout>

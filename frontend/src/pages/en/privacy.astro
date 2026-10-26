@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { useTranslations } from '../../i18n/ui';
+
+const currentLang = 'en';
+const t = useTranslations(currentLang);
+---
+
+<BaseLayout
+  title="Privacy Policy — SafeInGame"
+  description="SafeInGame privacy policy: data collection practices, contact form handling, and user privacy guarantees."
+  currentLang={currentLang}
+  canonicalSlug="privacy/"
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-8">
+      <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold border border-slate-300 dark:border-navy-700 bg-slate-100 dark:bg-navy-850 text-slate-600 dark:text-cloud-subtle mb-3">
+        Draft for Founder Review • Version 1.0 (March 2026)
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900 dark:text-cloud mb-4">
+        Privacy Policy
+      </h1>
+      <p class="text-sm text-slate-600 dark:text-cloud-muted leading-relaxed">
+        SafeInGame is committed to extreme data minimization. This policy explains what information we collect, how it is processed, and your privacy rights.
+      </p>
+    </div>
+
+    <div class="space-y-8 text-sm text-slate-600 dark:text-cloud-muted leading-relaxed">
+      <section class="rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 p-6 shadow-sm">
+        <h2 class="text-base font-heading font-bold text-cyan-700 dark:text-cyan mb-2">
+          1. Data We Do NOT Collect
+        </h2>
+        <ul class="list-disc list-inside space-y-1 text-xs">
+          <li>We never ask for or store gaming passwords, recovery phrases, or 2FA secrets.</li>
+          <li>We do not create user tracking profiles across external websites.</li>
+          <li>We do not sell, rent, or monetize visitor data to advertisers or data brokers.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          2. Information Collected Through the Contact Form
+        </h2>
+        <p class="mb-3">
+          When you submit a message via our contact form, we collect:
+        </p>
+        <ul class="list-disc list-inside space-y-1 mb-3 text-xs">
+          <li><strong>Message Subject & Category:</strong> Used to categorize your inquiry.</li>
+          <li><strong>Message Body:</strong> The text you explicitly provide.</li>
+          <li><strong>Optional Reply Email:</strong> Only if you choose to provide it for a direct response.</li>
+          <li><strong>Pseudonymized Salted IP Hash:</strong> A cryptographically hashed snippet (SHA-256) used strictly for automated rate limiting and anti-spam abuse protection. Your raw IP address is not persistently logged.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          3. Hosting & Storage
+        </h2>
+        <p>
+          Submissions are stored in an encrypted database accessible strictly to the SafeInGame founder for editorial review and feedback evaluation. Messages are retained for up to 12 months for record-keeping and then permanently purged.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          4. Third-Party Links
+        </h2>
+        <p>
+          Our educational articles contain hyperlinks to third-party domains (such as Valve, Epic Games, Discord, CISA, and FTC). SafeInGame is not responsible for the privacy practices or content of external websites.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+          5. Contacting Us
+        </h2>
+        <p>
+          To request the deletion of a previously submitted inquiry, contact us through the <a href="/en/contact/" class="text-cyan-700 dark:text-cyan underline">Contact Form</a> or via our official Telegram channel <a href="https://t.me/SafeInGame" class="text-cyan-700 dark:text-cyan underline">@SafeInGame</a>.
+        </p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

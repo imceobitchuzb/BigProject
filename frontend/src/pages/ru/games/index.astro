@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import CyberBackground from '../../../components/CyberBackground.astro';
+import GameCard from '../../../components/GameCard.astro';
+import { getAllGames } from '../../../data/games';
+import { useTranslations } from '../../../i18n/ui';
+
+const currentLang = 'ru';
+const t = useTranslations(currentLang);
+const games = getAllGames(currentLang);
+---
+
+<BaseLayout
+  title="Центр безопасности по играм — SafeInGame"
+  description="Выберите вашу игру, чтобы изучить проверенные шаги защиты от кражи аккаунта, фальшивых генераторов валюты, фишинга и обмана при торговле."
+  currentLang={currentLang}
+  canonicalSlug="games/"
+>
+  <div class="relative overflow-hidden py-12">
+    <CyberBackground variant="dense" />
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <div class="max-w-3xl mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-800 dark:text-cyan text-xs font-semibold mb-4 shadow-sm">
+          {t('games.hero.badge')}
+        </div>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight mb-4">
+          {t('games.hero.title')}
+        </h1>
+        <p class="text-base text-slate-600 dark:text-cloud-muted leading-relaxed">
+          {t('games.hero.subtitle')}
+        </p>
+      </div>
+
+      <!-- Games Grid with 3D Tilt Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+        {games.map((game) => (
+          <GameCard game={game} currentLang={currentLang} />
+        ))}
+      </div>
+
+      <!-- Help Banner -->
+      <div class="rounded-3xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+        <div class="max-w-xl">
+          <h2 class="text-xl sm:text-2xl font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+            Не нашли вашу любимую игру?
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-cloud-muted leading-relaxed">
+            Методы социальной инженерии и фишинга универсальны для всех онлайн-игр. Изучите общую Базу угроз или предложите новую игру напрямую основателю проекта.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <a
+            href="/ru/threats/"
+            class="px-5 py-2.5 rounded-xl text-xs font-heading font-bold text-slate-800 dark:text-cloud bg-slate-100 dark:bg-navy-800 hover:bg-slate-200 dark:hover:bg-navy-700 border border-slate-300 dark:border-navy-600 transition-colors"
+          >
+            {t('nav.threats')}
+          </a>
+          <a
+            href="/ru/contact/"
+            class="px-5 py-2.5 rounded-xl text-xs font-heading font-bold text-navy-950 bg-cyan hover:bg-cyan-light transition-all shadow-glow-cyan"
+          >
+            Предложить игру →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

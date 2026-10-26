@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CyberBackground from '../../components/CyberBackground.astro';
+import SocialLinks from '../../components/SocialLinks.astro';
+import Logo from '../../components/Logo.astro';
+import { useTranslations } from '../../i18n/ui';
+
+const currentLang = 'en';
+const t = useTranslations(currentLang);
+---
+
+<BaseLayout
+  title="About SafeInGame — Mission, Principles & Roadmap"
+  description="Learn about SafeInGame, an independent educational initiative dedicated to gaming account security and cyber education."
+  currentLang={currentLang}
+  canonicalSlug="about/"
+>
+  <div class="relative overflow-hidden py-12">
+    <CyberBackground variant="minimal" />
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <div class="inline-block mb-4">
+        <Logo size="lg" showText={false} />
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight mb-4">
+        Play smart. Stay safe.
+      </h1>
+      <p class="text-base text-slate-600 dark:text-cloud-muted leading-relaxed">
+        SafeInGame is an independent, non-commercial educational project created to empower gamers with accurate, actionable cybersecurity knowledge.
+      </p>
+    </div>
+
+    <!-- The Problem Statement -->
+    <section class="mb-14 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 p-6 sm:p-8 shadow-sm">
+      <h2 class="text-xl font-heading font-bold text-cyan-700 dark:text-cyan mb-4 flex items-center gap-2">
+        <svg class="w-5 h-5 text-cyan-700 dark:text-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>Why SafeInGame Was Created</span>
+      </h2>
+      <div class="space-y-4 text-sm text-slate-600 dark:text-cloud-muted leading-relaxed">
+        <p>
+          Gaming accounts in 2026 are high-value targets. Millions of players invest years of effort, competitive rankings, and significant money into virtual inventories. Yet, when accounts are targeted by sophisticated phishing, API key scams, or social engineering, players often have nowhere to turn for calm, reliable advice.
+        </p>
+        <p>
+          Community forums are frequently inundated with secondary scammers offering fake "recovery services," and official support portals can take days or weeks to respond during an active breach. SafeInGame was built to give players clear, proactive defense playbooks before disaster strikes, and calm containment protocols when it does.
+        </p>
+      </div>
+    </section>
+
+    <!-- Core Principles -->
+    <section class="mb-14">
+      <h2 class="text-2xl font-heading font-bold text-slate-900 dark:text-cloud mb-6">
+        Our Operating Principles
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 shadow-sm">
+          <h3 class="text-base font-heading font-bold text-lime-700 dark:text-lime mb-2">
+            1. Zero Credential Harvesting
+          </h3>
+          <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+            SafeInGame will never ask you to input game passwords, mobile authenticator codes, recovery backup keys, session cookies, or API secrets.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 shadow-sm">
+          <h3 class="text-base font-heading font-bold text-cyan-700 dark:text-cyan mb-2">
+            2. Truthful Education, Not Hype
+          </h3>
+          <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+            We do not sell proprietary anti-cheat software, automated scam detectors, or promise 100% invulnerability. Security is an ongoing practice, not a single button.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 shadow-sm">
+          <h3 class="text-base font-heading font-bold text-violet-700 dark:text-violet mb-2">
+            3. Grounded in Official Sources
+          </h3>
+          <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+            Our recommendations link directly to official documentation from Valve, Epic Games, Sony, Microsoft, Riot Games, Discord, and leading cybersecurity bodies (CISA, FTC).
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 shadow-sm">
+          <h3 class="text-base font-heading font-bold text-orange-600 dark:text-orange mb-2">
+            4. Independent & Objective
+          </h3>
+          <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+            SafeInGame is independently maintained. We do not promote unregulated third-party skin gambling sites, unverified key resellers, or paid recovery services.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Current Stage & Transparent Roadmap -->
+    <section class="mb-14 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 p-6 sm:p-8 shadow-sm">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-700 dark:text-violet text-xs font-semibold mb-4">
+        Project Status: Phase 1 MVP + Games Hub
+      </div>
+      <h2 class="text-2xl font-heading font-bold text-slate-900 dark:text-cloud mb-4">
+        Current Stage & Transparent Roadmap
+      </h2>
+      <p class="text-sm text-slate-600 dark:text-cloud-muted leading-relaxed mb-6">
+        The project is currently a founder-led educational MVP. We believe in transparent development without making premature promises.
+      </p>
+
+      <div class="space-y-4">
+        <div class="flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-lime-500/20 text-lime-700 dark:text-lime font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">✓</span>
+          <div>
+            <h4 class="text-sm font-bold text-slate-900 dark:text-cloud">Phase 1: Educational Knowledge Base & Games Hub (Active)</h4>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted">8 comprehensive threat guides, 5 game-specific security centers, dual-theme dark/light toggle, and secure contact inbox.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-700 dark:text-cyan font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">✓</span>
+          <div>
+            <h4 class="text-sm font-bold text-slate-900 dark:text-cloud">Phase 2: Interactive Scenario Drills & Quiz (Active)</h4>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted">Interactive cyber-awareness scenarios and mini-quizzes helping gamers practice identifying counterfeit URLs and phishing hooks safely.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-slate-200 dark:bg-navy-700 text-slate-500 dark:text-cloud-subtle font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
+          <div>
+            <h4 class="text-sm font-bold text-slate-900 dark:text-cloud">Phase 3: Community Scam Trend Intake (Planned)</h4>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted">Structured workflow for community members to submit new emerging scam scripts for editorial review and alert publication.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Social Channels & Contact -->
+    <section class="text-center pt-8 border-t border-slate-200 dark:border-navy-800">
+      <h2 class="text-xl font-heading font-bold text-slate-900 dark:text-cloud mb-3">
+        Connect With SafeInGame
+      </h2>
+      <p class="text-sm text-slate-600 dark:text-cloud-muted max-w-md mx-auto mb-6">
+        Follow our official handles across platforms for fresh security advisories and scam teardowns:
+      </p>
+      <div class="flex justify-center mb-8">
+        <SocialLinks variant="card" />
+      </div>
+      <div>
+        <a
+          href="/en/contact/"
+          class="inline-block px-6 py-3 rounded-xl bg-cyan text-navy-950 font-heading font-bold text-sm hover:bg-cyan-light transition-all shadow-glow-cyan"
+        >
+          Send Feedback or Scam Reports
+        </a>
+      </div>
+    </section>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,234 @@
+---
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  currentLang: 'en' | 'ru';
+}
+
+const { currentLang } = Astro.props;
+const t = useTranslations(currentLang);
+
+const patterns = [
+  {
+    id: 'pattern-1',
+    quoteEn: '“Send money first; we will credit your account later.”',
+    quoteRu: '«Переведи деньги сначала; мы начислим на баланс позже.»',
+    tagEn: 'Advance-Fee / Direct Payment Fraud',
+    tagRu: 'Предоплата / Прямой платежный обман',
+    level: 'High Risk',
+    whySuspiciousEn: 'Legitimate digital marketplaces and game publishers use automated escrow or instant checkout. A seller asking for direct wire, crypto, or gift cards with a promise of later delivery has zero accountability and will block you immediately after receiving funds.',
+    whySuspiciousRu: 'Официальные магазины и маркетплейсы проводят мгновенную оплату со встроенной защитой покупателя. Требование прямого перевода на карту или криптокошелек с обещанием начислить товар позже — классический способ исчезнуть с деньгами.',
+    saferResponseEn: 'Only transact through official in-game stores or verified platforms with buyer protection and automated escrow. Never send untraceable peer-to-peer payments to strangers.',
+    saferResponseRu: 'Покупайте предметы и валюту только во внутриигровом магазине или через проверенные торговые площадки с эскроу-защитой. Никогда не делайте прямых невозвратных переводов незнакомцам.',
+  },
+  {
+    id: 'pattern-2',
+    quoteEn: '“Enter your password to claim a free reward.”',
+    quoteRu: '«Введи пароль от аккаунта, чтобы забрать бесплатную награду.»',
+    tagEn: 'Credential Harvesting Phishing',
+    tagRu: 'Фишинг учетных данных',
+    level: 'Critical',
+    whySuspiciousEn: 'Legitimate promotions, promo codes, and contest giveaways NEVER require your password. Only malicious phishing portals ask for login passwords under the guise of "connecting" an account.',
+    whySuspiciousRu: 'Ни одна официальная раздача, промокод или подарок от разработчиков НИКОГДА не требует ввода пароля. Запрос пароля — это стопроцентный фишинг для захвата аккаунта.',
+    saferResponseEn: 'Close the browser tab immediately. Genuine giveaways only require your public player tag or character username, never your password.',
+    saferResponseRu: 'Немедленно закройте страницу. Для начисления подарка в играх достаточно публичного тега или никнейма, пароль не требуется никогда.',
+  },
+  {
+    id: 'pattern-3',
+    quoteEn: '“Send us your verification code to prove ownership.”',
+    quoteRu: '«Пришли код подтверждения из SMS/почты, чтобы подтвердить, что ты владелец.»',
+    tagEn: '2FA / TOTP Bypass Trap',
+    tagRu: 'Перехват двухфакторного кода',
+    level: 'Critical',
+    whySuspiciousEn: 'The 6-digit or 5-character code sent to your phone or email is NOT a verification badge. It is the authentication key allowing someone to log in from a new device, change your credentials, and permanently lock you out.',
+    whySuspiciousRu: 'Код из SMS или письма — это НЕ подтверждение личности. Это ключ авторизации для входа в ваш аккаунт с чужого устройства. Отдав его, вы отдаете контроль над профилем.',
+    saferResponseEn: 'Never share security codes with anyone under any circumstances. Official support agents will never ask for your verification code.',
+    saferResponseRu: 'Никогда и никому не называйте коды из SMS и писем. Настоящие сотрудники поддержки платформ никогда не запрашивают одноразовые коды.',
+  },
+  {
+    id: 'pattern-4',
+    quoteEn: '“Your account will be banned unless you verify it immediately.”',
+    quoteRu: '«Твой аккаунт будет заблокирован через 2 часа, если не пройдешь проверку.»',
+    tagEn: 'Artificial Urgency / Impersonation',
+    tagRu: 'Искусственная спешка / Запугивание',
+    level: 'High Risk',
+    whySuspiciousEn: 'Scammers manufacture artificial time pressure ("2 hours remaining!", "Permanent ban imminent!") so you panic and skip your critical thinking. Real platform bans are handled silently by automated backend moderation, not via chat ultimatums.',
+    whySuspiciousRu: 'Мошенники создают искусственную панику («осталось 2 часа!», «аккаунт удалят!»), чтобы заставить вас спешить и отключить критическое мышление. Настоящие блокировки не обсуждаются через ультиматумы в личных сообщениях.',
+    saferResponseEn: 'Take a breath. Do not click their links. Check your account standing directly on the official publisher website (e.g. help.steampowered.com, account.microsoft.com).',
+    saferResponseRu: 'Успокойтесь. Не переходите по присланным ссылкам. Проверьте статус профиля напрямую на официальном портале поддержки игры.',
+  },
+  {
+    id: 'pattern-5',
+    quoteEn: '“Install this special launcher or extension to get free currency.”',
+    quoteRu: '«Установи этот лаунчер или расширение для браузера, чтобы получить бесплатную валюту.»',
+    tagEn: 'Infostealer Trojan / Rogue Extension',
+    tagRu: 'Троян-стилер / Вредоносное расширение',
+    level: 'Critical',
+    whySuspiciousEn: 'No software extension or third-party executable can generate in-game currency hosted on secure game servers. Downloadable utilities are almost always infostealers (RedLine, Lumma) designed to siphon browser passwords, session tokens, and crypto keys.',
+    whySuspiciousRu: 'Ни одна сторонняя программа не способна «взломать» серверную валюту игры. Загружаемые файлы — это стилеры и вредоносные плагины, ворующие сохраненные пароли и токены сессий.',
+    saferResponseEn: 'Never run executables (.exe, .jar, .bat) or install unverified browser extensions claiming to give free game currency. Only download software from official vendor domains.',
+    saferResponseRu: 'Никогда не запускайте исполняемые файлы и не ставьте подозрительные плагины Chrome. Скачивайте программы только с официальных проверенных сайтов.',
+  },
+  {
+    id: 'pattern-6',
+    quoteEn: '“Give us your account temporarily so we can upgrade it.”',
+    quoteRu: '«Дай логин и пароль на пару часов, мы прокачаем тебе ранг/боевой пропуск.»',
+    tagEn: 'Account Sharing / Theft Vector',
+    tagRu: 'Передача аккаунта / Угон профиля',
+    level: 'High Risk',
+    whySuspiciousEn: 'Once someone has your login credentials, they can change the bound email, revoke two-factor authentication, drain your in-game items, or get your account banned for regional TOS violations or cheating.',
+    whySuspiciousRu: 'Получив доступ к вашему профилю, чужой человек может перепривязать почту, украсть инвентарь или использовать читы, что приведет к перманентной блокировке.',
+    saferResponseEn: 'Keep your login credentials strictly private. Never share account access with anyone, including friends, guild mates, or supposed "boosting services".',
+    saferResponseRu: 'Никогда не передавайте логин и пароль посторонним лицам, друзьям по клану или платным «бустерам». Играйте и прокачивайтесь самостоятельно.',
+  },
+  {
+    id: 'pattern-7',
+    quoteEn: '“Pay this fee to unlock your prize.”',
+    quoteRu: '«Оплати небольшую комиссию за доставку приза/ножа.»',
+    tagEn: 'Advance-Fee Prize Scam',
+    tagRu: 'Комиссия за несуществующий выигрыш',
+    level: 'High Risk',
+    whySuspiciousEn: 'Real contests and promotions never require winners to pay a "processing fee", "gas fee", or "customs charge" to receive virtual items. Once the fee is paid, the scammer invents another fee or disappears completely.',
+    whySuspiciousRu: 'Настоящие организаторы конкурсов никогда не просят победителя оплатить «комиссию за доставку» или «плату за активацию кода». Любая просьба заплатить за подарок — чистый обман.',
+    saferResponseEn: 'If a "free prize" requires you to pay money first, it is not a prize—it is an advance-fee fraud. Walk away immediately.',
+    saferResponseRu: 'Если за «бесплатный приз» требуют перевести деньги — это мошенничество. Немедленно прекратите общение.',
+  },
+  {
+    id: 'pattern-8',
+    quoteEn: '“Send your parent\'s card details or payment confirmation.”',
+    quoteRu: '«Пришли фото родительской карты или код подтверждения из банка.»',
+    tagEn: 'Carding / Unauthorized Microtransaction Fraud',
+    tagRu: 'Кража платежных карт / Списания без спроса',
+    level: 'Critical',
+    whySuspiciousEn: 'Fraudsters manipulate younger players into secretly taking photos of their parents’ payment cards or reading SMS bank codes under the false promise of unlocking exclusive skins or Robux.',
+    whySuspiciousRu: 'Мошенники манипулируют доверием детей, заставляя тайком фотографировать банковские карты родителей или называть SMS-коды банка в обмен на обещания дорогих скинов.',
+    saferResponseEn: 'Always talk to your parents before making any purchases or entering card numbers anywhere. Never photograph or share bank cards with anyone online.',
+    saferResponseRu: 'Всегда обсуждайте любые покупки с родителями. Никогда не фотографируйте и никому не отправляйте данные банковских карт в интернете.',
+  },
+  {
+    id: 'pattern-9',
+    quoteEn: '“A supposed support agent asks you to move the conversation to a private chat.”',
+    quoteRu: '«Сотрудник техподдержки просит перейти в личные сообщения Discord/Telegram.»',
+    tagEn: 'Impersonation & Private Channel Extortion',
+    tagRu: 'Лже-поддержка в личных сообщениях',
+    level: 'High Risk',
+    whySuspiciousEn: 'Official customer support teams for Steam, Epic Games, Riot, Discord, or Roblox operate strictly through ticketing systems on verified web domains. They never resolve inquiries in unmoderated private DMs on third-party apps.',
+    whySuspiciousRu: 'Сотрудники поддержки Steam, Riot, Discord или Roblox общаются исключительно через официальные защищенные тикет-системы на своих доменах. Они никогда не ведут диалог в личке мессенджеров.',
+    saferResponseEn: 'Refuse to communicate in private messaging apps. Only submit tickets directly through the verified publisher support portal.',
+    saferResponseRu: 'Откажитесь от общения в мессенджерах. Подавайте обращения только через официальные порталы поддержки на сайтах разработчиков.',
+  },
+];
+---
+
+<section class="py-16 bg-slate-100/70 dark:bg-navy-950/40 border-y border-slate-200 dark:border-navy-800 transition-colors duration-200" id="scam-patterns-section">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange text-xs font-semibold mb-3">
+        {t('patterns.badge')}
+      </div>
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight mb-3">
+        {t('patterns.title')}
+      </h2>
+      <p class="text-sm sm:text-base text-slate-600 dark:text-cloud-muted leading-relaxed">
+        {t('patterns.subtitle')}
+      </p>
+    </div>
+
+    <!-- Patterns Interactive Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {patterns.map((item, index) => {
+        const quote = currentLang === 'en' ? item.quoteEn : item.quoteRu;
+        const tag = currentLang === 'en' ? item.tagEn : item.tagRu;
+        const why = currentLang === 'en' ? item.whySuspiciousEn : item.whySuspiciousRu;
+        const safer = currentLang === 'en' ? item.saferResponseEn : item.saferResponseRu;
+
+        return (
+          <div class="flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 p-6 shadow-sm hover:shadow-md transition-all duration-300">
+            <div>
+              <!-- Header tag + badge -->
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-violet">
+                  #{index + 1} {tag}
+                </span>
+                <span class={`px-2 py-0.5 rounded text-[10px] font-extrabold uppercase ${item.level === 'Critical' ? 'bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/30' : 'bg-orange-500/15 text-orange-600 dark:text-orange border border-orange-500/30'}`}>
+                  {item.level}
+                </span>
+              </div>
+
+              <!-- Quote Phrase -->
+              <blockquote class="text-base font-heading font-bold text-slate-900 dark:text-cloud mb-4 leading-snug">
+                {quote}
+              </blockquote>
+            </div>
+
+            <!-- Expandable Detailed Explanation -->
+            <div class="pt-4 border-t border-slate-100 dark:border-navy-800">
+              <button
+                type="button"
+                data-pattern-toggle={item.id}
+                class="w-full py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-between text-slate-700 dark:text-cloud-muted bg-slate-100 dark:bg-navy-800 hover:text-cyan-dark dark:hover:text-cyan hover:bg-slate-200 dark:hover:bg-navy-700 transition-colors"
+                aria-expanded="false"
+              >
+                <span class="toggle-text">{t('patterns.reveal')}</span>
+                <svg class="w-4 h-4 transition-transform duration-200 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              <div id={item.id} class="hidden mt-4 space-y-3 text-xs leading-relaxed">
+                <!-- Why Suspicious -->
+                <div class="p-3 rounded-xl bg-orange-500/10 border border-orange-500/30 text-slate-800 dark:text-cloud-muted">
+                  <span class="block font-bold text-orange-600 dark:text-orange mb-1">
+                    ⚠ {t('patterns.why_suspicious')}:
+                  </span>
+                  <p>{why}</p>
+                </div>
+
+                <!-- Safer Response -->
+                <div class="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-slate-800 dark:text-cloud-muted">
+                  <span class="block font-bold text-cyan-700 dark:text-cyan mb-1">
+                    ✓ {t('patterns.safe_response')}:
+                  </span>
+                  <p>{safer}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<script>
+  function setupPatternToggles() {
+    const buttons = document.querySelectorAll('[data-pattern-toggle]');
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-pattern-toggle');
+        if (!targetId) return;
+
+        const target = document.getElementById(targetId);
+        const icon = btn.querySelector('.toggle-icon');
+        const text = btn.querySelector('.toggle-text');
+        const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+
+        if (target) {
+          if (isExpanded) {
+            target.classList.add('hidden');
+            btn.setAttribute('aria-expanded', 'false');
+            icon?.classList.remove('rotate-180');
+          } else {
+            target.classList.remove('hidden');
+            btn.setAttribute('aria-expanded', 'true');
+            icon?.classList.add('rotate-180');
+          }
+        }
+      });
+    });
+  }
+
+  setupPatternToggles();
+  document.addEventListener('astro:page-load', setupPatternToggles);
+</script>

@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import CyberBackground from '../../../components/CyberBackground.astro';
+import ThreatSearch from '../../../components/ThreatSearch.astro';
+import { getCollection } from 'astro:content';
+import { useTranslations } from '../../../i18n/ui';
+
+const currentLang = 'ru';
+const t = useTranslations(currentLang);
+
+const allThreats = await getCollection('threats', ({ id }) => id.startsWith('ru/'));
+
+const articleItems = allThreats.map((item) => ({
+  slug: item.id.replace('ru/', '').replace(/\.md$/, ''),
+  title: item.data.title,
+  description: item.data.description,
+  category: item.data.category,
+  categoryTitle: item.data.category_title,
+  readingTime: item.data.reading_time,
+  warningSignsCount: item.data.warning_signs.length,
+}));
+
+const categories = [
+  { slug: 'account-security', title: 'Безопасность аккаунта' },
+  { slug: 'phishing', title: 'Фишинг' },
+  { slug: 'trading-and-items', title: 'Торговля и предметы' },
+  { slug: 'currency-and-payments', title: 'Валюта и платежи' },
+  { slug: 'fake-giveaways', title: 'Фейковые раздачи' },
+  { slug: 'fake-support', title: 'Поддельная поддержка' },
+  { slug: 'social-engineering', title: 'Социальная инженерия' },
+  { slug: 'incident-response', title: 'Реагирование на инциденты' },
+];
+
+const selectedCategory = Astro.url.searchParams.get('category') || '';
+const searchQuery = Astro.url.searchParams.get('q') || '';
+---
+
+<BaseLayout
+  title="База угроз — SafeInGame"
+  description="Образовательная библиотека игровых угроз SafeInGame. Поиск по схемам обмана, признаки опасности и проверенные шаги защиты."
+  currentLang={currentLang}
+  canonicalSlug="threats/"
+>
+  <div class="relative overflow-hidden py-12">
+    <CyberBackground variant="dense" />
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+    <div class="max-w-3xl mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-800 dark:text-cyan text-xs font-semibold mb-4">
+        Образовательная база знаний
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight mb-4">
+        База игровых угроз
+      </h1>
+      <p class="text-base text-slate-600 dark:text-cloud-muted leading-relaxed">
+        Интерактивный поиск по образовательным руководствам. Учитесь вовремя распознавать признаки компрометации до потери учетной записи или скинов.
+      </p>
+    </div>
+
+    <!-- Interactive Search & Filtering Component -->
+    <ThreatSearch
+      articles={articleItems}
+      categories={categories}
+      currentLang={currentLang}
+      initialCategory={selectedCategory}
+      initialQuery={searchQuery}
+    />
+    </div>
+  </div>
+</BaseLayout>

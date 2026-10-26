@@ -1,0 +1,82 @@
+---
+interface Props {
+  variant?: 'hero' | 'dense' | 'minimal';
+}
+
+const { variant = 'hero' } = Astro.props;
+---
+
+<div class="absolute inset-0 overflow-hidden pointer-events-none select-none z-0" aria-hidden="true">
+  <!-- Ambient Atmospheric Gradient Glows -->
+  <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-cyan/15 dark:bg-cyan/10 blur-[130px] rounded-full"></div>
+  <div class="absolute top-1/3 -right-32 w-[500px] h-[350px] bg-violet/10 dark:bg-violet/10 blur-[120px] rounded-full"></div>
+  <div class="absolute top-2/3 -left-32 w-[450px] h-[300px] bg-orange/10 dark:bg-orange/5 blur-[120px] rounded-full"></div>
+
+  <!-- Perspective Cyber Grid Surface -->
+  <div class="absolute inset-0 opacity-[0.035] dark:opacity-[0.07] cyber-grid-pattern">
+    <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="bgGridPattern" width="60" height="60" patternUnits="userSpaceOnUse">
+          <path d="M 60 0 L 0 0 0 60" fill="none" stroke="currentColor" stroke-width="1" class="text-slate-900 dark:text-cyan"/>
+          <circle cx="0" cy="0" r="1.5" fill="currentColor" class="text-cyan"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#bgGridPattern)"/>
+    </svg>
+  </div>
+
+  <!-- Slow Vertical Scanning Line -->
+  <div class="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan/30 to-transparent animate-scanline opacity-40"></div>
+
+  <!-- Floating Cyber & Gaming Silhouettes (CSS-animated, lightweight) -->
+  {variant !== 'minimal' && (
+    <div class="absolute inset-0">
+      <!-- 1. FPS Tactical Crosshair (Top Right) -->
+      <div class="absolute top-20 right-[12%] opacity-15 dark:opacity-25 animate-float-slow text-cyan">
+        <svg class="w-16 h-16 sm:w-20 sm:h-20" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="50" cy="50" r="36" stroke-dasharray="8 6"/>
+          <circle cx="50" cy="50" r="16"/>
+          <line x1="50" y1="6" x2="50" y2="26"/>
+          <line x1="50" y1="74" x2="50" y2="94"/>
+          <line x1="6" y1="50" x2="26" y2="50"/>
+          <line x1="74" y1="50" x2="94" y2="50"/>
+          <circle cx="50" cy="50" r="3" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <!-- 2. Game Controller Silhouette (Mid Left) -->
+      <div class="absolute top-1/2 left-[6%] opacity-15 dark:opacity-20 animate-float-reverse text-violet">
+        <svg class="w-20 h-20 sm:w-24 sm:h-24" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M28 36 C18 36 12 48 12 66 C12 76 18 82 26 80 L38 72 C42 69 46 68 50 68 C54 68 58 69 62 72 L74 80 C82 82 88 76 88 66 C88 48 82 36 72 36 Z" stroke-linejoin="round"/>
+          <!-- D-Pad -->
+          <path d="M28 48 V60 M22 54 H34" stroke-width="3" stroke-linecap="round"/>
+          <!-- Action Buttons -->
+          <circle cx="70" cy="50" r="2.5" fill="currentColor"/>
+          <circle cx="76" cy="56" r="2.5" fill="currentColor"/>
+          <circle cx="64" cy="56" r="2.5" fill="currentColor"/>
+          <circle cx="70" cy="62" r="2.5" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <!-- 3. Security Shield Outline (Bottom Center) -->
+      <div class="absolute bottom-16 right-[18%] opacity-10 dark:opacity-20 animate-float-slow text-lime">
+        <svg class="w-20 h-20 sm:w-24 sm:h-24" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M50 14 L80 28 V54 C80 72 66 84 50 90 C34 84 20 72 20 54 V28 Z" stroke-dasharray="6 4"/>
+          <path d="M42 52 L48 58 L62 44" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <!-- 4. Virtual Item Collectible Gem (Top Left) -->
+      <div class="absolute top-44 left-[15%] opacity-15 dark:opacity-25 animate-float-slow text-orange">
+        <svg class="w-12 h-12 sm:w-16 sm:h-16" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="50,12 85,38 50,88 15,38" stroke-linejoin="round"/>
+          <line x1="15" y1="38" x2="85" y2="38"/>
+          <line x1="50" y1="12" x2="35" y2="38"/>
+          <line x1="50" y1="12" x2="65" y2="38"/>
+          <line x1="35" y1="38" x2="50" y2="88"/>
+          <line x1="65" y1="38" x2="50" y2="88"/>
+        </svg>
+      </div>
+    </div>
+  )}
+</div>

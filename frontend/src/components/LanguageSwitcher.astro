@@ -1,0 +1,51 @@
+---
+interface Props {
+  currentLang: 'en' | 'ru';
+}
+
+const { currentLang } = Astro.props;
+const pathname = Astro.url.pathname;
+
+// Calculate target URL preserving sub-path
+const targetLang = currentLang === 'en' ? 'ru' : 'en';
+let targetUrl = pathname;
+
+if (pathname.startsWith('/en/')) {
+  targetUrl = pathname.replace('/en/', `/${targetLang}/`);
+} else if (pathname.startsWith('/ru/')) {
+  targetUrl = pathname.replace('/ru/', `/${targetLang}/`);
+} else if (pathname === '/en') {
+  targetUrl = `/${targetLang}/`;
+} else if (pathname === '/ru') {
+  targetUrl = `/${targetLang}/`;
+} else {
+  targetUrl = `/${targetLang}/`;
+}
+---
+
+<div class="flex items-center rounded-lg border border-slate-200 dark:border-navy-700 bg-slate-100 dark:bg-navy-850 p-0.5 text-xs font-medium">
+  <a
+    href={currentLang === 'en' ? '#' : targetUrl}
+    class={`px-2.5 py-1 rounded transition-colors ${
+      currentLang === 'en'
+        ? 'bg-cyan-dark dark:bg-cyan text-white dark:text-navy-950 font-bold shadow-sm'
+        : 'text-slate-600 dark:text-cloud-muted hover:text-slate-900 dark:hover:text-cloud'
+    }`}
+    aria-label="Switch to English"
+    aria-current={currentLang === 'en' ? 'page' : undefined}
+  >
+    EN
+  </a>
+  <a
+    href={currentLang === 'ru' ? '#' : targetUrl}
+    class={`px-2.5 py-1 rounded transition-colors ${
+      currentLang === 'ru'
+        ? 'bg-cyan-dark dark:bg-cyan text-white dark:text-navy-950 font-bold shadow-sm'
+        : 'text-slate-600 dark:text-cloud-muted hover:text-slate-900 dark:hover:text-cloud'
+    }`}
+    aria-label="Переключить на русский"
+    aria-current={currentLang === 'ru' ? 'page' : undefined}
+  >
+    RU
+  </a>
+</div>

@@ -1,0 +1,390 @@
+---
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  currentLang: 'en' | 'ru';
+}
+
+const { currentLang } = Astro.props;
+const t = useTranslations(currentLang);
+
+const quizData = [
+  {
+    questionEn: 'You receive a private message on Discord from a friend: "Hey, my team is 1 vote away from qualifying for the $10,000 championship! Please click this link and vote for us!" What is the safest course of action?',
+    questionRu: 'Вам в Discord пишет знакомый: «Привет! Нам не хватает одного голоса для выхода в финал турнира на $10,000! Перейди по ссылке и кликни за нашу команду!». Как поступить безопаснее всего?',
+    optionsEn: [
+      'Click the link and quickly sign in with your Steam/game credentials.',
+      'Decline and verify with your friend via voice or an alternate channel to see if their account was compromised.',
+      'Enter an old password to see if the site works.',
+      'Forward the link to your clan mates so they vote instead.'
+    ],
+    optionsRu: [
+      'Быстро перейти по ссылке и авторизоваться через игровой аккаунт.',
+      'Отказаться и связаться с другом голосом или через другой мессенджер, чтобы узнать, не взломали ли его.',
+      'Ввести старый недействительный пароль для проверки сайта.',
+      'Переслать ссылку в чат клана, чтобы проголосовали они.'
+    ],
+    correctIndex: 1,
+    explanationEn: 'Tournament voting links are the #1 phishing lure in CS2, Discord, and Steam. The friend’s account was almost certainly hijacked by an automated script designed to steal your credentials.',
+    explanationRu: 'Голосование за команды на фальшивых турнирах — самый частый фишинговый трюк. Профиль вашего знакомого, скорее всего, уже захвачен ботом для массовой рассылки спама.'
+  },
+  {
+    questionEn: 'A website promises to generate 5,000 free Gems or Robux, and asks you to enter the 6-digit confirmation code just sent to your email. What is actually happening?',
+    questionRu: 'Сайт обещает начислить 5,000 бесплатных гемов или Robux и просит ввести 6-значный код, только что пришедший на вашу почту. Что происходит на самом деле?',
+    optionsEn: [
+      'The game developer is verifying that you are a real human.',
+      'A scammer is logging into your account from another location, and the code will hand over full ownership of your profile.',
+      'The code is needed to transfer digital currency between game servers.',
+      'The site will deposit half the currency now and half tomorrow.'
+    ],
+    optionsRu: [
+      'Разработчики игры проверяют, что вы реальный человек, а не бот.',
+      'Мошенник параллельно входит в ваш аккаунт со своего устройства, и этот код отдаст ему полный контроль над профилем.',
+      'Код необходим банку для перевода виртуальной валюты.',
+      'Сайт начислит половину валюты сейчас, а половину завтра.'
+    ],
+    correctIndex: 1,
+    explanationEn: 'The 6-digit code is an instant multi-factor login token. Game publishers NEVER require your login codes to distribute legitimate rewards or promotions.',
+    explanationRu: 'Этот 6-значный код — одноразовый ключ входа. Разработчики никогда не запрашивают ваши коды безопасности для начисления наград.'
+  },
+  {
+    questionEn: 'While playing, someone claims they accidentally reported your account for fraud and says you must message an "Official Support Agent" on Discord within 2 hours or be permanently banned. What should you do?',
+    questionRu: 'Вам пишут, что случайно отправили жалобу на ваш профиль за мошенничество, и требуют написать «агенту поддержки» в Discord в течение 2 часов под угрозой вечного бана. Что делать?',
+    optionsEn: [
+      'Trade your rare skins to a temporary account for safekeeping.',
+      'Immediately message the Discord admin and send screenshots of your purchase receipts.',
+      'Block the user and report them; official staff NEVER mediate bans or resolve tickets through Discord.',
+      'Pay a small $10 verification fee to unfreeze your standing.'
+    ],
+    optionsRu: [
+      'Быстро перекинуть редкие скины на второй аккаунт для сохранности.',
+      'Срочно написать администратору в Discord и выслать чеки покупок.',
+      'Заблокировать отправителя и пожаловаться на него: настоящие сотрудники платформ НИКОГДА не решают вопросы банов через Discord.',
+      'Оплатить небольшую комиссию в $10 за разморозку статуса.'
+    ],
+    correctIndex: 2,
+    explanationEn: 'This is the infamous "accidental report" extortion scam. Valve, Epic, and Discord staff will NEVER contact you on personal chat handles or ask you to trade items for verification.',
+    explanationRu: 'Это классическая схема вымогательства «случайный репорт». Сотрудники Valve, Epic или Discord никогда не ведут диалог через личные сообщения в сторонних мессенджерах.'
+  },
+  {
+    questionEn: 'A competitive team captain tells you to download a custom voice plugin (.exe) or mod (.jar) from a direct MediaFire link to connect to their private match. Is it safe to run?',
+    questionRu: 'Капитан команды просит скачать кастомный голосовой плагин (.exe) или мод (.jar) по прямой ссылке на файлообменник для подключения к приватному матчу. Безопасно ли это?',
+    optionsEn: [
+      'Yes, if you run it in compatibility mode.',
+      'No. Executable files sent via direct chat links frequently contain infostealers that siphon browser passwords and session tokens in seconds.',
+      'Yes, if your Windows Defender does not instantly pop up.',
+      'Yes, because Discord scans all uploaded files.'
+    ],
+    optionsRu: [
+      'Да, если запустить файл в режиме совместимости.',
+      'Нет: исполняемые файлы из личных чатов почти всегда содержат трояны-стилеры, крадущие пароли браузера и токены сессий за секунды.',
+      'Да, если антивирус не среагировал в первую секунду.',
+      'Да, потому что Discord проверяет все файлы.'
+    ],
+    correctIndex: 1,
+    explanationEn: 'Never run executable files (.exe, .jar, .bat) sent via private chat. Attackers use custom "voice clients" or "mods" to deploy sophisticated infostealers.',
+    explanationRu: 'Никогда не запускайте исполняемые файлы (.exe, .jar) из личных чатов. Под видом турнирных утилит хакеры распространяют стилеры паролей.'
+  },
+  {
+    questionEn: 'You find a website offering 10,000 in-game currency for $15 (normally $100). The seller asks for your login credentials so they can "top up from a cheaper country". What is the biggest danger?',
+    questionRu: 'Сайт предлагает купить 10,000 внутриигровой валюты за 1000 рублей (в игре стоит 6000 рублей). Продавец просит логин и пароль, чтобы «задонатить через дешевый регион». В чем главная опасность?',
+    optionsEn: [
+      'The currency will arrive with a 24-hour delay.',
+      'The seller can hijack your account, or use stolen credit cards, which will trigger a permanent negative balance ban when the real owner charges back.',
+      'Your graphics settings will be reset to default.',
+      'There is no danger if the seller has a 5-star rating on their own site.'
+    ],
+    optionsRu: [
+      'Валюта придет с задержкой в 24 часа.',
+      'Продавец может угнать аккаунт либо оплатить покупку с ворованной кредитки — тогда при чарджбэке ваш аккаунт забанят за отрицательный баланс.',
+      'Сбросятся настройки графики в игре.',
+      'Никакой опасности нет, если на сайте продавца стоят 5 звезд.'
+    ],
+    correctIndex: 1,
+    explanationEn: 'Sharing login credentials violates platform rules. Cheap third-party top-ups are commonly funded by stolen credit cards, leading to punitive publisher bans once the chargeback hits.',
+    explanationRu: 'Передача аккаунта запрещена правилами. Серый донат часто оплачивается с краденых карт: после отзыва платежа банком аккаунт замораживается с долгом.'
+  },
+  {
+    questionEn: 'A stranger on Discord offers to trade for your rare Roblox limited or CS2 knife, but insists you must first export a `.har` file or open browser developer tools (F12) to "verify the item float". What should you do?',
+    questionRu: 'Вам предлагают выгодный обмен скина или редкой лимитки, но просят открыть инструменты разработчика (F12) и прислать `.har` файл «для проверки float предмета». Что делать?',
+    optionsEn: [
+      'Export the file and email it to them.',
+      'Immediately decline and block them. A HAR file contains your secret session cookies, allowing them to steal your account and inventory without knowing your password.',
+      'Rename the file before sending.',
+      'Send it only if they show their Steam inventory first.'
+    ],
+    optionsRu: [
+      'Экспортировать файл и отправить.',
+      'Немедленно отказаться и заблокировать: HAR-файл содержит сессионные куки авторизации, позволяющие войти в ваш профиль и украсть вещи без пароля.',
+      'Переименовать расширение файла перед отправкой.',
+      'Отправить, если собеседник покажет свой инвентарь.'
+    ],
+    correctIndex: 1,
+    explanationEn: 'HAR files contain raw browser network logs, including your `.ROBLOSECURITY` or `steamLoginSecure` cookies. Handing over this file allows instant account takeover without a password or 2FA code.',
+    explanationRu: 'HAR-файлы содержат сессионные токены браузера. Передача этого файла позволяет злоумышленнику войти в ваш аккаунт в обход пароля и двухфакторки.'
+  }
+];
+---
+
+<section class="py-16 bg-white dark:bg-navy-900 border-b border-slate-200 dark:border-navy-800 transition-colors duration-200" id="interactive-quiz-section">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="text-center mb-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-700 dark:text-cyan text-xs font-semibold mb-3">
+        {t('quiz.badge')}
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight mb-2">
+        {t('quiz.title')}
+      </h2>
+      <p class="text-xs sm:text-sm text-slate-600 dark:text-cloud-muted max-w-xl mx-auto">
+        {t('quiz.subtitle')}
+      </p>
+    </div>
+
+    <!-- Quiz Card Container -->
+    <div class="rounded-3xl border border-slate-200 dark:border-navy-700 bg-slate-50 dark:bg-navy-850 p-6 sm:p-8 shadow-sm">
+      <!-- Active Question View -->
+      <div id="quiz-question-view">
+        <!-- Progress bar -->
+        <div class="flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-cloud-subtle mb-3">
+          <span id="quiz-progress-text">Scenario 1 of 6</span>
+          <span id="quiz-score-badge" class="px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-700 dark:text-cyan text-[11px] font-bold">
+            Score: 0
+          </span>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-navy-800 h-1.5 rounded-full overflow-hidden mb-6">
+          <div id="quiz-progress-bar" class="bg-cyan h-full transition-all duration-300" style="width: 16.66%;"></div>
+        </div>
+
+        <!-- Question Title -->
+        <h3 id="quiz-question-title" class="text-base sm:text-lg font-heading font-bold text-slate-900 dark:text-cloud mb-6 leading-relaxed">
+          <!-- Populated by JS -->
+        </h3>
+
+        <!-- Options Container -->
+        <div id="quiz-options-container" class="space-y-3 mb-6">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Feedback Box (Hidden initially) -->
+        <div id="quiz-feedback-box" class="hidden mb-6 p-4 rounded-2xl border text-xs sm:text-sm leading-relaxed transition-all">
+          <p id="quiz-feedback-result" class="font-heading font-bold mb-1"></p>
+          <p id="quiz-feedback-explanation" class="text-slate-600 dark:text-cloud-muted"></p>
+        </div>
+
+        <!-- Next Button -->
+        <div class="flex justify-end">
+          <button
+            type="button"
+            id="quiz-next-btn"
+            class="hidden px-6 py-2.5 rounded-xl font-heading font-bold text-xs uppercase tracking-wider text-navy-950 bg-cyan hover:bg-cyan-light transition-all shadow-glow-cyan"
+          >
+            {t('quiz.next')} →
+          </button>
+        </div>
+      </div>
+
+      <!-- Result View (Hidden initially) -->
+      <div id="quiz-result-view" class="hidden text-center py-6">
+        <div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl font-bold bg-cyan-500/20 text-cyan">
+          🛡️
+        </div>
+        <h3 class="text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud mb-2">
+          {t('quiz.score_title')}
+        </h3>
+        <p id="quiz-final-score-text" class="text-base font-bold text-cyan-dark dark:text-cyan mb-3"></p>
+        <p id="quiz-final-feedback-text" class="text-xs sm:text-sm text-slate-600 dark:text-cloud-muted max-w-md mx-auto mb-8 leading-relaxed"></p>
+
+        <button
+          type="button"
+          id="quiz-restart-btn"
+          class="px-6 py-3 rounded-xl font-heading font-bold text-xs uppercase tracking-wider text-navy-950 bg-cyan hover:bg-cyan-light transition-all shadow-glow-cyan"
+        >
+          {t('quiz.restart')}
+        </button>
+
+        <p class="text-[10px] text-slate-400 dark:text-cloud-subtle mt-6 max-w-sm mx-auto">
+          {currentLang === 'en'
+            ? 'SafeInGame quizzes are educational exercises. Results do not constitute an official cybersecurity certification.'
+            : 'Тесты SafeInGame являются учебными упражнениями и не являются официальной профессиональной сертификацией.'}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Inject quiz data for client-side vanilla interactivity -->
+<script define:vars={{ quizData, currentLang }}>
+  window.__SAFEINGAME_QUIZ__ = {
+    data: quizData,
+    lang: currentLang
+  };
+</script>
+
+<script>
+  function setupQuiz() {
+    const config = (window as any).__SAFEINGAME_QUIZ__;
+    if (!config || !config.data) return;
+
+    const scenarios = config.data;
+    const isRu = config.lang === 'ru';
+
+    let currentIndex = 0;
+    let score = 0;
+    let answered = false;
+
+    const questionView = document.getElementById('quiz-question-view');
+    const resultView = document.getElementById('quiz-result-view');
+    const progressText = document.getElementById('quiz-progress-text');
+    const progressBar = document.getElementById('quiz-progress-bar');
+    const scoreBadge = document.getElementById('quiz-score-badge');
+    const questionTitle = document.getElementById('quiz-question-title');
+    const optionsContainer = document.getElementById('quiz-options-container');
+    const feedbackBox = document.getElementById('quiz-feedback-box');
+    const feedbackResult = document.getElementById('quiz-feedback-result');
+    const feedbackExplanation = document.getElementById('quiz-feedback-explanation');
+    const nextBtn = document.getElementById('quiz-next-btn');
+    const restartBtn = document.getElementById('quiz-restart-btn');
+    const finalScoreText = document.getElementById('quiz-final-score-text');
+    const finalFeedbackText = document.getElementById('quiz-final-feedback-text');
+
+    function renderQuestion(index: number) {
+      answered = false;
+      const item = scenarios[index];
+      const qText = isRu ? item.questionRu : item.questionEn;
+      const opts = isRu ? item.optionsRu : item.optionsEn;
+
+      if (progressText) {
+        progressText.textContent = isRu 
+          ? `Сценарий ${index + 1} из ${scenarios.length}` 
+          : `Scenario ${index + 1} of ${scenarios.length}`;
+      }
+      if (progressBar) {
+        progressBar.style.width = `${((index + 1) / scenarios.length) * 100}%`;
+      }
+      if (scoreBadge) {
+        scoreBadge.textContent = isRu ? `Счет: ${score}` : `Score: ${score}`;
+      }
+
+      if (questionTitle) questionTitle.textContent = qText;
+
+      if (optionsContainer) {
+        optionsContainer.innerHTML = '';
+        opts.forEach((optText: string, oIdx: number) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'w-full text-left p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-900 text-xs sm:text-sm text-slate-800 dark:text-cloud hover:border-cyan hover:bg-slate-50 dark:hover:bg-navy-800 transition-all font-medium flex items-start gap-3';
+          btn.innerHTML = `<span class="w-5 h-5 rounded-full border border-slate-300 dark:border-navy-600 flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">${String.fromCharCode(65 + oIdx)}</span><span>${optText}</span>`;
+
+          btn.addEventListener('click', () => handleAnswer(oIdx, btn));
+          optionsContainer.appendChild(btn);
+        });
+      }
+
+      if (feedbackBox) feedbackBox.classList.add('hidden');
+      if (nextBtn) nextBtn.classList.add('hidden');
+    }
+
+    function handleAnswer(selectedIndex: number, clickedBtn: HTMLButtonElement) {
+      if (answered) return;
+      answered = true;
+
+      const item = scenarios[currentIndex];
+      const isCorrect = selectedIndex === item.correctIndex;
+      const explanation = isRu ? item.explanationRu : item.explanationEn;
+
+      if (isCorrect) {
+        score++;
+        if (scoreBadge) scoreBadge.textContent = isRu ? `Счет: ${score}` : `Score: ${score}`;
+      }
+
+      // Highlight options
+      const allButtons = optionsContainer?.querySelectorAll('button') || [];
+      allButtons.forEach((b, idx) => {
+        (b as HTMLButtonElement).disabled = true;
+        if (idx === item.correctIndex) {
+          b.className = 'w-full text-left p-3.5 sm:p-4 rounded-2xl border border-lime-500/50 bg-lime-500/10 text-slate-900 dark:text-cloud text-xs sm:text-sm font-semibold flex items-start gap-3';
+        } else if (idx === selectedIndex && !isCorrect) {
+          b.className = 'w-full text-left p-3.5 sm:p-4 rounded-2xl border border-red-500/50 bg-red-500/10 text-slate-900 dark:text-cloud text-xs sm:text-sm font-medium flex items-start gap-3';
+        } else {
+          b.className = 'w-full text-left p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-navy-800 opacity-50 text-xs sm:text-sm flex items-start gap-3';
+        }
+      });
+
+      // Display feedback box
+      if (feedbackBox && feedbackResult && feedbackExplanation) {
+        feedbackBox.classList.remove('hidden');
+        if (isCorrect) {
+          feedbackBox.className = 'mb-6 p-4 rounded-2xl border border-lime-500/40 bg-lime-500/10 text-xs sm:text-sm';
+          feedbackResult.textContent = isRu ? '✓ Отлично! Правильный ответ' : '✓ Excellent! Correct Answer';
+          feedbackResult.className = 'font-heading font-bold text-lime-600 dark:text-lime mb-1';
+        } else {
+          feedbackBox.className = 'mb-6 p-4 rounded-2xl border border-red-500/40 bg-red-500/10 text-xs sm:text-sm';
+          feedbackResult.textContent = isRu ? '✕ Осторожно! Это ловушка' : '✕ Careful! That is a Scam Trap';
+          feedbackResult.className = 'font-heading font-bold text-red-600 dark:text-red-400 mb-1';
+        }
+        feedbackExplanation.textContent = explanation;
+      }
+
+      // Show Next or Finish Button
+      if (nextBtn) {
+        nextBtn.classList.remove('hidden');
+        if (currentIndex === scenarios.length - 1) {
+          nextBtn.textContent = isRu ? 'Посмотреть результаты →' : 'See Results →';
+        } else {
+          nextBtn.textContent = isRu ? 'Следующий сценарий →' : 'Next Scenario →';
+        }
+      }
+    }
+
+    nextBtn?.addEventListener('click', () => {
+      if (currentIndex < scenarios.length - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+      } else {
+        showResults();
+      }
+    });
+
+    function showResults() {
+      if (questionView) questionView.classList.add('hidden');
+      if (resultView) resultView.classList.remove('hidden');
+
+      if (finalScoreText) {
+        finalScoreText.textContent = isRu
+          ? `Вы ответили правильно на ${score} из ${scenarios.length} сценариев!`
+          : `You got ${score} out of ${scenarios.length} scenarios correct!`;
+      }
+
+      if (finalFeedbackText) {
+        if (score === scenarios.length) {
+          finalFeedbackText.textContent = isRu
+            ? 'Превосходно! У вас отличные инстинкты кибербезопасности. Вы прекрасно распознаете фишинг, API-скам и социальную инженерию.'
+            : 'Outstanding! You have elite gaming security awareness. You easily spot phishing, API traps, and social manipulation.';
+        } else if (score >= 4) {
+          finalFeedbackText.textContent = isRu
+            ? 'Хороший результат! Вы распознаете большинство угроз, но мошенники постоянно совершенствуют скрипты. Ознакомьтесь с нашими статьями для закрепления.'
+            : 'Good job! You catch most attacks, but fraudsters continuously evolve. Check out our threat guides to sharpen your defenses.';
+        } else {
+          finalFeedbackText.textContent = isRu
+            ? 'Будьте бдительны! В онлайн-играх легко потерять аккаунт из-за спешки или доверия к незнакомцам. Изучите наши руководства перед сделками.'
+            : 'Stay sharp! In online gaming, panic and misplaced trust lead to lost accounts. Review our game guides before making trades.';
+        }
+      }
+    }
+
+    restartBtn?.addEventListener('click', () => {
+      currentIndex = 0;
+      score = 0;
+      if (resultView) resultView.classList.add('hidden');
+      if (questionView) questionView.classList.remove('hidden');
+      renderQuestion(0);
+    });
+
+    // Start initial question
+    renderQuestion(0);
+  }
+
+  setupQuiz();
+  document.addEventListener('astro:page-load', setupQuiz);
+</script>

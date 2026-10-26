@@ -1,0 +1,21 @@
+---
+import GameSecurityPage from '../../../components/GameSecurityPage.astro';
+import { getAllGames } from '../../../data/games';
+import type { GameSecurityProfile } from '../../../data/games';
+
+export async function getStaticPaths() {
+  const games = getAllGames('en');
+  return games.map((game) => ({
+    params: { slug: game.slug },
+    props: { game },
+  }));
+}
+
+interface Props {
+  game: GameSecurityProfile;
+}
+
+const { game } = Astro.props;
+---
+
+<GameSecurityPage game={game} currentLang="en" />
