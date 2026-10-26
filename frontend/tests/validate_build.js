@@ -16,12 +16,11 @@ const requiredFiles = [
   'robots.txt',
   'favicon.svg',
   'images/logo.png',
-  'images/logo.svg',
-  'images/games/cs2-steam.svg',
-  'images/games/brawl-stars.svg',
-  'images/games/pubg.svg',
-  'images/games/roblox.svg',
-  'images/games/minecraft.svg',
+  'images/games/cs2-steam.jpg',
+  'images/games/brawl-stars.jpg',
+  'images/games/pubg.jpg',
+  'images/games/roblox.webp',
+  'images/games/minecraft.webp',
   'en/index.html',
   'en/safety/index.html',
   'en/threats/index.html',
@@ -111,12 +110,14 @@ console.log(`✓ All 5 Game Security Centers in EN and RU (10 game pages) verifi
 // 5. Verify Theme Toggle and Homepage Features
 const enIndexHtml = fs.readFileSync(path.join(distDir, 'en', 'index.html'), 'utf-8');
 assert.ok(enIndexHtml.includes('theme-toggle-btn'), 'Theme toggle button missing on EN index page');
+assert.ok(enIndexHtml.includes('scroll-to-top-btn'), 'Scroll-to-top button missing on EN index page');
 assert.ok(enIndexHtml.includes('scam-patterns'), 'Universal scam patterns section missing on EN index');
 assert.ok(enIndexHtml.includes('scam-quiz'), 'Scam awareness quiz section missing on EN index');
 assert.ok(enIndexHtml.includes('tilt-card'), 'Interactive 3D tilt cards missing on EN index');
 
 const ruIndexHtml = fs.readFileSync(path.join(distDir, 'ru', 'index.html'), 'utf-8');
 assert.ok(ruIndexHtml.includes('theme-toggle-btn'), 'Theme toggle button missing on RU index page');
+assert.ok(ruIndexHtml.includes('scroll-to-top-btn'), 'Scroll-to-top button missing on RU index page');
 assert.ok(ruIndexHtml.includes('scam-patterns'), 'Universal scam patterns section missing on RU index');
 assert.ok(ruIndexHtml.includes('scam-quiz'), 'Scam awareness quiz section missing on RU index');
 
