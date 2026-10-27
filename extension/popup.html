@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeInGame Shield</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="hud-container">
+    <!-- Header -->
+    <header class="hud-header">
+      <div class="brand">
+        <img src="icons/icon48.png" alt="Logo" class="logo-img">
+        <div>
+          <h1 class="brand-title">Safe<span>In</span>Game</h1>
+          <span class="brand-sub">Shield v1.0</span>
+        </div>
+      </div>
+      <div class="status-indicator">
+        <span class="pulse-dot"></span>
+        <span class="status-text">Active</span>
+      </div>
+    </header>
+
+    <!-- Active Tab Status Card -->
+    <div class="tab-card">
+      <div class="tab-header">
+        <span class="tab-label">CURRENT TAB DOMAIN</span>
+        <span id="tab-risk-badge" class="badge badge-safe">SAFE</span>
+      </div>
+      <div id="tab-domain" class="tab-domain">Checking domain...</div>
+      <div id="tab-verdict" class="tab-verdict">Evaluating security profile...</div>
+    </div>
+
+    <!-- Quick Scan Input -->
+    <div class="scan-box">
+      <label for="url-input" class="input-label">ANALYZE CUSTOM LINK</label>
+      <div class="input-group">
+        <input type="text" id="url-input" placeholder="paste link or domain to check...">
+        <button id="btn-scan" class="btn-scan">SCAN</button>
+      </div>
+    </div>
+
+    <!-- Results Area -->
+    <div id="scan-result-card" class="result-card hidden">
+      <div class="result-row">
+        <span class="result-title" id="res-domain">domain.com</span>
+        <span class="score-pill" id="res-score">95% Risk</span>
+      </div>
+      <p id="res-verdict" class="result-desc"></p>
+      <div id="res-flags" class="flags-list"></div>
+    </div>
+
+    <!-- Footer Links -->
+    <footer class="hud-footer">
+      <a href="http://localhost:4321/en/lab/" target="_blank" class="footer-link">Scam Lab & Exam</a>
+      <span class="sep">•</span>
+      <a href="http://localhost:4321/en/scanner/" target="_blank" class="footer-link">Web Hub</a>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ScamLab from '../../components/ScamLab.astro';
+import CyberBackground from '../../components/CyberBackground.astro';
+
+const title = 'Scam Lab: Interactive Attack Simulator & Certification — SafeInGame';
+const description = 'Train against realistic phishing lures, test your instincts in our interactive sandbox, and earn your verified Cyber Hygiene Certificate.';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  currentLang="en"
+  canonicalSlug="lab/"
+>
+  <div class="relative min-h-screen py-12 lg:py-16">
+    <CyberBackground />
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs text-slate-500 dark:text-cloud-subtle mb-8" aria-label="Breadcrumb">
+        <a href="/en/" class="hover:text-cyan transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-slate-800 dark:text-cloud font-medium">Scam Lab & Exam</span>
+      </nav>
+
+      <!-- Page Header -->
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border border-cyan-500/40 bg-cyan-500/10 text-cyan-800 dark:text-cyan uppercase tracking-wider mb-4">
+          <span>🎮 Interactive Defense Sandbox</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight mb-4">
+          Scam Lab & Certification Exam
+        </h1>
+        <p class="text-base sm:text-lg text-slate-600 dark:text-cloud-muted leading-relaxed">
+          Step into our safe cyber training environment. Learn to spot deceptive Discord invitations, API trade hijacks, and session cookie stealers — then earn your verified Cyber Resilience Certificate.
+        </p>
+      </div>
+
+      <!-- Main Scam Lab Component -->
+      <div class="mb-16">
+        <ScamLab currentLang="en" />
+      </div>
+    </div>
+  </div>
+</BaseLayout>

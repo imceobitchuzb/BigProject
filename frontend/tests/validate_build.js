@@ -30,6 +30,7 @@ const requiredFiles = [
   'en/terms/index.html',
   'en/games/index.html',
   'en/scanner/index.html',
+  'en/lab/index.html',
   'ru/index.html',
   'ru/safety/index.html',
   'ru/threats/index.html',
@@ -39,6 +40,7 @@ const requiredFiles = [
   'ru/terms/index.html',
   'ru/games/index.html',
   'ru/scanner/index.html',
+  'ru/lab/index.html',
 ];
 
 for (const file of requiredFiles) {
@@ -140,5 +142,16 @@ assert.ok(ruScannerHtml.includes('id="scanner-input"'), 'Scanner input missing o
 assert.ok(ruScannerHtml.includes('cyber-scanner-wrapper'), 'Cyber scanner wrapper missing on RU scanner page');
 
 console.log('✓ Phishing link scanner verified in EN and RU.');
+
+// 8. Verify Scam Lab and Certification Exam pages in EN and RU
+const enLabHtml = fs.readFileSync(path.join(distDir, 'en', 'lab', 'index.html'), 'utf-8');
+assert.ok(enLabHtml.includes('scam-lab-container'), 'Scam Lab container missing on EN lab page');
+assert.ok(enLabHtml.includes('certificate-box'), 'Certificate generator missing on EN lab page');
+
+const ruLabHtml = fs.readFileSync(path.join(distDir, 'ru', 'lab', 'index.html'), 'utf-8');
+assert.ok(ruLabHtml.includes('scam-lab-container'), 'Scam Lab container missing on RU lab page');
+assert.ok(ruLabHtml.includes('certificate-box'), 'Certificate generator missing on RU lab page');
+
+console.log('✓ Scam Lab training sandbox and certification exam verified in EN and RU.');
 
 console.log('✓ Build validation PASSED: 100% checks successful.');

