@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LinkScanner from '../../components/LinkScanner.astro';
+import CyberBackground from '../../components/CyberBackground.astro';
+
+const title = 'Кибер-сканер подозрительных ссылок — SafeInGame';
+const description = 'Мгновенная проверка игровых ссылок на фишинг, скрытые символы (Homoglyph) и тайпосквоттинг. Защита аккаунтов и инвентарей от кражи.';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  currentLang="ru"
+  canonicalSlug="scanner/"
+>
+  <div class="relative min-h-screen py-12 lg:py-16">
+    <CyberBackground />
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs text-slate-500 dark:text-cloud-subtle mb-8" aria-label="Breadcrumb">
+        <a href="/ru/" class="hover:text-cyan transition-colors">Главная</a>
+        <span>/</span>
+        <span class="text-slate-800 dark:text-cloud font-medium">Кибер-сканер ссылок</span>
+      </nav>
+
+      <!-- Page Header -->
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border border-cyan-500/40 bg-cyan-500/10 text-cyan-800 dark:text-cyan uppercase tracking-wider mb-4">
+          <span>⚡ Инструмент активной диагностики безопасности</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight mb-4">
+          Кибер-сканер игровых ссылок и фишинга
+        </h1>
+        <p class="text-base sm:text-lg text-slate-600 dark:text-cloud-muted leading-relaxed">
+          Прислали ссылку в Discord, Telegram или чате игры? Проверьте подлинность домена, найдите скрытые поддельные символы и оцените уровень риска перед переходом и авторизацией.
+        </p>
+      </div>
+
+      <!-- Main Scanner Widget -->
+      <div class="mb-16">
+        <LinkScanner currentLang="ru" />
+      </div>
+
+      <!-- Technical Architecture & How It Works Info Section -->
+      <section class="max-w-4xl mx-auto pt-8 border-t border-slate-200 dark:border-navy-800">
+        <h2 class="text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud mb-6 text-center">
+          Как алгоритмы SafeInGame распознают скам
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white/80 dark:bg-navy-850/80 backdrop-blur-sm">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-700 dark:text-cyan flex items-center justify-center font-bold text-lg mb-4">
+              1
+            </div>
+            <h3 class="text-base font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+              Детект Homoglyph атак
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+              Выявляет подмену символов в Punycode / IDN доменах, когда злоумышленник заменяет латинские буквы визуально неотличимыми русскими или греческими (например, «а» или «с» в слове steam).
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white/80 dark:bg-navy-850/80 backdrop-blur-sm">
+            <div class="w-10 h-10 rounded-xl bg-violet-500/20 text-violet-700 dark:text-violet flex items-center justify-center font-bold text-lg mb-4">
+              2
+            </div>
+            <h3 class="text-base font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+              Анализ Левенштейна
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+              Алгоритм Дамерау-Левенштейна вычисляет дистанцию редактирования относительно официальных баз Steam, Roblox, Supercell, PUBG и Minecraft для поиска тайпосквоттинга и сайтов-клонов.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white/80 dark:bg-navy-850/80 backdrop-blur-sm">
+            <div class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-600 dark:text-orange flex items-center justify-center font-bold text-lg mb-4">
+              3
+            </div>
+            <h3 class="text-base font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+              Эвристический профиль
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+              Анализирует опасные доменные зоны (.xyz, .top, .click), маскировку брендов в поддоменах, прямые IP-адреса и маркеры социальной инженерии («бесплатные скины», «голосование за турнир»).
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

@@ -29,6 +29,7 @@ const requiredFiles = [
   'en/privacy/index.html',
   'en/terms/index.html',
   'en/games/index.html',
+  'en/scanner/index.html',
   'ru/index.html',
   'ru/safety/index.html',
   'ru/threats/index.html',
@@ -37,6 +38,7 @@ const requiredFiles = [
   'ru/privacy/index.html',
   'ru/terms/index.html',
   'ru/games/index.html',
+  'ru/scanner/index.html',
 ];
 
 for (const file of requiredFiles) {
@@ -127,5 +129,16 @@ console.log('✓ Dual-theme toggle, universal scam patterns, and scam quiz verif
 const enContactHtml = fs.readFileSync(path.join(distDir, 'en', 'contact', 'index.html'), 'utf-8');
 assert.ok(enContactHtml.includes('id="safeingame-contact-form"'), 'Contact form missing on EN page');
 assert.ok(enContactHtml.includes('name="honeypot"'), 'Honeypot anti-spam field missing on contact form');
+
+// 7. Verify live scanner pages in EN and RU
+const enScannerHtml = fs.readFileSync(path.join(distDir, 'en', 'scanner', 'index.html'), 'utf-8');
+assert.ok(enScannerHtml.includes('id="scanner-input"'), 'Scanner input missing on EN scanner page');
+assert.ok(enScannerHtml.includes('cyber-scanner-wrapper'), 'Cyber scanner wrapper missing on EN scanner page');
+
+const ruScannerHtml = fs.readFileSync(path.join(distDir, 'ru', 'scanner', 'index.html'), 'utf-8');
+assert.ok(ruScannerHtml.includes('id="scanner-input"'), 'Scanner input missing on RU scanner page');
+assert.ok(ruScannerHtml.includes('cyber-scanner-wrapper'), 'Cyber scanner wrapper missing on RU scanner page');
+
+console.log('✓ Phishing link scanner verified in EN and RU.');
 
 console.log('✓ Build validation PASSED: 100% checks successful.');

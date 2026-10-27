@@ -11,6 +11,8 @@
 | Method | Endpoint | Description | Rate Limit |
 |---|---|---|---|
 | `GET` | `/api/v1/health` | Health & database connectivity status | None |
+| `POST` | `/api/v1/scanner/check` | Analyze suspicious URL for phishing/typosquatting | 30 / minute |
+| `GET` | `/api/v1/scanner/targets` | List monitored official gaming platform domains | 60 / minute |
 | `GET` | `/api/v1/categories` | Retrieve published threat categories | None |
 | `GET` | `/api/v1/articles` | Search and list educational articles | None |
 | `GET` | `/api/v1/articles/{slug}` | Retrieve single article by slug | None |

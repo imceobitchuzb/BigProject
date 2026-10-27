@@ -14,6 +14,7 @@ const pathname = Astro.url.pathname;
 
 const navItems = [
   { href: `/${currentLang}/`, label: t('nav.home') },
+  { href: `/${currentLang}/scanner/`, label: t('nav.scanner'), badge: 'AI' },
   { href: `/${currentLang}/games/`, label: t('nav.games') },
   { href: `/${currentLang}/safety/`, label: t('nav.safety') },
   { href: `/${currentLang}/threats/`, label: t('nav.threats') },

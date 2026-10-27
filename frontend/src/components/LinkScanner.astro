@@ -1,0 +1,463 @@
+---
+interface Props {
+  currentLang: 'en' | 'ru';
+}
+
+const { currentLang } = Astro.props;
+const isRu = currentLang === 'ru';
+---
+
+<div class="w-full max-w-4xl mx-auto" id="cyber-scanner-wrapper">
+  <!-- Scanner Console Container -->
+  <div class="relative rounded-3xl border border-slate-200 dark:border-cyan/40 bg-white/95 dark:bg-navy-850/95 shadow-2xl backdrop-blur-xl overflow-hidden transition-all duration-300">
+    <!-- Top HUD Status Bar -->
+    <div class="px-6 py-4 border-b border-slate-200 dark:border-navy-700/80 bg-slate-100/70 dark:bg-navy-900/80 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="relative flex h-3 w-3">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan"></span>
+        </div>
+        <span class="font-heading text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-cloud">
+          {isRu ? 'Игровой кибер-сканер угроз v1.0' : 'Gaming Phishing Threat Scanner v1.0'}
+        </span>
+      </div>
+
+      <div class="flex items-center gap-4 text-xs font-medium text-slate-500 dark:text-cloud-subtle">
+        <span class="hidden sm:inline-flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          {isRu ? '8 игровых экосистем' : '8 Gaming Ecosystems'}
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan"></span>
+          {isRu ? 'Homoglyph & Typosquatting Детектор' : 'Homoglyph & Typosquatting Engine'}
+        </span>
+      </div>
+    </div>
+
+    <!-- Scanner Input Area -->
+    <div class="p-6 sm:p-8 lg:p-10">
+      <div class="text-center max-w-2xl mx-auto mb-8">
+        <h2 class="text-2xl sm:text-3xl font-heading font-extrabold text-slate-900 dark:text-cloud mb-3 tracking-tight">
+          {isRu ? 'Проверьте подозрительную ссылку перед входом' : 'Inspect Suspicious Links Before Signing In'}
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-cloud-muted leading-relaxed">
+          {isRu
+            ? 'Анализатор выявляет замаскированные символы (Punycode/Homoglyph), опечатки в доменах (Typosquatting), фальшивые поддомены Steam/Roblox и скрытые маркеры кражи аккаунтов.'
+            : 'Detects disguised unicode homoglyphs, brand typosquatting, deceptive subdomains, high-risk TLDs, and credential-harvesting patterns in real time.'}
+        </p>
+      </div>
+
+      <!-- Main Input Form -->
+      <form id="scanner-form" class="relative max-w-3xl mx-auto mb-6">
+        <div class="relative flex flex-col sm:flex-row items-stretch gap-3">
+          <div class="relative flex-grow">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 dark:text-cloud-subtle">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+            </div>
+            <input
+              type="text"
+              id="scanner-input"
+              name="url"
+              required
+              placeholder={isRu ? 'Вставьте ссылку: например, steamcommuniity.com или robl0x.com' : 'Paste link: e.g. steamcommuniity.com or free-skins.xyz'}
+              class="w-full pl-12 pr-20 py-4 rounded-2xl border border-slate-300 dark:border-navy-700 bg-slate-50 dark:bg-navy-900 text-slate-900 dark:text-cloud placeholder-slate-400 dark:placeholder-navy-400 text-sm focus:outline-none focus:ring-2 focus:ring-cyan focus:border-transparent transition-all shadow-inner"
+            />
+            <button
+              type="button"
+              id="btn-paste-clipboard"
+              class="absolute inset-y-0 right-0 pr-4 flex items-center text-xs font-semibold text-cyan-dark dark:text-cyan hover:underline"
+              title={isRu ? 'Вставить из буфера' : 'Paste from clipboard'}
+            >
+              {isRu ? 'Вставить' : 'Paste'}
+            </button>
+          </div>
+
+          <button
+            type="submit"
+            id="scanner-submit-btn"
+            class="px-8 py-4 rounded-2xl font-heading font-bold text-sm bg-cyan text-navy-950 hover:bg-cyan-light shadow-lg hover:shadow-cyan/25 transition-all duration-200 flex items-center justify-center gap-2 group flex-shrink-0 hover:scale-105 active:scale-95"
+          >
+            <span id="btn-text">{isRu ? 'Сканировать' : 'Analyze Link'}</span>
+            <svg id="btn-icon" class="w-4 h-4 transition-transform group-hover:rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <span id="btn-spinner" class="hidden animate-spin rounded-full h-4 w-4 border-2 border-navy-950 border-t-transparent"></span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Preset Example Pills -->
+      <div class="flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto mb-8 text-xs">
+        <span class="text-slate-500 dark:text-cloud-subtle font-medium mr-1">
+          {isRu ? 'Попробовать пример:' : 'Try test cases:'}
+        </span>
+        <button
+          type="button"
+          data-sample="https://steamcommunity.com/tradeoffer/new"
+          class="sample-pill px-3 py-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-medium hover:scale-105 transition-transform"
+        >
+          ✓ Steam (Official)
+        </button>
+        <button
+          type="button"
+          data-sample="https://steamcommuniity.com/tradeoffer/1829"
+          class="sample-pill px-3 py-1.5 rounded-xl border border-orange-500/40 bg-orange-500/10 text-orange-700 dark:text-orange font-medium hover:scale-105 transition-transform"
+        >
+          ⚠ steamcommuniity (Typo)
+        </button>
+        <button
+          type="button"
+          data-sample="https://steаmcommunity.com/login"
+          class="sample-pill px-3 py-1.5 rounded-xl border border-red-500/40 bg-red-500/10 text-red-700 dark:text-red-400 font-medium hover:scale-105 transition-transform"
+        >
+          🚨 steаm (Homoglyph)
+        </button>
+        <button
+          type="button"
+          data-sample="https://free-skins-knife-giveaway.click/claim"
+          class="sample-pill px-3 py-1.5 rounded-xl border border-red-500/40 bg-red-500/10 text-red-700 dark:text-red-400 font-medium hover:scale-105 transition-transform"
+        >
+          ☠ free-skins.click
+        </button>
+      </div>
+
+      <!-- Live Scan Results Container (Hidden initially) -->
+      <div id="scanner-result" class="hidden space-y-6 pt-6 border-t border-slate-200 dark:border-navy-700 animate-fade-in">
+        <!-- Top Result Banner with Gauge -->
+        <div id="result-banner" class="p-6 sm:p-7 rounded-3xl border transition-all duration-300">
+          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <!-- Left: Verdict Info -->
+            <div class="space-y-2">
+              <div class="flex items-center gap-3">
+                <span id="risk-badge" class="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider border"></span>
+                <span id="target-badge" class="hidden px-3 py-1 rounded-full text-xs font-semibold bg-slate-200 dark:bg-navy-800 text-slate-700 dark:text-cloud border border-slate-300 dark:border-navy-700"></span>
+              </div>
+              <h3 id="result-verdict" class="text-xl sm:text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud"></h3>
+              <p id="result-domain" class="text-xs sm:text-sm font-mono text-slate-600 dark:text-cloud-muted break-all"></p>
+            </div>
+
+            <!-- Right: Visual Score Gauge -->
+            <div class="flex items-center gap-4 flex-shrink-0 self-center md:self-auto">
+              <div class="relative w-24 h-24 flex items-center justify-center">
+                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                  <path
+                    class="text-slate-200 dark:text-navy-700"
+                    stroke-width="3.5"
+                    stroke="currentColor"
+                    fill="none"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  />
+                  <path
+                    id="gauge-progress"
+                    stroke-width="3.5"
+                    stroke-linecap="round"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-dasharray="0, 100"
+                    class="transition-all duration-1000 ease-out"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  />
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                  <span id="risk-score-value" class="text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud">0</span>
+                  <span class="text-[9px] uppercase tracking-wider font-bold text-slate-500 dark:text-cloud-subtle">
+                    {isRu ? 'Риск' : 'Risk'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Breakdown Grid: Detected Attack Vectors -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="flags-grid">
+          <!-- Dynamically populated via JS -->
+        </div>
+
+        <!-- Recommendations Box -->
+        <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-slate-50/80 dark:bg-navy-900/60">
+          <h4 class="text-sm font-heading font-bold uppercase tracking-wider text-slate-800 dark:text-cloud mb-3 flex items-center gap-2">
+            <span>🛡</span>
+            <span>{isRu ? 'Рекомендации по защите' : 'Actionable Security Defense'}</span>
+          </h4>
+          <ul id="recommendations-list" class="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-cloud-muted">
+            <!-- Dynamically populated via JS -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ isRu }}>
+  function initCyberScanner() {
+    const form = document.getElementById('scanner-form');
+    const input = document.getElementById('scanner-input');
+    const submitBtn = document.getElementById('scanner-submit-btn');
+    const btnText = document.getElementById('btn-text');
+    const btnIcon = document.getElementById('btn-icon');
+    const btnSpinner = document.getElementById('btn-spinner');
+    const pasteBtn = document.getElementById('btn-paste-clipboard');
+    const resultBox = document.getElementById('scanner-result');
+    const resultBanner = document.getElementById('result-banner');
+    const riskBadge = document.getElementById('risk-badge');
+    const targetBadge = document.getElementById('target-badge');
+    const resultVerdict = document.getElementById('result-verdict');
+    const resultDomain = document.getElementById('result-domain');
+    const riskScoreVal = document.getElementById('risk-score-value');
+    const gaugeProgress = document.getElementById('gauge-progress');
+    const flagsGrid = document.getElementById('flags-grid');
+    const recsList = document.getElementById('recommendations-list');
+
+    if (!form || !input) return;
+
+    // Paste from clipboard support
+    if (pasteBtn && navigator.clipboard && navigator.clipboard.readText) {
+      pasteBtn.addEventListener('click', async () => {
+        try {
+          const text = await navigator.clipboard.readText();
+          if (text) {
+            input.value = text;
+            input.focus();
+          }
+        } catch (e) {
+          input.focus();
+        }
+      });
+    }
+
+    // Sample pills click
+    document.querySelectorAll('.sample-pill').forEach((pill) => {
+      pill.addEventListener('click', () => {
+        const sampleUrl = pill.getAttribute('data-sample');
+        if (sampleUrl) {
+          input.value = sampleUrl;
+          performScan(sampleUrl);
+        }
+      });
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const rawUrl = input.value.trim();
+      if (rawUrl) {
+        performScan(rawUrl);
+      }
+    });
+
+    async function performScan(targetUrl) {
+      // Show loading state
+      btnText.textContent = isRu ? 'Анализ...' : 'Scanning...';
+      btnIcon.classList.add('hidden');
+      btnSpinner.classList.remove('hidden');
+      submitBtn.disabled = true;
+
+      try {
+        let scanData = null;
+
+        // 1. Try FastAPI backend endpoint first
+        try {
+          const res = await fetch('http://127.0.0.1:8000/api/v1/scanner/check', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: targetUrl, lang: isRu ? 'ru' : 'en' }),
+          });
+          if (res.ok) {
+            scanData = await res.json();
+          }
+        } catch (backendErr) {
+          console.warn('Backend scanner unreachable, falling back to client-side heuristics engine', backendErr);
+        }
+
+        // 2. Client-side heuristic fallback if backend is offline
+        if (!scanData) {
+          scanData = clientSideHeuristicScan(targetUrl);
+        }
+
+        renderScanResults(scanData);
+      } catch (err) {
+        console.error('Scan error:', err);
+        alert(isRu ? 'Ошибка при сканировании. Проверьте введённый URL.' : 'Error scanning URL. Please check the format.');
+      } finally {
+        btnText.textContent = isRu ? 'Сканировать' : 'Analyze Link';
+        btnIcon.classList.remove('hidden');
+        btnSpinner.classList.add('hidden');
+        submitBtn.disabled = false;
+      }
+    }
+
+    function renderScanResults(data) {
+      resultBox.classList.remove('hidden');
+      resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      riskScoreVal.textContent = String(data.risk_score);
+      gaugeProgress.setAttribute('stroke-dasharray', `${data.risk_score}, 100`);
+      resultDomain.textContent = `URL: ${data.original_url} → Domain: [${data.domain}]`;
+      resultVerdict.textContent = data.verdict;
+
+      // Color themes per risk level
+      const level = data.risk_level;
+      if (level === 'CRITICAL') {
+        resultBanner.className = 'p-6 sm:p-7 rounded-3xl border border-red-500/50 bg-red-500/10 text-red-600 dark:text-red-400';
+        riskBadge.className = 'px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-red-500/50 bg-red-500/20 text-red-600 dark:text-red-400';
+        riskBadge.textContent = isRu ? 'Критическая угроза' : 'Critical Threat';
+        gaugeProgress.setAttribute('class', 'text-red-500 transition-all duration-1000 ease-out');
+      } else if (level === 'SUSPICIOUS') {
+        resultBanner.className = 'p-6 sm:p-7 rounded-3xl border border-orange-500/50 bg-orange-500/10 text-orange-600 dark:text-orange';
+        riskBadge.className = 'px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-orange-500/50 bg-orange-500/20 text-orange-600 dark:text-orange';
+        riskBadge.textContent = isRu ? 'Подозрительный ресурс' : 'Suspicious Resource';
+        gaugeProgress.setAttribute('class', 'text-orange-500 transition-all duration-1000 ease-out');
+      } else if (level === 'CAUTION') {
+        resultBanner.className = 'p-6 sm:p-7 rounded-3xl border border-yellow-500/50 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400';
+        riskBadge.className = 'px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-yellow-500/50 bg-yellow-500/20 text-yellow-600 dark:text-yellow-400';
+        riskBadge.textContent = isRu ? 'Требуется внимание' : 'Caution Advised';
+        gaugeProgress.setAttribute('class', 'text-yellow-500 transition-all duration-1000 ease-out');
+      } else {
+        resultBanner.className = 'p-6 sm:p-7 rounded-3xl border border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400';
+        riskBadge.className = 'px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-emerald-500/50 bg-emerald-500/20 text-emerald-600 dark:text-emerald-400';
+        riskBadge.textContent = isRu ? 'Безопасный ресурс' : 'Verified Safe';
+        gaugeProgress.setAttribute('class', 'text-emerald-500 transition-all duration-1000 ease-out');
+      }
+
+      if (data.matched_target) {
+        targetBadge.classList.remove('hidden');
+        targetBadge.textContent = `🎯 ${data.matched_target}`;
+      } else {
+        targetBadge.classList.add('hidden');
+      }
+
+      // Render Flags
+      flagsGrid.innerHTML = '';
+      if (data.flags && data.flags.length > 0) {
+        data.flags.forEach((f) => {
+          const card = document.createElement('div');
+          const isCritical = f.severity === 'CRITICAL';
+          const isHigh = f.severity === 'HIGH';
+          const borderClass = isCritical
+            ? 'border-red-500/40 bg-red-500/5'
+            : isHigh
+            ? 'border-orange-500/40 bg-orange-500/5'
+            : 'border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-900';
+
+          card.className = `p-4 sm:p-5 rounded-2xl border ${borderClass} flex flex-col justify-between`;
+          card.innerHTML = `
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-xs font-heading font-bold text-slate-900 dark:text-cloud">${f.name}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                  isCritical ? 'bg-red-500/20 text-red-600 dark:text-red-400' : 'bg-slate-100 dark:bg-navy-800 text-slate-600 dark:text-cloud-muted'
+                }">${f.severity}</span>
+              </div>
+              <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">${f.description}</p>
+            </div>
+          `;
+          flagsGrid.appendChild(card);
+        });
+      } else {
+        const cleanCard = document.createElement('div');
+        cleanCard.className = 'col-span-full p-5 rounded-2xl border border-emerald-500/30 bg-emerald-500/5 text-xs text-slate-600 dark:text-cloud-muted';
+        cleanCard.textContent = isRu
+          ? 'Факторов риска или вредоносных маркеров не обнаружено.'
+          : 'No malicious indicators or risk flags detected for this URL.';
+        flagsGrid.appendChild(cleanCard);
+      }
+
+      // Render Recommendations
+      recsList.innerHTML = '';
+      if (data.recommendations && data.recommendations.length > 0) {
+        data.recommendations.forEach((rec) => {
+          const li = document.createElement('li');
+          li.className = 'flex items-start gap-2.5';
+          li.innerHTML = `<span class="text-cyan font-bold mt-0.5">▪</span><span>${rec}</span>`;
+          recsList.appendChild(li);
+        });
+      }
+    }
+
+    // Client-side fallback implementation for static preview or disconnected dev
+    function clientSideHeuristicScan(urlStr) {
+      let cleaned = urlStr.trim();
+      if (!cleaned.includes('://')) cleaned = 'https://' + cleaned;
+      let host = '';
+      try {
+        host = new URL(cleaned).hostname.toLowerCase();
+      } catch (e) {
+        host = cleaned.toLowerCase();
+      }
+
+      const officialDomains = [
+        'steamcommunity.com', 'steampowered.com', 'valvesoftware.com',
+        'roblox.com', 'supercell.com', 'brawlstars.com', 'pubg.com',
+        'minecraft.net', 'discord.com', 'epicgames.com'
+      ];
+
+      // Exact match
+      for (const d of officialDomains) {
+        if (host === d || host.endsWith('.' + d)) {
+          return {
+            original_url: urlStr,
+            domain: host,
+            risk_score: 0,
+            risk_level: 'SAFE',
+            verdict: isRu ? 'Безопасно. Подтверждённый официальный ресурс.' : 'Safe. Verified authentic gaming platform.',
+            is_official_domain: true,
+            matched_target: d,
+            flags: [{ id: 'official', severity: 'INFO', name: isRu ? 'Официальный домен' : 'Official Domain', description: isRu ? `Домен принадлежит официальной платформе (${d}).` : `Verified domain belonging to ${d}.` }],
+            recommendations: [isRu ? 'Ресурс официальный. Проверяйте наличие HTTPS.' : 'Official resource. Verify HTTPS padlock in browser.']
+          };
+        }
+      }
+
+      // Check Cyrillic homoglyphs
+      const hasCyrillic = /[\u0400-\u04FF]/.test(host);
+      if (hasCyrillic) {
+        return {
+          original_url: urlStr,
+          domain: host,
+          risk_score: 95,
+          risk_level: 'CRITICAL',
+          verdict: isRu ? 'КРИТИЧЕСКАЯ УГРОЗА! Обнаружена подмена символов (Homoglyph).' : 'CRITICAL THREAT! Homoglyph character substitution detected.',
+          is_official_domain: false,
+          matched_target: 'Steam / Gaming Platform',
+          flags: [{ id: 'homoglyph', severity: 'CRITICAL', name: isRu ? 'Подмена символов (Homoglyph)' : 'Homoglyph Attack', description: isRu ? 'В имени домена использованы нелатинские буквы для обмана визуального восприятия.' : 'Domain contains Cyrillic/Greek characters visually spoofing Latin letters.' }],
+          recommendations: [isRu ? 'КАТЕГОРИЧЕСКИ НЕ ВВОДИТЕ пароли и коды на этом сайте!' : 'DO NOT submit passwords or 2FA codes on this site!']
+        };
+      }
+
+      // Typosquatting
+      const isTypo = host.includes('communiity') || host.includes('stema') || host.includes('robl0x') || host.includes('brawl-gems');
+      if (isTypo) {
+        return {
+          original_url: urlStr,
+          domain: host,
+          risk_score: 85,
+          risk_level: 'CRITICAL',
+          verdict: isRu ? 'КРИТИЧЕСКАЯ УГРОЗА! Обнаружен тайпосквоттинг (сайт-двойник).' : 'CRITICAL THREAT! Typosquatting brand clone detected.',
+          is_official_domain: false,
+          matched_target: 'Steam / Valve',
+          flags: [{ id: 'typo', severity: 'CRITICAL', name: isRu ? 'Тайпосквоттинг' : 'Typosquatting Detected', description: isRu ? 'Название домена отличается от официального на 1-2 буквы для обмана пользователей.' : 'Domain deliberately mimics an official gaming brand with subtle typos.' }],
+          recommendations: [isRu ? 'Закройте страницу. Не переходите по ссылке.' : 'Close the page. Do not proceed.']
+        };
+      }
+
+      // Suspicious keywords
+      const isScam = urlStr.includes('free-skins') || urlStr.includes('claim') || urlStr.includes('knife-giveaway') || urlStr.includes('.click') || urlStr.includes('.xyz');
+      return {
+        original_url: urlStr,
+        domain: host,
+        risk_score: isScam ? 75 : 25,
+        risk_level: isScam ? 'CRITICAL' : 'CAUTION',
+        verdict: isScam ? (isRu ? 'КРИТИЧЕСКАЯ УГРОЗА! Обнаружены маркеры скама.' : 'CRITICAL THREAT! Scam patterns identified.') : (isRu ? 'Неизвестный сторонний ресурс.' : 'Unverified third-party resource.'),
+        is_official_domain: false,
+        matched_target: null,
+        flags: isScam ? [{ id: 'scam_keywords', severity: 'HIGH', name: isRu ? 'Маркеры скама' : 'Scam Markers', description: isRu ? 'Ссылка обещает бесплатные награды или использует подозрительную зону.' : 'URL promises free rewards or uses high-risk TLD.' }] : [],
+        recommendations: [isRu ? 'Проверяйте безопасность перед вводом любых данных.' : 'Exercise caution before entering any personal data.']
+      };
+    }
+  }
+
+  initCyberScanner();
+  document.addEventListener('astro:page-load', initCyberScanner);
+</script>

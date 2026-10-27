@@ -7,9 +7,26 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688.svg)](https://fastapi.tiangolo.com)
 [![Astro](https://img.shields.io/badge/Astro-4.16%2B-BC52EE.svg)](https://astro.build)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4%2B-38B2AC.svg)](https://tailwindcss.com)
-[![Tests](https://img.shields.io/badge/Tests-100%25%20Passing-brightgreen.svg)]()
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://www.docker.com/)
+[![CI](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF.svg)](https://github.com/imceobitchuzb/BigProject/actions)
+[![Tests](https://img.shields.io/badge/Tests-29%2F29%20Passing-brightgreen.svg)]()
 
-SafeInGame is an independent, non-commercial gaming safety education platform. It teaches gamers across genres and platforms how to spot digital deception, harden their accounts against hijacking, secure valuable virtual items, and navigate emergency recovery when incidents occur.
+SafeInGame is an independent, non-commercial gaming safety education and threat analysis platform. It teaches gamers across genres and platforms how to spot digital deception, harden their accounts against hijacking, secure valuable virtual items, and evaluate suspicious links using live heuristic algorithms.
+
+---
+
+## What's New: Gaming Link Scanner & Threat Detection Engine
+
+- **⚡ Live Gaming URL & Phishing Scanner (`/scanner/`):** Full-stack algorithmic tool analyzing candidate URLs for:
+  - **Homoglyph & Punycode (IDN) Spoofing:** Identifies disguised Cyrillic/Greek characters visually mimicking Latin letters in domain names (e.g. `steаmcommunity.com`).
+  - **Damerau-Levenshtein Typosquatting:** Calculates string edit distance against 8 monitored gaming platforms (Steam, Roblox, Supercell, PUBG, Minecraft, Discord, Epic Games, Twitch).
+  - **Subdomain Masking:** Uncovers attacker attempts to disguise brands inside subdomains of unrelated hosts.
+  - **Suspicious TLD & Host Profiling:** Evaluates high-abuse TLDs (`.xyz`, `.top`, `.click`), free dynamic tunnels, and direct IP addresses.
+  - **Risk Score Gauge & Visual HUD:** Real-time 0-100 risk score with categorized flags and actionable mitigation steps.
+- **🐳 Docker & Docker Compose Support:** Run the entire frontend and backend with a single command: `docker compose up`.
+- **🧪 Automated GitHub Actions CI:** Continuous testing pipeline validating 29 backend test cases and 46 frontend pages on every commit.
+- **📄 Research Whitepaper:** Academic-grade technical taxonomy in `docs/RESEARCH_PHISHING_TAXONOMY.md` detailing the mathematical threat model and empirical results.
+- **🌐 Bilingual Start Portal (`/`):** Dedicated language gateway with automatic browser locale suggestion, direct access to Russian and English hubs, and quick game profiles.
 
 ---
 

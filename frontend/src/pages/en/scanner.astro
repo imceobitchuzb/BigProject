@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LinkScanner from '../../components/LinkScanner.astro';
+import CyberBackground from '../../components/CyberBackground.astro';
+
+const title = 'Gaming Phishing & Link Scanner — SafeInGame';
+const description = 'Analyze suspicious gaming links, trade offers, and login portals for homoglyphs, typosquatting, and account theft vectors.';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  currentLang="en"
+  canonicalSlug="scanner/"
+>
+  <div class="relative min-h-screen py-12 lg:py-16">
+    <CyberBackground />
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs text-slate-500 dark:text-cloud-subtle mb-8" aria-label="Breadcrumb">
+        <a href="/en/" class="hover:text-cyan transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-slate-800 dark:text-cloud font-medium">Link Scanner</span>
+      </nav>
+
+      <!-- Page Header -->
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border border-cyan-500/40 bg-cyan-500/10 text-cyan-800 dark:text-cyan uppercase tracking-wider mb-4">
+          <span>⚡ Live Security Diagnostic Tool</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight mb-4">
+          Gaming URL & Phishing Scanner
+        </h1>
+        <p class="text-base sm:text-lg text-slate-600 dark:text-cloud-muted leading-relaxed">
+          Received a suspicious link on Discord, Telegram, or Steam chat? Verify domain legitimacy, uncover hidden Cyrillic homoglyphs, and evaluate phishing risks before signing in.
+        </p>
+      </div>
+
+      <!-- Main Scanner Widget -->
+      <div class="mb-16">
+        <LinkScanner currentLang="en" />
+      </div>
+
+      <!-- Technical Architecture & How It Works Info Section (Great for University Grant / Portfolio) -->
+      <section class="max-w-4xl mx-auto pt-8 border-t border-slate-200 dark:border-navy-800">
+        <h2 class="text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud mb-6 text-center">
+          How the SafeInGame Scanner Protects Players
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white/80 dark:bg-navy-850/80 backdrop-blur-sm">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-700 dark:text-cyan flex items-center justify-center font-bold text-lg mb-4">
+              1
+            </div>
+            <h3 class="text-base font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+              Homoglyph Detection
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+              Detects internationalized domain names (IDN / Punycode) where malicious actors substitute Latin characters with visually identical Cyrillic or Greek glyphs (e.g. Cyrillic "а" instead of Latin "a").
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white/80 dark:bg-navy-850/80 backdrop-blur-sm">
+            <div class="w-10 h-10 rounded-xl bg-violet-500/20 text-violet-700 dark:text-violet flex items-center justify-center font-bold text-lg mb-4">
+              2
+            </div>
+            <h3 class="text-base font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+              Damerau-Levenshtein Analysis
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+              Calculates string edit distance against official gaming ecosystem registries (Steam, Roblox, Supercell, PUBG, Minecraft) to uncover typosquatting and deceptive domain clones.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white/80 dark:bg-navy-850/80 backdrop-blur-sm">
+            <div class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-600 dark:text-orange flex items-center justify-center font-bold text-lg mb-4">
+              3
+            </div>
+            <h3 class="text-base font-heading font-bold text-slate-900 dark:text-cloud mb-2">
+              Heuristic Attack Profiling
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+              Examines high-abuse TLDs, subdomains disguising brand names, raw IP addresses, and known social engineering lures ("tournament vote", "free skins", "claim bonus").
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
