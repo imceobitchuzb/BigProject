@@ -1,14 +1,265 @@
 ---
-// Root entrypoint: redirect to /en/
-return Astro.redirect('/en/');
+import CyberBackground from '../components/CyberBackground.astro';
+import Logo from '../components/Logo.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import ScrollToTop from '../components/ScrollToTop.astro';
+import '../styles/global.css';
+
+const siteTitle = 'SafeInGame — Gaming Cybersecurity & Safety Hub';
+const siteDesc = 'Independent gaming safety education platform helping players recognize scams and protect virtual assets.';
 ---
+
 <!doctype html>
-<html>
+<html lang="en" class="scroll-smooth">
   <head>
-    <meta http-equiv="refresh" content="0;url=/en/" />
-    <title>Redirecting to SafeInGame...</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{siteTitle}</title>
+    <meta name="description" content={siteDesc} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/images/logo.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={siteDesc} />
+    <meta property="og:image" content="/images/logo.png" />
+    <meta property="og:type" content="website" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Theme script to prevent FOUC -->
+    <script is:inline>
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'dark'; // Default dark for gaming aesthetic
+      })();
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
   </head>
-  <body>
-    <p>Redirecting to <a href="/en/">SafeInGame</a>...</p>
+  <body class="flex flex-col min-h-screen bg-slate-50 dark:bg-navy-900 text-slate-900 dark:text-cloud selection:bg-cyan selection:text-navy-950 transition-colors duration-200 relative overflow-x-hidden">
+    <!-- Gaming Cyber Background with dynamic particles -->
+    <CyberBackground />
+
+    <!-- Header / Navbar -->
+    <header class="relative z-30 border-b border-slate-200/80 dark:border-navy-800 bg-white/80 dark:bg-navy-950/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+        <a href="/" class="focus:outline-none focus:ring-2 focus:ring-cyan rounded-xl p-1">
+          <Logo size="md" showText={true} />
+        </a>
+        <div class="flex items-center gap-4">
+          <ThemeToggle />
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content: Welcome & Language Gateway -->
+    <main class="relative z-10 flex-grow flex items-center justify-center py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+      <div class="w-full max-w-4xl mx-auto text-center">
+        <!-- Mascot Hero Visual -->
+        <div class="relative inline-block mb-6">
+          <div class="absolute -inset-4 rounded-full bg-gradient-to-r from-cyan/30 via-violet/20 to-orange/20 blur-xl animate-pulse-subtle"></div>
+          <div class="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-3xl bg-white dark:bg-navy-850 border border-slate-200 dark:border-cyan/40 shadow-xl flex items-center justify-center p-3 transition-transform duration-300 hover:scale-105">
+            <img
+              src="/images/logo.png"
+              alt="SafeInGame Mascot"
+              class="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(34,211,238,0.4)] rounded-2xl"
+              width="112"
+              height="112"
+            />
+          </div>
+        </div>
+
+        <!-- Heading & Dual Tagline -->
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold tracking-tight text-slate-900 dark:text-cloud mb-3">
+          Safe<span class="text-cyan-dark dark:text-cyan">In</span>Game
+        </h1>
+        <p class="text-sm sm:text-base font-semibold text-cyan-dark dark:text-cyan tracking-wider uppercase mb-2">
+          Play smart. Stay safe. • Играй с умом. Оставайся в безопасности.
+        </p>
+        <p class="text-sm sm:text-base text-slate-600 dark:text-cloud-muted max-w-xl mx-auto mb-10 leading-relaxed">
+          Независимый центр кибербезопасности для геймеров. Выберите язык для перехода к материалам и руководствам.
+        </p>
+
+        <!-- Gateway Language Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto text-left mb-12">
+          <!-- Card 1: Russian Version -->
+          <div
+            id="lang-card-ru"
+            class="group relative flex flex-col justify-between p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-navy-700 bg-white/90 dark:bg-navy-850/90 backdrop-blur-md shadow-lg hover:shadow-2xl hover:border-cyan transition-all duration-300 hover:-translate-y-1"
+          >
+            <div class="relative z-10">
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-3xl">🇷🇺</span>
+                <span id="badge-ru" class="px-2.5 py-1 rounded-full text-[11px] font-bold border border-cyan-500/40 bg-cyan-500/10 text-cyan-800 dark:text-cyan uppercase tracking-wider">
+                  Русская версия
+                </span>
+              </div>
+              <h2 class="text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud group-hover:text-cyan-dark dark:group-hover:text-cyan transition-colors mb-2">
+                Русский интерфейс
+              </h2>
+              <p class="text-sm text-slate-600 dark:text-cloud-muted leading-relaxed mb-6">
+                Полные руководства по безопасности в CS2, Brawl Stars, PUBG, Roblox и Minecraft. Защита аккаунтов, безопасный трейд скинов, квиз и распознавание скама.
+              </p>
+
+              <!-- Features checklist -->
+              <div class="space-y-1.5 mb-6 text-xs text-slate-500 dark:text-cloud-subtle">
+                <div class="flex items-center gap-2">
+                  <span class="text-cyan font-bold">✓</span>
+                  <span>5 центров безопасности популярных игр</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-cyan font-bold">✓</span>
+                  <span>8 практических статей об онлайн-угрозах</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-cyan font-bold">✓</span>
+                  <span>Интерактивный тест на знание скам-схем</span>
+                </div>
+              </div>
+            </div>
+
+            <a
+              href="/ru/"
+              class="relative z-10 w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-heading font-bold text-sm bg-cyan text-navy-950 hover:bg-cyan-light shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <span>Открыть Русскую версию</span>
+              <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </a>
+          </div>
+
+          <!-- Card 2: English Version -->
+          <div
+            id="lang-card-en"
+            class="group relative flex flex-col justify-between p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-navy-700 bg-white/90 dark:bg-navy-850/90 backdrop-blur-md shadow-lg hover:shadow-2xl hover:border-cyan transition-all duration-300 hover:-translate-y-1"
+          >
+            <div class="relative z-10">
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-3xl">🌐</span>
+                <span id="badge-en" class="px-2.5 py-1 rounded-full text-[11px] font-bold border border-violet-500/40 bg-violet-500/10 text-violet-700 dark:text-violet uppercase tracking-wider">
+                  English Version
+                </span>
+              </div>
+              <h2 class="text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud group-hover:text-cyan-dark dark:group-hover:text-cyan transition-colors mb-2">
+                English Hub
+              </h2>
+              <p class="text-sm text-slate-600 dark:text-cloud-muted leading-relaxed mb-6">
+                Complete security playbooks for CS2, Brawl Stars, PUBG, Roblox & Minecraft. Account defense, safe trading, anti-phishing checklists and interactive quiz.
+              </p>
+
+              <!-- Features checklist -->
+              <div class="space-y-1.5 mb-6 text-xs text-slate-500 dark:text-cloud-subtle">
+                <div class="flex items-center gap-2">
+                  <span class="text-cyan font-bold">✓</span>
+                  <span>5 dedicated Game Security Hubs</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-cyan font-bold">✓</span>
+                  <span>8 in-depth threat defense articles</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-cyan font-bold">✓</span>
+                  <span>Interactive scam recognition quiz</span>
+                </div>
+              </div>
+            </div>
+
+            <a
+              href="/en/"
+              class="relative z-10 w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-heading font-bold text-sm bg-slate-900 text-white dark:bg-navy-750 dark:text-cloud hover:bg-slate-800 dark:hover:bg-navy-700 border border-slate-300 dark:border-navy-600 shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <span>Explore English Version</span>
+              <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Game Icons Preview Row -->
+        <div class="p-6 rounded-3xl bg-white/70 dark:bg-navy-950/60 border border-slate-200 dark:border-navy-800 backdrop-blur-sm max-w-2xl mx-auto">
+          <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-cloud-subtle mb-4">
+            Поддерживаемые игры • Supported Games
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+            <a href="/ru/games/cs2-steam/" class="flex flex-col items-center gap-1.5 group" title="Counter-Strike 2 / Steam">
+              <img src="/images/games/cs2-steam.jpg" alt="CS2" class="w-12 h-12 rounded-xl object-cover border border-slate-200 dark:border-navy-700 group-hover:scale-110 group-hover:border-cyan transition-all shadow-sm" />
+              <span class="text-[10px] font-medium text-slate-600 dark:text-cloud-muted">CS2</span>
+            </a>
+            <a href="/ru/games/brawl-stars/" class="flex flex-col items-center gap-1.5 group" title="Brawl Stars">
+              <img src="/images/games/brawl-stars.jpg" alt="Brawl Stars" class="w-12 h-12 rounded-xl object-cover border border-slate-200 dark:border-navy-700 group-hover:scale-110 group-hover:border-cyan transition-all shadow-sm" />
+              <span class="text-[10px] font-medium text-slate-600 dark:text-cloud-muted">Brawl Stars</span>
+            </a>
+            <a href="/ru/games/pubg/" class="flex flex-col items-center gap-1.5 group" title="PUBG">
+              <img src="/images/games/pubg.jpg" alt="PUBG" class="w-12 h-12 rounded-xl object-cover border border-slate-200 dark:border-navy-700 group-hover:scale-110 group-hover:border-cyan transition-all shadow-sm" />
+              <span class="text-[10px] font-medium text-slate-600 dark:text-cloud-muted">PUBG</span>
+            </a>
+            <a href="/ru/games/roblox/" class="flex flex-col items-center gap-1.5 group" title="Roblox">
+              <img src="/images/games/roblox.webp" alt="Roblox" class="w-12 h-12 rounded-xl object-cover border border-slate-200 dark:border-navy-700 group-hover:scale-110 group-hover:border-cyan transition-all shadow-sm" />
+              <span class="text-[10px] font-medium text-slate-600 dark:text-cloud-muted">Roblox</span>
+            </a>
+            <a href="/ru/games/minecraft/" class="flex flex-col items-center gap-1.5 group" title="Minecraft">
+              <img src="/images/games/minecraft.webp" alt="Minecraft" class="w-12 h-12 rounded-xl object-cover border border-slate-200 dark:border-navy-700 group-hover:scale-110 group-hover:border-cyan transition-all shadow-sm" />
+              <span class="text-[10px] font-medium text-slate-600 dark:text-cloud-muted">Minecraft</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-slate-200 dark:border-navy-800 bg-white/80 dark:bg-navy-950/80 backdrop-blur-md py-6 text-center text-xs text-slate-500 dark:text-cloud-subtle">
+      <div class="max-w-7xl mx-auto px-4">
+        <p class="mb-2 font-medium">
+          © {new Date().getFullYear()} SafeInGame. Независимый образовательный центр игровой безопасности.
+        </p>
+        <p class="text-[11px] text-slate-400 dark:text-navy-400 max-w-xl mx-auto">
+          Не связан с Valve, Supercell, KRAFTON, Roblox Corp или Mojang Studios.
+        </p>
+      </div>
+    </footer>
+
+    <ScrollToTop currentLang="ru" />
+
+    <!-- Browser Language Detection Script -->
+    <script>
+      function highlightPreferredLanguage() {
+        const userLang = (navigator.language || '').toLowerCase();
+        const isRu = userLang.startsWith('ru') || userLang.startsWith('be') || userLang.startsWith('uk') || userLang.startsWith('kk');
+
+        const badgeRu = document.getElementById('badge-ru');
+        const badgeEn = document.getElementById('badge-en');
+        const cardRu = document.getElementById('lang-card-ru');
+        const cardEn = document.getElementById('lang-card-en');
+
+        if (isRu && badgeRu && cardRu) {
+          badgeRu.textContent = '★ Рекомендуется (RU)';
+          badgeRu.classList.add('border-cyan', 'text-cyan-dark', 'dark:text-cyan');
+          cardRu.classList.add('ring-2', 'ring-cyan/50');
+        } else if (!isRu && badgeEn && cardEn) {
+          badgeEn.textContent = '★ Recommended (EN)';
+          badgeEn.classList.add('border-cyan', 'text-cyan-dark', 'dark:text-cyan');
+          cardEn.classList.add('ring-2', 'ring-cyan/50');
+        }
+      }
+
+      highlightPreferredLanguage();
+    </script>
   </body>
 </html>

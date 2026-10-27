@@ -13,6 +13,7 @@ export default defineConfig({
     locales: ['en', 'ru'],
     routing: {
       prefixDefaultLocale: true,
+      redirectToDefaultLocale: false,
     },
   },
 });
