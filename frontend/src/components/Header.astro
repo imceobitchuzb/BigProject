@@ -13,7 +13,6 @@ const t = useTranslations(currentLang);
 const pathname = Astro.url.pathname;
 
 const navItems = [
-  { href: `/${currentLang}/`, label: t('nav.home') },
   { href: `/${currentLang}/scanner/`, label: t('nav.scanner') },
   { href: `/${currentLang}/lab/`, label: t('nav.lab'), badge: 'LAB' },
   { href: `/${currentLang}/games/`, label: t('nav.games') },
@@ -26,8 +25,8 @@ const navItems = [
 
 <header class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-navy-800 bg-white/95 dark:bg-navy-900/95 backdrop-blur-md transition-colors duration-200">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-    <!-- Brand / Logo -->
-    <a href={`/${currentLang}/`} class="flex items-center">
+    <!-- Brand / Logo (Takes users to Home) -->
+    <a href={`/${currentLang}/`} class="flex items-center" aria-label={t('nav.home')} title={t('nav.home')}>
       <Logo size="md" currentLang={currentLang} />
     </a>
 
