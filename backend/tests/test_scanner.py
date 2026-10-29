@@ -127,3 +127,75 @@ def test_scanner_monitored_targets_endpoint():
     assert any("Steam" in name for name in platform_names)
     assert any("Roblox" in name for name in platform_names)
     assert any("Supercell" in name for name in platform_names)
+
+
+def test_scanner_ssrf_internal_ip_and_metadata():
+    for target in [
+        "http://127.0.0.1:8000/api/v1/health",
+        "http://localhost:3000",
+        "http://169.254.169.254/latest/meta-data/",
+        "http://10.0.1.5:8080/admin",
+        "http://192.168.1.1/router",
+    ]:
+        response = client.post(
+            "/api/v1/scanner/check",
+            json={"url": target, "lang": "ru"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["risk_score"] == 100
+        assert data["risk_level"] == "CRITICAL"
+        assert data["is_private_or_internal"] is True
+        flag_ids = [f["id"] for f in data["flags"]]
+        assert "ssrf_internal_target" in flag_ids
+
+
+def test_scanner_dangerous_scheme_blocked():
+    for dangerous in [
+        "file:///etc/passwd",
+        "gopher://malicious.org:70/1",
+        "ftp://internal.backup/keys.txt",
+    ]:
+        response = client.post(
+            "/api/v1/scanner/check",
+            json={"url": dangerous, "lang": "en"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["risk_score"] >= 90
+        flag_ids = [f["id"] for f in data["flags"]]
+        assert "dangerous_scheme" in flag_ids
+
+
+def test_scanner_non_standard_port():
+    response = client.post(
+        "/api/v1/scanner/check",
+        json={"url": "http://steamcommunity.com:8080/tradeoffer", "lang": "ru"}
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["port"] == 8080
+    assert data["is_non_standard_port"] is True
+    flag_ids = [f["id"] for f in data["flags"]]
+    assert "non_standard_port" in flag_ids
+
+
+def test_scanner_cache_and_status_labels():
+    url = "https://safe-test-check-community.org/welcome"
+    # First request
+    resp1 = client.post("/api/v1/scanner/check", json={"url": url, "lang": "ru"})
+    assert resp1.status_code == 200
+    data1 = resp1.json()
+    assert data1["cached"] is False
+    assert "status_label" in data1
+    assert "disclaimer" in data1
+    assert len(data1["disclaimer"]) > 10
+
+    # Second request should be served from memory cache
+    resp2 = client.post("/api/v1/scanner/check", json={"url": url, "lang": "ru"})
+    assert resp2.status_code == 200
+    data2 = resp2.json()
+    assert data2["cached"] is True
+    assert data2["risk_score"] == data1["risk_score"]
+    assert data2["status_label"] == data1["status_label"]
+

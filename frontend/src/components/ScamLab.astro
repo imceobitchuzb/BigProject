@@ -173,24 +173,65 @@ const isRu = currentLang === 'ru';
         </div>
       </div>
 
+      <!-- Difficulty Level Selector & Hotkeys Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-4">
+        <div class="flex items-center gap-1.5" id="difficulty-filters">
+          <button
+            type="button"
+            data-difficulty="all"
+            class="diff-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-cyan text-navy-950 border border-cyan shadow-sm"
+          >
+            {isRu ? 'Все вопросы' : 'All Levels'}
+          </button>
+          <button
+            type="button"
+            data-difficulty="beginner"
+            class="diff-btn px-3 py-1.5 rounded-xl text-xs font-medium transition-all bg-slate-100 dark:bg-navy-900 text-slate-700 dark:text-cloud-muted border border-slate-300 dark:border-navy-700 hover:border-cyan"
+          >
+            🟢 {isRu ? 'Базовый' : 'Beginner'}
+          </button>
+          <button
+            type="button"
+            data-difficulty="intermediate"
+            class="diff-btn px-3 py-1.5 rounded-xl text-xs font-medium transition-all bg-slate-100 dark:bg-navy-900 text-slate-700 dark:text-cloud-muted border border-slate-300 dark:border-navy-700 hover:border-cyan"
+          >
+            🟡 {isRu ? 'Средний' : 'Intermediate'}
+          </button>
+          <button
+            type="button"
+            data-difficulty="advanced"
+            class="diff-btn px-3 py-1.5 rounded-xl text-xs font-medium transition-all bg-slate-100 dark:bg-navy-900 text-slate-700 dark:text-cloud-muted border border-slate-300 dark:border-navy-700 hover:border-cyan"
+          >
+            🔴 {isRu ? 'Сложный' : 'Advanced'}
+          </button>
+        </div>
+
+        <div class="hidden sm:inline-flex items-center gap-2 text-[11px] font-mono text-slate-500 dark:text-cloud-subtle bg-slate-100/70 dark:bg-navy-900/60 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-navy-800">
+          <span>⌨ {isRu ? 'Клавиши: 1-3 или A-C для выбора | Enter для далее' : 'Keys: 1-3 or A-C to answer | Enter for next'}</span>
+        </div>
+      </div>
+
       <!-- Question & Scenario Box -->
-      <div id="test-active-question" class="py-8 space-y-6">
+      <div id="test-active-question" class="py-6 space-y-6">
         <div class="p-5 rounded-2xl bg-slate-100/70 dark:bg-navy-900/80 border border-slate-200 dark:border-navy-800">
-          <span id="question-badge" class="px-2.5 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-cyan/20 text-cyan-800 dark:text-cyan border border-cyan/40 inline-block mb-2">
-            Сценарий
-          </span>
+          <div class="flex items-center justify-between mb-2">
+            <span id="question-badge" class="px-2.5 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-cyan/20 text-cyan-800 dark:text-cyan border border-cyan/40 inline-block">
+              Сценарий
+            </span>
+            <span id="question-diff-badge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-slate-200 dark:bg-navy-800 text-slate-700 dark:text-cloud"></span>
+          </div>
           <p id="question-text" class="text-base sm:text-lg font-heading font-bold text-slate-900 dark:text-cloud leading-relaxed">
             <!-- Populated via JS -->
           </p>
         </div>
 
         <!-- Answers Options -->
-        <div id="answers-container" class="space-y-3">
+        <div id="answers-container" class="space-y-3" role="radiogroup" aria-label="Exam answers">
           <!-- Populated via JS -->
         </div>
 
         <!-- Answer Explanation Box (Hidden until answered) -->
-        <div id="explanation-box" class="hidden p-5 rounded-2xl border transition-all animate-fade-in">
+        <div id="explanation-box" class="hidden p-5 rounded-2xl border transition-all animate-fade-in" aria-live="polite">
           <div class="flex items-start gap-3">
             <span id="expl-icon" class="text-xl"></span>
             <div>
@@ -552,8 +593,9 @@ const isRu = currentLang === 'ru';
 
 
     // --- PART 2: CERTIFICATION SCAM EXAM LOGIC ---
-    const examQuestions = [
+    const allExamQuestions = [
       {
+        difficulty: 'beginner',
         scenario: isRu
           ? 'Вам в Steam пишет незнакомый пользователь с аватаром сотрудника Valve и утверждает: «На ваш аккаунт отправлено 15 жалоб за мошенничество. Передайте скины боту проверки Valve или получите перманентный бан через 2 часа».'
           : 'A user with a Valve employee badge messages you on Steam stating: "15 fraud reports received against your account. Transfer your items to the Valve verification bot or face a permanent ban in 2 hours."',
@@ -574,6 +616,7 @@ const isRu = currentLang === 'ru';
           : 'Official support never communicates via chat and never requests item custody for "investigations".'
       },
       {
+        difficulty: 'intermediate',
         scenario: isRu
           ? 'Вам прислали ссылку на обмен в Steam: «https://steаmcommunity.com/tradeoffer/new». Вы переходите, и браузер открывает окно авторизации. В чем скрытая опасность?'
           : 'You receive a trade link: "https://steаmcommunity.com/tradeoffer/new". You open it and see a login window. What is the hidden threat?',
@@ -594,6 +637,7 @@ const isRu = currentLang === 'ru';
           : 'HTTPS certificates are issued for any domain, including phishing domains. Cyrillic homoglyphs look identical but point to attacker servers.'
       },
       {
+        difficulty: 'advanced',
         scenario: isRu
           ? 'Что произойдет, если на вашем аккаунте Steam злоумышленник сгенерирует тайный Web API-ключ?'
           : 'What occurs if a threat actor generates a secret Steam Web API Key on your account?',
@@ -614,6 +658,7 @@ const isRu = currentLang === 'ru';
           : 'Steam API keys grant access to trade management, enabling automated Man-in-the-Middle trade cancellations and duplicate bot swaps.'
       },
       {
+        difficulty: 'beginner',
         scenario: isRu
           ? 'В Brawl Stars вам предлагают купить чужой прокачанный аккаунт с 50,000 кубков за небольшие деньги. Почему это почти всегда заканчивается потерей денег?'
           : 'In Brawl Stars, someone offers to sell a maxed 50k trophy account for cheap. Why does this almost inevitably result in lost money?',
@@ -634,6 +679,7 @@ const isRu = currentLang === 'ru';
           : 'Account buying violates Terms of Service and guarantees account recovery fraud through original transaction receipts.'
       },
       {
+        difficulty: 'beginner',
         scenario: isRu
           ? 'Что из перечисленного КАТЕГОРИЧЕСКИ нельзя передавать никому, даже «администраторам» или «друзьям»?'
           : 'Which of the following must you NEVER share with anyone under any circumstances?',
@@ -654,6 +700,7 @@ const isRu = currentLang === 'ru';
           : '2FA codes and session cookies grant instant authenticated access bypassing passwords.'
       },
       {
+        difficulty: 'intermediate',
         scenario: isRu
           ? 'Вам предлагают скачать бесплатный чит или модификацию для Minecraft в виде файла «Optifine_Mod.jar» через Discord. Какая главная опасность?'
           : 'Someone on Discord sends you a Minecraft mod file named "Optifine_Mod.jar". What is the primary danger?',
@@ -674,6 +721,7 @@ const isRu = currentLang === 'ru';
           : 'Minecraft mods are executable Java archives capable of deploying token stealers and session hijackers.'
       },
       {
+        difficulty: 'advanced',
         scenario: isRu
           ? 'Вы переходите по ссылке на «раздачу ножей» и видите окно входа через Steam. Как отличить настоящее окно входа от поддельного?'
           : 'You visit a "knife giveaway" site with a Steam OpenID login popup. How do you distinguish authentic Steam OpenID from a phishing clone?',
@@ -694,6 +742,7 @@ const isRu = currentLang === 'ru';
           : 'Authentic OpenID relies on your existing browser session. If logged in, genuine portals only ask for confirmation, never fresh password entry.'
       },
       {
+        difficulty: 'intermediate',
         scenario: isRu
           ? 'Что нужно сделать ПЕРВЫМ делом, если вы случайно ввели пароль на подозрительном сайте?'
           : 'What is the FIRST action you should take if you accidentally submitted credentials on a suspicious site?',
@@ -715,9 +764,12 @@ const isRu = currentLang === 'ru';
       }
     ];
 
+    let currentDifficulty = 'all';
+    let currentQuestions = [...allExamQuestions];
     let currentQIdx = 0;
     let score = 0;
     const qBadge = document.getElementById('question-badge');
+    const qDiffBadge = document.getElementById('question-diff-badge');
     const qText = document.getElementById('question-text');
     const answersBox = document.getElementById('answers-container');
     const explBox = document.getElementById('explanation-box');
@@ -733,20 +785,75 @@ const isRu = currentLang === 'ru';
     const finalRank = document.getElementById('final-rank-badge');
     const certDate = document.getElementById('cert-date');
     const certId = document.getElementById('cert-id');
+    const certUserName = document.getElementById('cert-user-name');
+    const diffButtons = document.querySelectorAll('.diff-btn');
+
+    // Restore saved user name
+    const savedUserName = localStorage.getItem('safeingame_exam_user_name');
+    if (savedUserName && certUserName) {
+      certUserName.value = savedUserName;
+    }
+    certUserName?.addEventListener('input', (e) => {
+      localStorage.setItem('safeingame_exam_user_name', e.target.value.trim());
+    });
+
+    // Difficulty filtering
+    diffButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const diff = btn.getAttribute('data-difficulty') || 'all';
+        currentDifficulty = diff;
+
+        diffButtons.forEach((b) => {
+          if (b.getAttribute('data-difficulty') === diff) {
+            b.className = 'diff-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-cyan text-navy-950 border border-cyan shadow-sm';
+          } else {
+            b.className = 'diff-btn px-3 py-1.5 rounded-xl text-xs font-medium transition-all bg-slate-100 dark:bg-navy-900 text-slate-700 dark:text-cloud-muted border border-slate-300 dark:border-navy-700 hover:border-cyan';
+          }
+        });
+
+        if (diff === 'all') {
+          currentQuestions = [...allExamQuestions];
+        } else {
+          currentQuestions = allExamQuestions.filter((q) => q.difficulty === diff);
+        }
+
+        currentQIdx = 0;
+        score = 0;
+        resultsView.classList.add('hidden');
+        qActiveView.classList.remove('hidden');
+        renderQuestion(0);
+      });
+    });
 
     function renderQuestion(idx) {
       explBox.classList.add('hidden');
-      const q = examQuestions[idx];
-      progText.textContent = isRu ? `Вопрос ${idx + 1} из ${examQuestions.length}` : `Question ${idx + 1} of ${examQuestions.length}`;
-      progBar.style.width = `${((idx + 1) / examQuestions.length) * 100}%`;
+      const q = currentQuestions[idx];
+      if (!q) return;
+
+      progText.textContent = isRu
+        ? `Вопрос ${idx + 1} из ${currentQuestions.length}`
+        : `Question ${idx + 1} of ${currentQuestions.length}`;
+      progBar.style.width = `${((idx + 1) / currentQuestions.length) * 100}%`;
       qBadge.textContent = isRu ? `Сценарий ${idx + 1}` : `Scenario ${idx + 1}`;
+
+      if (qDiffBadge) {
+        const diffLabels = {
+          beginner: isRu ? '🟢 Базовый' : '🟢 Beginner',
+          intermediate: isRu ? '🟡 Средний' : '🟡 Intermediate',
+          advanced: isRu ? '🔴 Сложный' : '🔴 Advanced',
+        };
+        qDiffBadge.textContent = diffLabels[q.difficulty] || q.difficulty;
+      }
+
       qText.textContent = q.scenario;
 
       answersBox.innerHTML = '';
       q.answers.forEach((ans, aIdx) => {
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'w-full text-left p-4 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-900 text-slate-800 dark:text-cloud hover:border-cyan hover:bg-slate-50 dark:hover:bg-navy-800 transition-all font-medium text-xs sm:text-sm flex items-center justify-between group';
+        btn.setAttribute('role', 'radio');
+        btn.setAttribute('aria-checked', 'false');
+        btn.className = 'w-full text-left p-4 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-900 text-slate-800 dark:text-cloud hover:border-cyan hover:bg-slate-50 dark:hover:bg-navy-800 transition-all font-medium text-xs sm:text-sm flex items-center justify-between group focus:outline-none focus:ring-2 focus:ring-cyan';
         btn.innerHTML = `
           <span>${ans}</span>
           <span class="w-6 h-6 rounded-full border border-slate-300 dark:border-navy-700 flex items-center justify-center text-xs text-slate-400 group-hover:border-cyan group-hover:text-cyan">
@@ -759,7 +866,7 @@ const isRu = currentLang === 'ru';
     }
 
     function selectAnswer(chosenIdx) {
-      const q = examQuestions[currentQIdx];
+      const q = currentQuestions[currentQIdx];
       const isCorrect = chosenIdx === q.correct;
       if (isCorrect) score++;
 
@@ -768,8 +875,10 @@ const isRu = currentLang === 'ru';
       buttons.forEach((btn, bIdx) => {
         btn.disabled = true;
         if (bIdx === q.correct) {
+          btn.setAttribute('aria-checked', 'true');
           btn.className = 'w-full text-left p-4 rounded-2xl border border-emerald-500 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 font-medium text-xs sm:text-sm flex items-center justify-between';
         } else if (bIdx === chosenIdx) {
+          btn.setAttribute('aria-checked', 'true');
           btn.className = 'w-full text-left p-4 rounded-2xl border border-red-500 bg-red-500/10 text-red-800 dark:text-red-300 font-medium text-xs sm:text-sm flex items-center justify-between';
         }
       });
@@ -790,7 +899,7 @@ const isRu = currentLang === 'ru';
 
     nextBtn.onclick = () => {
       currentQIdx++;
-      if (currentQIdx < examQuestions.length) {
+      if (currentQIdx < currentQuestions.length) {
         renderQuestion(currentQIdx);
       } else {
         showFinalResults();
@@ -801,20 +910,40 @@ const isRu = currentLang === 'ru';
       qActiveView.classList.add('hidden');
       resultsView.classList.remove('hidden');
 
-      const total = examQuestions.length;
+      const total = currentQuestions.length;
       const pct = Math.round((score / total) * 100);
       finalScore.textContent = `${score} / ${total} (${pct}%)`;
 
+      let rankStr = '';
       if (pct >= 85) {
-        finalRank.textContent = '🛡️ Cyber Defense Master (Высшая защита)';
+        rankStr = isRu ? '🛡️ Cyber Defense Master (Высшая защита)' : '🛡️ Cyber Defense Master (Top Tier)';
       } else if (pct >= 60) {
-        finalRank.textContent = '⚠️ Cautious Gamer (Базовая защита)';
+        rankStr = isRu ? '⚠️ Cautious Gamer (Базовая защита)' : '⚠️ Cautious Gamer (Basic Tier)';
       } else {
-        finalRank.textContent = '🚨 High Risk (Рекомендуется повторить базу)';
+        rankStr = isRu ? '🚨 High Risk (Рекомендуется повторить базу)' : '🚨 High Risk (Review Guides)';
       }
+      finalRank.textContent = rankStr;
 
-      certDate.textContent = new Date().toISOString().split('T')[0];
-      certId.textContent = `SIG-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+      const today = new Date().toISOString().split('T')[0];
+      const newCertId = `SIG-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+      certDate.textContent = today;
+      certId.textContent = newCertId;
+
+      // Persist state in localStorage
+      try {
+        localStorage.setItem(
+          'safeingame_exam_state',
+          JSON.stringify({
+            score,
+            total,
+            pct,
+            rank: rankStr,
+            certId: newCertId,
+            date: today,
+            userName: certUserName?.value || 'Gamer Specialist',
+          })
+        );
+      } catch (e) {}
     }
 
     // Retake exam
@@ -830,6 +959,35 @@ const isRu = currentLang === 'ru';
     document.getElementById('btn-print-cert').onclick = () => {
       window.print();
     };
+
+    // Keyboard navigation shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+
+      if (!secTest.classList.contains('hidden')) {
+        if (e.key === '1' || e.key.toLowerCase() === 'a') {
+          const btn = answersBox.querySelectorAll('button')[0];
+          if (btn && !btn.disabled) btn.click();
+        } else if (e.key === '2' || e.key.toLowerCase() === 'b') {
+          const btn = answersBox.querySelectorAll('button')[1];
+          if (btn && !btn.disabled) btn.click();
+        } else if (e.key === '3' || e.key.toLowerCase() === 'c') {
+          const btn = answersBox.querySelectorAll('button')[2];
+          if (btn && !btn.disabled) btn.click();
+        } else if (e.key === 'Enter') {
+          if (!explBox.classList.contains('hidden')) {
+            nextBtn.click();
+          }
+        }
+      } else if (!secSandbox.classList.contains('hidden')) {
+        if (e.key.toLowerCase() === 'x') {
+          xrayBtn.click();
+        } else if (['1', '2', '3', '4'].includes(e.key)) {
+          const sIdx = parseInt(e.key, 10) - 1;
+          renderScenario(sIdx);
+        }
+      }
+    });
 
     renderQuestion(0);
   }

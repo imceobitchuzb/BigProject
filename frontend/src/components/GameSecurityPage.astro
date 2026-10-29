@@ -82,6 +82,14 @@ const relatedArticles = allThreats
               </span>
             ))}
           </div>
+
+          <!-- Audit & Verification Badge -->
+          <div class="mt-5 inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 text-xs font-mono">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="font-semibold">{game.verificationStatus}</span>
+            <span class="text-slate-400 dark:text-cloud-subtle">•</span>
+            <span>{currentLang === 'ru' ? 'Аудит:' : 'Audited:'} {game.lastAuditedDate}</span>
+          </div>
         </div>
 
         <!-- 3D Mascot Artwork Emblem with Floating Animation -->

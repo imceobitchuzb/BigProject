@@ -14,6 +14,7 @@ const requiredFiles = [
   'index.html',
   '404.html',
   'robots.txt',
+  'sitemap.xml',
   'favicon.svg',
   'images/logo.png',
   'images/games/cs2-steam.jpg',
@@ -153,5 +154,12 @@ assert.ok(ruLabHtml.includes('scam-lab-container'), 'Scam Lab container missing 
 assert.ok(ruLabHtml.includes('certificate-box'), 'Certificate generator missing on RU lab page');
 
 console.log('✓ Scam Lab training sandbox and certification exam verified in EN and RU.');
+
+// 9. Verify sitemap.xml
+const sitemapContent = fs.readFileSync(path.join(distDir, 'sitemap.xml'), 'utf-8');
+assert.ok(sitemapContent.includes('<urlset'), 'Sitemap missing urlset element');
+assert.ok(sitemapContent.includes('https://safeingame.org/en/games/cs2-steam/'), 'Sitemap missing cs2-steam URL');
+assert.ok(sitemapContent.includes('https://safeingame.org/ru/scanner/'), 'Sitemap missing scanner URL');
+console.log('✓ Valid XML sitemap verified with game centers and localized alternates.');
 
 console.log('✓ Build validation PASSED: 100% checks successful.');

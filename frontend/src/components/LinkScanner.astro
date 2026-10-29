@@ -130,9 +130,13 @@ const isRu = currentLang === 'ru';
           <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <!-- Left: Verdict Info -->
             <div class="space-y-2">
-              <div class="flex items-center gap-3">
+              <div class="flex flex-wrap items-center gap-2">
                 <span id="risk-badge" class="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider border"></span>
-                <span id="target-badge" class="hidden px-3 py-1 rounded-full text-xs font-semibold bg-slate-200 dark:bg-navy-800 text-slate-700 dark:text-cloud border border-slate-300 dark:border-navy-700"></span>
+                <span id="status-label-badge" class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-200/80 dark:bg-navy-800 text-slate-700 dark:text-cloud border border-slate-300 dark:border-navy-700"></span>
+                <span id="target-badge" class="hidden px-3 py-1 rounded-full text-xs font-semibold bg-cyan/15 text-cyan-dark dark:text-cyan border border-cyan/30"></span>
+                <span id="cache-badge" class="hidden px-2.5 py-0.5 rounded text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                  ⚡ {isRu ? 'Кэш' : 'Cached'}
+                </span>
               </div>
               <h3 id="result-verdict" class="text-xl sm:text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud"></h3>
               <p id="result-domain" class="text-xs sm:text-sm font-mono text-slate-600 dark:text-cloud-muted break-all"></p>
@@ -186,6 +190,12 @@ const isRu = currentLang === 'ru';
             <!-- Dynamically populated via JS -->
           </ul>
         </div>
+
+        <!-- Security Disclaimer Box -->
+        <div id="scanner-disclaimer" class="p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-navy-700/80 bg-slate-100/70 dark:bg-navy-900/40 text-xs text-slate-600 dark:text-cloud-muted flex items-start gap-3">
+          <span class="text-base text-cyan select-none">ℹ</span>
+          <p id="scanner-disclaimer-text" class="leading-relaxed"></p>
+        </div>
       </div>
     </div>
   </div>
@@ -203,15 +213,21 @@ const isRu = currentLang === 'ru';
     const resultBox = document.getElementById('scanner-result');
     const resultBanner = document.getElementById('result-banner');
     const riskBadge = document.getElementById('risk-badge');
+    const statusLabelBadge = document.getElementById('status-label-badge');
     const targetBadge = document.getElementById('target-badge');
+    const cacheBadge = document.getElementById('cache-badge');
     const resultVerdict = document.getElementById('result-verdict');
     const resultDomain = document.getElementById('result-domain');
     const riskScoreVal = document.getElementById('risk-score-value');
     const gaugeProgress = document.getElementById('gauge-progress');
     const flagsGrid = document.getElementById('flags-grid');
     const recsList = document.getElementById('recommendations-list');
+    const disclaimerBox = document.getElementById('scanner-disclaimer');
+    const disclaimerText = document.getElementById('scanner-disclaimer-text');
 
     if (!form || !input) return;
+
+    let activeScanController = null;
 
     // Paste from clipboard support
     if (pasteBtn && navigator.clipboard && navigator.clipboard.readText) {
@@ -248,6 +264,13 @@ const isRu = currentLang === 'ru';
     });
 
     async function performScan(targetUrl) {
+      // Abort any prior pending scan request
+      if (activeScanController) {
+        activeScanController.abort();
+      }
+      activeScanController = new AbortController();
+      const { signal } = activeScanController;
+
       // Show loading state
       btnText.textContent = isRu ? 'Анализ...' : 'Scanning...';
       btnIcon.classList.add('hidden');
@@ -263,12 +286,16 @@ const isRu = currentLang === 'ru';
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ url: targetUrl, lang: isRu ? 'ru' : 'en' }),
+            signal,
           });
           if (res.ok) {
             scanData = await res.json();
           }
         } catch (backendErr) {
-          console.warn('Backend scanner unreachable, falling back to client-side heuristics engine', backendErr);
+          if (backendErr.name === 'AbortError') {
+            return; // Superseded by a newer scan
+          }
+          console.warn('Backend scanner unreachable, falling back to client heuristics engine', backendErr);
         }
 
         // 2. Client-side heuristic fallback if backend is offline
@@ -278,6 +305,7 @@ const isRu = currentLang === 'ru';
 
         renderScanResults(scanData);
       } catch (err) {
+        if (err.name === 'AbortError') return;
         console.error('Scan error:', err);
         alert(isRu ? 'Ошибка при сканировании. Проверьте введённый URL.' : 'Error scanning URL. Please check the format.');
       } finally {
@@ -294,8 +322,22 @@ const isRu = currentLang === 'ru';
 
       riskScoreVal.textContent = String(data.risk_score);
       gaugeProgress.setAttribute('stroke-dasharray', `${data.risk_score}, 100`);
-      resultDomain.textContent = `URL: ${data.original_url} → Domain: [${data.domain}]`;
+      resultDomain.textContent = `URL: ${data.original_url} → Domain: [${data.domain || 'N/A'}]`;
       resultVerdict.textContent = data.verdict;
+
+      // Localized refined status label
+      if (statusLabelBadge) {
+        statusLabelBadge.textContent = data.status_label || (isRu ? 'Признаков угрозы не обнаружено' : 'No Threat Indicators');
+      }
+
+      // Cached indicator
+      if (cacheBadge) {
+        if (data.cached) {
+          cacheBadge.classList.remove('hidden');
+        } else {
+          cacheBadge.classList.add('hidden');
+        }
+      }
 
       // Color themes per risk level
       const level = data.risk_level;
@@ -374,17 +416,68 @@ const isRu = currentLang === 'ru';
           recsList.appendChild(li);
         });
       }
+
+      // Render Disclaimer
+      if (disclaimerBox && disclaimerText) {
+        disclaimerText.textContent = data.disclaimer || (
+          isRu
+            ? 'Обратите внимание: отсутствие ссылки в базе угроз не гарантирует стопроцентную безопасность. Всегда сохраняйте бдительность.'
+            : 'Notice: Absence of known threat patterns does not guarantee 100% safety. Always stay vigilant.'
+        );
+      }
     }
 
     // Client-side fallback implementation for static preview or disconnected dev
     function clientSideHeuristicScan(urlStr) {
       let cleaned = urlStr.trim();
-      if (!cleaned.includes('://')) cleaned = 'https://' + cleaned;
+      let scheme = 'https';
+      if (cleaned.includes('://')) {
+        scheme = cleaned.split('://')[0].toLowerCase();
+      } else {
+        cleaned = 'https://' + cleaned;
+      }
+
+      // Scheme validation
+      const dangerousSchemes = ['file', 'gopher', 'dict', 'ldap', 'ssh', 'ftp', 'javascript', 'data'];
+      if (dangerousSchemes.includes(scheme)) {
+        return {
+          original_url: urlStr,
+          domain: '',
+          risk_score: 100,
+          risk_level: 'CRITICAL',
+          status_label: isRu ? 'Высокий риск' : 'High Risk',
+          verdict: isRu ? `КРИТИЧЕСКАЯ УГРОЗА: запрещённый протокол ${scheme}://` : `CRITICAL THREAT: forbidden protocol ${scheme}://`,
+          is_official_domain: false,
+          matched_target: null,
+          flags: [{ id: 'dangerous_scheme', severity: 'CRITICAL', name: isRu ? 'Опасная схема URI' : 'Dangerous URI Scheme', description: isRu ? 'Использована нестандартная схема протокола.' : 'Non-standard protocol scheme detected.' }],
+          recommendations: [isRu ? 'КАТЕГОРИЧЕСКИ запрещено переходить по данной ссылке.' : 'Never open this link.'],
+          disclaimer: isRu ? 'Отсутствие ссылки в базе угроз не гарантирует стопроцентную безопасность.' : 'Absence of known threat patterns does not guarantee 100% safety.'
+        };
+      }
+
       let host = '';
       try {
         host = new URL(cleaned).hostname.toLowerCase();
       } catch (e) {
         host = cleaned.toLowerCase();
+      }
+
+      // Internal / SSRF check
+      const internalHosts = ['localhost', '127.0.0.1', '169.254.169.254', '0.0.0.0', '::1'];
+      if (internalHosts.includes(host) || host.startsWith('192.168.') || host.startsWith('10.')) {
+        return {
+          original_url: urlStr,
+          domain: host,
+          risk_score: 100,
+          risk_level: 'CRITICAL',
+          status_label: isRu ? 'Высокий риск' : 'High Risk',
+          verdict: isRu ? 'КРИТИЧЕСКАЯ УГРОЗА: попытка обращения к внутренней сети (SSRF).' : 'CRITICAL THREAT: internal network target probed (SSRF).',
+          is_official_domain: false,
+          matched_target: null,
+          flags: [{ id: 'ssrf', severity: 'CRITICAL', name: isRu ? 'Внутренний сетевой адрес (SSRF)' : 'Internal Network Target (SSRF)', description: isRu ? 'Ссылка указывает на локальный хост или внутреннюю инфраструктуру.' : 'URL points to local host or internal infrastructure.' }],
+          recommendations: [isRu ? 'Никогда не взаимодействуйте с внутренними сетевыми адресами.' : 'Never interact with internal network addresses.'],
+          disclaimer: isRu ? 'Отсутствие ссылки в базе угроз не гарантирует стопроцентную безопасность.' : 'Absence of known threat patterns does not guarantee 100% safety.'
+        };
       }
 
       const officialDomains = [
@@ -401,11 +494,13 @@ const isRu = currentLang === 'ru';
             domain: host,
             risk_score: 0,
             risk_level: 'SAFE',
+            status_label: isRu ? 'Официальный проверенный ресурс' : 'Official Verified Resource',
             verdict: isRu ? 'Безопасно. Подтверждённый официальный ресурс.' : 'Safe. Verified authentic gaming platform.',
             is_official_domain: true,
             matched_target: d,
             flags: [{ id: 'official', severity: 'INFO', name: isRu ? 'Официальный домен' : 'Official Domain', description: isRu ? `Домен принадлежит официальной платформе (${d}).` : `Verified domain belonging to ${d}.` }],
-            recommendations: [isRu ? 'Ресурс официальный. Проверяйте наличие HTTPS.' : 'Official resource. Verify HTTPS padlock in browser.']
+            recommendations: [isRu ? 'Ресурс официальный. Проверяйте наличие HTTPS.' : 'Official resource. Verify HTTPS padlock in browser.'],
+            disclaimer: isRu ? 'Отсутствие ссылки в базе угроз не гарантирует стопроцентную безопасность.' : 'Absence of known threat patterns does not guarantee 100% safety.'
           };
         }
       }
@@ -418,11 +513,13 @@ const isRu = currentLang === 'ru';
           domain: host,
           risk_score: 95,
           risk_level: 'CRITICAL',
+          status_label: isRu ? 'Высокий риск' : 'High Risk',
           verdict: isRu ? 'КРИТИЧЕСКАЯ УГРОЗА! Обнаружена подмена символов (Homoglyph).' : 'CRITICAL THREAT! Homoglyph character substitution detected.',
           is_official_domain: false,
           matched_target: 'Steam / Gaming Platform',
           flags: [{ id: 'homoglyph', severity: 'CRITICAL', name: isRu ? 'Подмена символов (Homoglyph)' : 'Homoglyph Attack', description: isRu ? 'В имени домена использованы нелатинские буквы для обмана визуального восприятия.' : 'Domain contains Cyrillic/Greek characters visually spoofing Latin letters.' }],
-          recommendations: [isRu ? 'КАТЕГОРИЧЕСКИ НЕ ВВОДИТЕ пароли и коды на этом сайте!' : 'DO NOT submit passwords or 2FA codes on this site!']
+          recommendations: [isRu ? 'КАТЕГОРИЧЕСКИ НЕ ВВОДИТЕ пароли и коды на этом сайте!' : 'DO NOT submit passwords or 2FA codes on this site!'],
+          disclaimer: isRu ? 'Отсутствие ссылки в базе угроз не гарантирует стопроцентную безопасность.' : 'Absence of known threat patterns does not guarantee 100% safety.'
         };
       }
 
@@ -434,11 +531,13 @@ const isRu = currentLang === 'ru';
           domain: host,
           risk_score: 85,
           risk_level: 'CRITICAL',
+          status_label: isRu ? 'Высокий риск' : 'High Risk',
           verdict: isRu ? 'КРИТИЧЕСКАЯ УГРОЗА! Обнаружен тайпосквоттинг (сайт-двойник).' : 'CRITICAL THREAT! Typosquatting brand clone detected.',
           is_official_domain: false,
           matched_target: 'Steam / Valve',
           flags: [{ id: 'typo', severity: 'CRITICAL', name: isRu ? 'Тайпосквоттинг' : 'Typosquatting Detected', description: isRu ? 'Название домена отличается от официального на 1-2 буквы для обмана пользователей.' : 'Domain deliberately mimics an official gaming brand with subtle typos.' }],
-          recommendations: [isRu ? 'Закройте страницу. Не переходите по ссылке.' : 'Close the page. Do not proceed.']
+          recommendations: [isRu ? 'Закройте страницу. Не переходите по ссылке.' : 'Close the page. Do not proceed.'],
+          disclaimer: isRu ? 'Отсутствие ссылки в базе угроз не гарантирует стопроцентную безопасность.' : 'Absence of known threat patterns does not guarantee 100% safety.'
         };
       }
 
@@ -449,14 +548,20 @@ const isRu = currentLang === 'ru';
         domain: host,
         risk_score: isScam ? 75 : 25,
         risk_level: isScam ? 'CRITICAL' : 'CAUTION',
+        status_label: isScam ? (isRu ? 'Подозрительная ссылка' : 'Suspicious Link') : (isRu ? 'Признаков угрозы не обнаружено' : 'No Threat Patterns Found'),
         verdict: isScam ? (isRu ? 'КРИТИЧЕСКАЯ УГРОЗА! Обнаружены маркеры скама.' : 'CRITICAL THREAT! Scam patterns identified.') : (isRu ? 'Неизвестный сторонний ресурс.' : 'Unverified third-party resource.'),
         is_official_domain: false,
         matched_target: null,
         flags: isScam ? [{ id: 'scam_keywords', severity: 'HIGH', name: isRu ? 'Маркеры скама' : 'Scam Markers', description: isRu ? 'Ссылка обещает бесплатные награды или использует подозрительную зону.' : 'URL promises free rewards or uses high-risk TLD.' }] : [],
-        recommendations: [isRu ? 'Проверяйте безопасность перед вводом любых данных.' : 'Exercise caution before entering any personal data.']
+        recommendations: [isRu ? 'Проверяйте безопасность перед вводом любых данных.' : 'Exercise caution before entering any personal data.'],
+        disclaimer: isRu ? 'Отсутствие ссылки в базе угроз не гарантирует стопроцентную безопасность.' : 'Absence of known threat patterns does not guarantee 100% safety.'
       };
     }
   }
+
+  initCyberScanner();
+  document.addEventListener('astro:page-load', initCyberScanner);
+</script>
 
   initCyberScanner();
   document.addEventListener('astro:page-load', initCyberScanner);

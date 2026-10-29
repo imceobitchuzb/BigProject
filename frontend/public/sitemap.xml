@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Gateway -->
+  <url>
+    <loc>https://safeingame.org/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/" />
+  </url>
+
+  <!-- EN: Home -->
+  <url>
+    <loc>https://safeingame.org/en/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/" />
+  </url>
+
+  <!-- RU: Home -->
+  <url>
+    <loc>https://safeingame.org/ru/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/" />
+  </url>
+
+  <!-- Scanner -->
+  <url>
+    <loc>https://safeingame.org/en/scanner/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/scanner/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/scanner/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/scanner/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/scanner/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/scanner/" />
+  </url>
+
+  <!-- Scam Lab -->
+  <url>
+    <loc>https://safeingame.org/en/lab/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/lab/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/lab/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/lab/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/lab/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/lab/" />
+  </url>
+
+  <!-- Games Hub -->
+  <url>
+    <loc>https://safeingame.org/en/games/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/games/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/games/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/games/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/games/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/games/" />
+  </url>
+
+  <!-- Games: CS2 & Steam -->
+  <url>
+    <loc>https://safeingame.org/en/games/cs2-steam/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/games/cs2-steam/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/games/cs2-steam/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/games/cs2-steam/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/games/cs2-steam/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/games/cs2-steam/" />
+  </url>
+
+  <!-- Games: Brawl Stars -->
+  <url>
+    <loc>https://safeingame.org/en/games/brawl-stars/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/games/brawl-stars/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/games/brawl-stars/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/games/brawl-stars/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/games/brawl-stars/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/games/brawl-stars/" />
+  </url>
+
+  <!-- Games: PUBG -->
+  <url>
+    <loc>https://safeingame.org/en/games/pubg/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/games/pubg/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/games/pubg/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/games/pubg/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/games/pubg/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/games/pubg/" />
+  </url>
+
+  <!-- Games: Roblox -->
+  <url>
+    <loc>https://safeingame.org/en/games/roblox/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/games/roblox/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/games/roblox/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/games/roblox/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/games/roblox/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/games/roblox/" />
+  </url>
+
+  <!-- Games: Minecraft -->
+  <url>
+    <loc>https://safeingame.org/en/games/minecraft/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/games/minecraft/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/games/minecraft/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/games/minecraft/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/games/minecraft/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/games/minecraft/" />
+  </url>
+
+  <!-- Threat Articles Hub -->
+  <url>
+    <loc>https://safeingame.org/en/threats/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/threats/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/" />
+  </url>
+
+  <!-- Threats: 8 Guides -->
+  <url>
+    <loc>https://safeingame.org/en/threats/how-to-spot-gaming-phishing/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/how-to-spot-gaming-phishing/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/how-to-spot-gaming-phishing/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/threats/how-to-spot-gaming-phishing/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/how-to-spot-gaming-phishing/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/how-to-spot-gaming-phishing/" />
+  </url>
+
+  <url>
+    <loc>https://safeingame.org/en/threats/fake-giveaways-and-free-rewards/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/fake-giveaways-and-free-rewards/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/fake-giveaways-and-free-rewards/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/threats/fake-giveaways-and-free-rewards/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/fake-giveaways-and-free-rewards/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/fake-giveaways-and-free-rewards/" />
+  </url>
+
+  <url>
+    <loc>https://safeingame.org/en/threats/safe-trading-in-game-items/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/safe-trading-in-game-items/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/safe-trading-in-game-items/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/threats/safe-trading-in-game-items/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/safe-trading-in-game-items/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/safe-trading-in-game-items/" />
+  </url>
+
+  <url>
+    <loc>https://safeingame.org/en/threats/social-engineering-in-online-games/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/social-engineering-in-online-games/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/social-engineering-in-online-games/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/threats/social-engineering-in-online-games/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/social-engineering-in-online-games/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/social-engineering-in-online-games/" />
+  </url>
+
+  <url>
+    <loc>https://safeingame.org/en/threats/gaming-account-recovery-scams/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/gaming-account-recovery-scams/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/gaming-account-recovery-scams/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/threats/gaming-account-recovery-scams/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/gaming-account-recovery-scams/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/gaming-account-recovery-scams/" />
+  </url>
+
+  <url>
+    <loc>https://safeingame.org/en/threats/gaming-currency-and-payment-safety/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/gaming-currency-and-payment-safety/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/gaming-currency-and-payment-safety/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/threats/gaming-currency-and-payment-safety/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/gaming-currency-and-payment-safety/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/gaming-currency-and-payment-safety/" />
+  </url>
+
+  <url>
+    <loc>https://safeingame.org/en/threats/how-to-secure-your-gaming-account/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/how-to-secure-your-gaming-account/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/how-to-secure-your-gaming-account/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/threats/how-to-secure-your-gaming-account/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/how-to-secure-your-gaming-account/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/how-to-secure-your-gaming-account/" />
+  </url>
+
+  <url>
+    <loc>https://safeingame.org/en/threats/what-to-do-after-a-gaming-scam/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/what-to-do-after-a-gaming-scam/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/what-to-do-after-a-gaming-scam/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/threats/what-to-do-after-a-gaming-scam/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/threats/what-to-do-after-a-gaming-scam/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/threats/what-to-do-after-a-gaming-scam/" />
+  </url>
+
+  <!-- Safety Guide -->
+  <url>
+    <loc>https://safeingame.org/en/safety/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/safety/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/safety/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/safety/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/safety/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/safety/" />
+  </url>
+
+  <!-- About -->
+  <url>
+    <loc>https://safeingame.org/en/about/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/about/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/about/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/about/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/about/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/about/" />
+  </url>
+
+  <!-- Contact -->
+  <url>
+    <loc>https://safeingame.org/en/contact/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/contact/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/contact/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/contact/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/contact/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/contact/" />
+  </url>
+
+  <!-- Privacy -->
+  <url>
+    <loc>https://safeingame.org/en/privacy/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/privacy/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/privacy/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/privacy/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/privacy/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/privacy/" />
+  </url>
+
+  <!-- Terms -->
+  <url>
+    <loc>https://safeingame.org/en/terms/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/terms/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/terms/" />
+  </url>
+  <url>
+    <loc>https://safeingame.org/ru/terms/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://safeingame.org/en/terms/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://safeingame.org/ru/terms/" />
+  </url>
+</urlset>

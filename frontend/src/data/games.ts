@@ -44,6 +44,8 @@ export interface GameSecurityProfile {
   officialResources: GameOfficialResource[];
   relatedArticleSlugs: string[];
   quiz: GameQuizQuestion[];
+  lastAuditedDate: string;
+  verificationStatus: string;
 }
 
 export const GAMES_DATA: Record<'en' | 'ru', GameSecurityProfile[]> = {
@@ -52,6 +54,8 @@ export const GAMES_DATA: Record<'en' | 'ru', GameSecurityProfile[]> = {
       slug: 'cs2-steam',
       title: 'Counter-Strike 2 & Steam',
       subtitle: 'Skin trading traps, counterfeit Steam login popups, and API key interception safeguards.',
+      lastAuditedDate: 'October 2026',
+      verificationStatus: 'Verified by SafeInGame Security Labs',
       genre: 'Tactical FPS & Economy',
       platforms: ['PC (Steam)'],
       riskBadge: 'High Trading & Phishing Vector',
@@ -200,6 +204,8 @@ export const GAMES_DATA: Record<'en' | 'ru', GameSecurityProfile[]> = {
       slug: 'brawl-stars',
       title: 'Brawl Stars',
       subtitle: 'Supercell ID phishing traps, fake gem generators, and account-selling scams.',
+      lastAuditedDate: 'October 2026',
+      verificationStatus: 'Verified by SafeInGame Security Labs',
       genre: 'Mobile Hero Shooter',
       platforms: ['iOS', 'Android'],
       riskBadge: 'High Account Takeover & Fake Currency Risk',
@@ -347,6 +353,8 @@ export const GAMES_DATA: Record<'en' | 'ru', GameSecurityProfile[]> = {
       slug: 'pubg',
       title: 'PUBG & PUBG Mobile',
       subtitle: 'Third-party UC discounts, crate reward phishing, and fraudulent tournament claims.',
+      lastAuditedDate: 'October 2026',
+      verificationStatus: 'Verified by SafeInGame Security Labs',
       genre: 'Battle Royale',
       platforms: ['PC', 'Console', 'Mobile'],
       riskBadge: 'High Payment Fraud & Account Phishing Risk',
@@ -492,6 +500,8 @@ export const GAMES_DATA: Record<'en' | 'ru', GameSecurityProfile[]> = {
       slug: 'roblox',
       title: 'Roblox',
       subtitle: 'Cookie theft (.ROBLOSECURITY), fake Robux generators, rogue browser extensions, and trade scams.',
+      lastAuditedDate: 'October 2026',
+      verificationStatus: 'Verified by SafeInGame Security Labs',
       genre: 'Metaverse & Creation Platform',
       platforms: ['PC', 'Mobile', 'Console'],
       riskBadge: 'High Account Hijacking & Browser Extension Risk',
@@ -638,6 +648,8 @@ export const GAMES_DATA: Record<'en' | 'ru', GameSecurityProfile[]> = {
       slug: 'minecraft',
       title: 'Minecraft',
       subtitle: 'Trojanized mods & plugins, fake migration verification, multiplayer server scams, and account phishing.',
+      lastAuditedDate: 'October 2026',
+      verificationStatus: 'Verified by SafeInGame Security Labs',
       genre: 'Sandbox & Multiplayer',
       platforms: ['PC (Java & Bedrock)', 'Console', 'Mobile'],
       riskBadge: 'High Malware & Credential Phishing Risk',
@@ -785,6 +797,8 @@ export const GAMES_DATA: Record<'en' | 'ru', GameSecurityProfile[]> = {
       slug: 'cs2-steam',
       title: 'Counter-Strike 2 и Steam',
       subtitle: 'Защита от API-скама, фальшивых окон авторизации через Steam и перехвата трейдов скинов.',
+      lastAuditedDate: 'Октябрь 2026',
+      verificationStatus: 'Проверено аналитиками SafeInGame Labs',
       genre: 'Тактический шутер и экономика',
       platforms: ['ПК (Steam)'],
       riskBadge: 'Высокий риск трейдов и фишинга',
@@ -933,6 +947,8 @@ export const GAMES_DATA: Record<'en' | 'ru', GameSecurityProfile[]> = {
       slug: 'brawl-stars',
       title: 'Brawl Stars',
       subtitle: 'Защита от фишинга Supercell ID, фальшивых генераторов гемов и обмана при покупке аккаунтов.',
+      lastAuditedDate: 'Октябрь 2026',
+      verificationStatus: 'Проверено аналитиками SafeInGame Labs',
       genre: 'Мобильный геройский шутер',
       platforms: ['iOS', 'Android'],
       riskBadge: 'Высокий риск взлома Supercell ID и фейк-доната',
@@ -1080,6 +1096,8 @@ export const GAMES_DATA: Record<'en' | 'ru', GameSecurityProfile[]> = {
       slug: 'pubg',
       title: 'PUBG & PUBG Mobile',
       subtitle: 'Защита от серого доната UC, фишинга скинов «Ледник» и сомнительных турнирных регистраций.',
+      lastAuditedDate: 'Октябрь 2026',
+      verificationStatus: 'Проверено аналитиками SafeInGame Labs',
       genre: 'Королевская битва',
       platforms: ['ПК', 'Консоли', 'Мобильные устройства'],
       riskBadge: 'Высокий риск платежного фрода и фишинга',
@@ -1226,6 +1244,8 @@ export const GAMES_DATA: Record<'en' | 'ru', GameSecurityProfile[]> = {
       slug: 'roblox',
       title: 'Roblox',
       subtitle: 'Защита от кражи куки (.ROBLOSECURITY), фальшивых расширений браузера, бим-скама и обмана с Robux.',
+      lastAuditedDate: 'Октябрь 2026',
+      verificationStatus: 'Проверено аналитиками SafeInGame Labs',
       genre: 'Метаверс и платформа для творчества',
       platforms: ['ПК', 'Мобильные устройства', 'Консоли'],
       riskBadge: 'Высокий риск кражи куки и расширений',
@@ -1372,6 +1392,8 @@ export const GAMES_DATA: Record<'en' | 'ru', GameSecurityProfile[]> = {
       slug: 'minecraft',
       title: 'Minecraft',
       subtitle: 'Защита от троянов в модах (.JAR), фейковой верификации через Microsoft, скама на серверах и кражи аккаунтов.',
+      lastAuditedDate: 'Октябрь 2026',
+      verificationStatus: 'Проверено аналитиками SafeInGame Labs',
       genre: 'Песочница и мультиплеер',
       platforms: ['ПК (Java и Bedrock)', 'Консоли', 'Мобильные устройства'],
       riskBadge: 'Высокий риск вредоносного софта и фишинга',

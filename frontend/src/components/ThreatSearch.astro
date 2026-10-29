@@ -74,23 +74,30 @@ const t = useTranslations(currentLang);
   </div>
 
   <!-- Category Pills for quick filtering on desktop -->
-  <div class="hidden sm:flex flex-wrap gap-2 pt-1 pb-2">
-    <button
-      type="button"
-      data-category=""
-      class="filter-pill px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-200 border-cyan-500 bg-cyan-500/15 text-cyan-800 dark:text-cyan"
-    >
-      {t('search.all_categories')}
-    </button>
-    {categories.map((c) => (
+  <div class="hidden sm:flex flex-wrap items-center justify-between gap-2 pt-1 pb-2">
+    <div class="flex flex-wrap gap-2">
       <button
         type="button"
-        data-category={c.slug}
-        class="filter-pill px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-300 dark:border-navy-700 bg-white dark:bg-navy-850 text-slate-700 dark:text-cloud-muted hover:text-slate-900 dark:hover:text-cloud hover:border-slate-400 dark:hover:border-navy-600 transition-all duration-200 shadow-sm"
+        data-category=""
+        class="filter-pill px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-200 border-cyan-500 bg-cyan-500/15 text-cyan-800 dark:text-cyan"
       >
-        {c.title}
+        {t('search.all_categories')}
       </button>
-    ))}
+      {categories.map((c) => (
+        <button
+          type="button"
+          data-category={c.slug}
+          class="filter-pill px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-300 dark:border-navy-700 bg-white dark:bg-navy-850 text-slate-700 dark:text-cloud-muted hover:text-slate-900 dark:hover:text-cloud hover:border-slate-400 dark:hover:border-navy-600 transition-all duration-200 shadow-sm"
+        >
+          {c.title}
+        </button>
+      ))}
+    </div>
+
+    <!-- Live counter badge -->
+    <div class="text-xs font-mono font-medium text-slate-500 dark:text-cloud-subtle bg-slate-100 dark:bg-navy-850 px-3 py-1 rounded-md border border-slate-200 dark:border-navy-700">
+      <span id="threat-visible-count">{articles.length}</span> / <span id="threat-total-count">{articles.length}</span> {currentLang === 'ru' ? 'статей' : 'guides'}
+    </div>
   </div>
 
   <!-- Articles Grid -->
@@ -151,6 +158,12 @@ const t = useTranslations(currentLang);
     const emptyState = document.getElementById('no-results-state');
     const resetBtn = document.getElementById('reset-filter-btn');
 
+    const visibleCountEl = document.getElementById('threat-visible-count');
+    const totalCountEl = document.getElementById('threat-total-count');
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+
+    if (totalCountEl) totalCountEl.textContent = String(items.length);
+
     // Parse URL params on load
     const params = new URLSearchParams(window.location.search);
     const paramCategory = params.get('category') || '';
@@ -191,6 +204,10 @@ const t = useTranslations(currentLang);
         }
       });
 
+      if (visibleCountEl) {
+        visibleCountEl.textContent = String(visibleCount);
+      }
+
       if (emptyState) {
         if (visibleCount === 0) {
           emptyState.classList.remove('hidden');
@@ -208,7 +225,12 @@ const t = useTranslations(currentLang);
       window.history.replaceState({}, '', newUrl.toString());
     }
 
-    input?.addEventListener('input', applyFilter);
+    // Debounce search input to prevent rapid reflows
+    input?.addEventListener('input', () => {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(applyFilter, 150);
+    });
+
     select?.addEventListener('change', applyFilter);
 
     pills.forEach((pill) => {
