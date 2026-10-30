@@ -1,11 +1,12 @@
 ---
 interface Props {
-  type: 'cs2' | 'brawlstars' | 'pubg' | 'roblox' | 'minecraft';
+  type: 'cs2' | 'brawlstars' | 'pubg' | 'roblox' | 'minecraft' | 'discord' | 'epicgames' | 'genshin';
   size?: 'sm' | 'md' | 'lg' | 'xl';
   class?: string;
+  format?: 'svg' | 'raster';
 }
 
-const { type, size = 'md', class: extraClass = '' } = Astro.props;
+const { type, size = 'md', class: extraClass = '', format = 'svg' } = Astro.props;
 
 const dimensions = {
   sm: 'w-10 h-10',
@@ -14,12 +15,26 @@ const dimensions = {
   xl: 'w-32 h-32 sm:w-36 sm:h-36',
 }[size];
 
-const fileMap: Record<string, string> = {
+const svgFileMap: Record<string, string> = {
+  cs2: 'cs2-steam.svg',
+  brawlstars: 'brawl-stars.svg',
+  pubg: 'pubg.svg',
+  roblox: 'roblox.svg',
+  minecraft: 'minecraft.svg',
+  discord: 'discord.svg',
+  epicgames: 'epic-games.svg',
+  genshin: 'genshin.svg',
+};
+
+const rasterFileMap: Record<string, string> = {
   cs2: 'cs2-steam.jpg',
   brawlstars: 'brawl-stars.jpg',
   pubg: 'pubg.jpg',
   roblox: 'roblox.webp',
   minecraft: 'minecraft.webp',
+  discord: 'discord.svg',
+  epicgames: 'epic-games.svg',
+  genshin: 'genshin.svg',
 };
 
 const altMap: Record<string, string> = {
@@ -28,9 +43,12 @@ const altMap: Record<string, string> = {
   pubg: 'PUBG Battlegrounds',
   roblox: 'Roblox',
   minecraft: 'Minecraft',
+  discord: 'Discord',
+  epicgames: 'Epic Games',
+  genshin: 'Genshin Impact',
 };
 
-const fileName = fileMap[type] || 'cs2-steam.jpg';
+const fileName = format === 'raster' ? (rasterFileMap[type] || 'cs2-steam.jpg') : (svgFileMap[type] || 'cs2-steam.svg');
 const altText = altMap[type] || 'Game Security Profile';
 ---
 
@@ -40,7 +58,7 @@ const altText = altMap[type] || 'Game Security Profile';
   <img
     src={`/images/games/${fileName}`}
     alt={`${altText} Icon`}
-    class="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+    class="w-full h-full object-contain p-1 transition-transform duration-300 group-hover:scale-105"
     width="160"
     height="160"
     loading="lazy"

@@ -91,9 +91,16 @@ const compromiseOptions: CompromiseType[] = COMPROMISE_TYPES[currentLang];
         >
           <div>
             <div class="flex items-center justify-between mb-3">
-              <span class="text-3xl p-2 rounded-xl bg-slate-100 dark:bg-navy-900 group-hover:scale-110 transition-transform">
-                {platform.icon}
-              </span>
+              <div class="w-14 h-14 rounded-2xl overflow-hidden p-1.5 bg-slate-100 dark:bg-navy-900 border border-slate-200 dark:border-navy-700/80 group-hover:scale-105 group-hover:border-cyan/50 shadow-sm transition-all flex items-center justify-center flex-shrink-0">
+                <img
+                  src={platform.iconImage}
+                  alt={`${platform.name} Icon`}
+                  class="w-full h-full object-contain"
+                  width="56"
+                  height="56"
+                  loading="lazy"
+                />
+              </div>
               <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border border-slate-300 dark:border-navy-700 text-slate-600 dark:text-cloud-subtle bg-slate-100/80 dark:bg-navy-900/80">
                 {platform.badge}
               </span>
@@ -197,7 +204,16 @@ const compromiseOptions: CompromiseType[] = COMPROMISE_TYPES[currentLang];
     <!-- Active Selection Summary Bar -->
     <div class="p-4 sm:p-5 rounded-2xl border border-cyan-500/30 bg-cyan-500/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
       <div class="flex items-center gap-3">
-        <span class="text-2xl" id="summary-platform-icon">🎮</span>
+        <div class="w-12 h-12 rounded-xl overflow-hidden p-1 bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-700 flex-shrink-0 flex items-center justify-center shadow-sm">
+          <img
+            id="summary-platform-icon-img"
+            src="/images/games/cs2-steam.svg"
+            alt="Game Icon"
+            class="w-full h-full object-contain"
+            width="48"
+            height="48"
+          />
+        </div>
         <div>
           <span class="text-[11px] font-bold uppercase tracking-wider text-cyan-dark dark:text-cyan">
             {isRu ? 'Персональный план восстановления' : 'Personal Recovery Roadmap'}
@@ -515,7 +531,7 @@ const compromiseOptions: CompromiseType[] = COMPROMISE_TYPES[currentLang];
     const platform = platformsData.find((p) => p.id === selectedPlatformId);
     const badgeEl = document.getElementById('selected-platform-name-badge');
     if (badgeEl && platform) {
-      badgeEl.textContent = `🎮 ${platform.name}`;
+      badgeEl.innerHTML = `<img src="${platform.iconImage}" class="w-4 h-4 object-contain inline-block mr-1.5 rounded-sm" alt="${platform.name}" /><span>${platform.name}</span>`;
     }
 
     step1.classList.add('hidden');
@@ -616,7 +632,11 @@ const compromiseOptions: CompromiseType[] = COMPROMISE_TYPES[currentLang];
     if (!platform) return;
 
     // Header summary
-    document.getElementById('summary-platform-icon').textContent = platform.icon;
+    const summaryIconImg = document.getElementById('summary-platform-icon-img');
+    if (summaryIconImg && platform.iconImage) {
+      summaryIconImg.src = platform.iconImage;
+      summaryIconImg.alt = platform.name;
+    }
     document.getElementById('summary-platform-title').textContent = `${platform.name} (${platform.publisher})`;
 
     // Emergency First Action

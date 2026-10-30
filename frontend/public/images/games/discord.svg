@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="discordBlurple" x1="20" y1="20" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#7289DA"/>
+      <stop offset="50%" stop-color="#5865F2"/>
+      <stop offset="100%" stop-color="#4752C4"/>
+    </linearGradient>
+    <linearGradient id="discordShieldGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#22D3EE"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+    <filter id="discordShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- Deep Slate/Navy Container -->
+  <rect width="200" height="200" rx="36" fill="#151728" stroke="#313658" stroke-width="4"/>
+
+  <!-- Audio Wave / Chat Bubbles Background Radiance -->
+  <circle cx="100" cy="100" r="70" fill="#5865F2" fill-opacity="0.12"/>
+  <circle cx="100" cy="100" r="50" stroke="#5865F2" stroke-width="1.5" stroke-dasharray="4 4" stroke-opacity="0.3"/>
+
+  <!-- Iconic Official Discord "Clyde" Mascot / Controller Geometry -->
+  <g filter="url(#discordShadow)" transform="translate(100, 94)">
+    <!-- Blurple Controller / Head Shape -->
+    <path d="M52 -44 C42 -48 31 -50 20 -52 C18 -48 16 -43 14 -39 C-5 -41 -15 -41 -24 -39 C-26 -43 -28 -48 -30 -52 C-41 -50 -52 -48 -62 -44 C-76 -23 -80 1 -78 24 C-65 34 -52 40 -40 44 C-37 39 -34 34 -32 29 C-36 27 -40 25 -44 23 C-43 22 -42 21 -41 20 C-14 33 14 33 41 20 C42 21 43 22 44 23 C40 25 36 27 32 29 C34 34 37 39 40 44 C52 40 65 34 78 24 C80 1 76 -23 52 -44 Z" 
+          fill="url(#discordBlurple)" 
+          stroke="#2A2D4A" 
+          stroke-width="5" 
+          stroke-linejoin="round"/>
+
+    <!-- Left Controller Eye (Hollow Circle) -->
+    <circle cx="-23" cy="-8" r="11" fill="#FFFFFF"/>
+    <!-- Right Controller Eye (Hollow Circle) -->
+    <circle cx="23" cy="-8" r="11" fill="#FFFFFF"/>
+  </g>
+
+  <!-- Security Shield & QR Alert Badge (Bottom Right) -->
+  <g transform="translate(144, 144)" filter="url(#discordShadow)">
+    <circle cx="0" cy="0" r="26" fill="#111827" stroke="url(#discordShieldGrad)" stroke-width="3"/>
+    <!-- Padlock & Token Shield Shape -->
+    <path d="M-7 1 L-7 -5 C-7 -8.5 -4.5 -11 0 -11 C4.5 -11 7 -8.5 7 -5 L7 1" stroke="#22D3EE" stroke-width="2.5" fill="none"/>
+    <rect x="-9" y="1" width="18" height="12" rx="2.5" fill="#22D3EE"/>
+    <circle cx="0" cy="7" r="2" fill="#111827"/>
+  </g>
+
+  <!-- "DISCORD" Badge -->
+  <rect x="24" y="24" width="46" height="20" rx="6" fill="#5865F2" fill-opacity="0.2" stroke="#5865F2" stroke-width="1.5"/>
+  <text x="47" y="38" font-family="'Space Grotesk', system-ui, sans-serif" font-size="10" font-weight="900" fill="#818CF8" text-anchor="middle" letter-spacing="1">CHAT</text>
+</svg>
