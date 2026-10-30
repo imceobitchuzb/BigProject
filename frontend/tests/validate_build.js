@@ -32,6 +32,7 @@ const requiredFiles = [
   'en/games/index.html',
   'en/scanner/index.html',
   'en/lab/index.html',
+  'en/recovery/index.html',
   'ru/index.html',
   'ru/safety/index.html',
   'ru/threats/index.html',
@@ -42,6 +43,7 @@ const requiredFiles = [
   'ru/games/index.html',
   'ru/scanner/index.html',
   'ru/lab/index.html',
+  'ru/recovery/index.html',
 ];
 
 for (const file of requiredFiles) {
@@ -155,11 +157,25 @@ assert.ok(ruLabHtml.includes('certificate-box'), 'Certificate generator missing 
 
 console.log('✓ Scam Lab training sandbox and certification exam verified in EN and RU.');
 
-// 9. Verify sitemap.xml
+// 9. Verify Incident Recovery Wizard pages in EN and RU
+const enRecoveryHtml = fs.readFileSync(path.join(distDir, 'en', 'recovery', 'index.html'), 'utf-8');
+assert.ok(enRecoveryHtml.includes('recovery-wizard-container'), 'Recovery Wizard container missing on EN page');
+assert.ok(enRecoveryHtml.includes('wizard-step-1'), 'Step 1 missing on EN recovery page');
+assert.ok(enRecoveryHtml.includes('btn-goto-step-2'), 'Step 2 transition missing on EN recovery page');
+
+const ruRecoveryHtml = fs.readFileSync(path.join(distDir, 'ru', 'recovery', 'index.html'), 'utf-8');
+assert.ok(ruRecoveryHtml.includes('recovery-wizard-container'), 'Recovery Wizard container missing on RU page');
+assert.ok(ruRecoveryHtml.includes('wizard-step-1'), 'Step 1 missing on RU recovery page');
+assert.ok(ruRecoveryHtml.includes('btn-goto-step-2'), 'Step 2 transition missing on RU recovery page');
+
+console.log('✓ Incident Recovery Wizard and Support Ticket Generator verified in EN and RU.');
+
+// 10. Verify sitemap.xml
 const sitemapContent = fs.readFileSync(path.join(distDir, 'sitemap.xml'), 'utf-8');
 assert.ok(sitemapContent.includes('<urlset'), 'Sitemap missing urlset element');
 assert.ok(sitemapContent.includes('https://safeingame.org/en/games/cs2-steam/'), 'Sitemap missing cs2-steam URL');
 assert.ok(sitemapContent.includes('https://safeingame.org/ru/scanner/'), 'Sitemap missing scanner URL');
+assert.ok(sitemapContent.includes('https://safeingame.org/ru/recovery/'), 'Sitemap missing recovery URL');
 console.log('✓ Valid XML sitemap verified with game centers and localized alternates.');
 
 console.log('✓ Build validation PASSED: 100% checks successful.');

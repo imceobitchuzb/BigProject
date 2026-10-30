@@ -15,6 +15,18 @@ SafeInGame is an independent, non-commercial gaming safety education and threat 
 
 ---
 
+## What's New: Incident Recovery Wizard & Support Ticket Generator
+
+- **🚨 SOS Account Recovery Wizard (`/recovery/`):** Full-stack interactive emergency response assistant:
+  - **8 Major Platforms Supported:** Tailored triage workflows for Steam (CS2/Dota 2), Brawl Stars (Supercell ID), Roblox, Minecraft (Microsoft Account), Discord, Epic Games (Fortnite), PUBG Mobile (KRAFTON), and Genshin Impact (HoYoverse).
+  - **Compromise Vector Profiling:** Specific tactical mitigation plans depending on whether the player leaked passwords, 2FA codes, Steam API keys, executed trojan mods/stealers, or scanned rogue Discord QR codes.
+  - **Exact Click-by-Click Navigation:** Direct verified official support links with granular breadcrumbs and UI button targets to prevent falling for sponsored search engine phishing ads.
+  - **Dynamic Bilingual Support Ticket Generator:** Real-time populated, professional support inquiry templates in English and Russian with placeholders for CD-keys, transaction IDs, original registration emails, and payment card proofs. One-click clipboard copy.
+  - **Interactive Proof of Ownership Checklist:** Dynamic progress tracker helping victims assemble critical evidence (GPA invoice numbers, hardware specs, original CD-keys) before contacting support desks.
+  - **Anti-Recovery-Scam Advisory:** Essential warning alerts protecting victims against secondary extortion scams on Telegram and social networks.
+
+---
+
 ## What's New: Gaming Link Scanner & Threat Detection Engine
 
 - **⚡ Live Gaming URL & Phishing Scanner (`/scanner/`):** Full-stack algorithmic tool analyzing candidate URLs for:

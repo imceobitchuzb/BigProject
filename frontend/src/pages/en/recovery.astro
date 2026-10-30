@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RecoveryWizard from '../../components/RecoveryWizard.astro';
+import CyberBackground from '../../components/CyberBackground.astro';
+
+const title = 'Account Recovery Wizard: Step-by-Step Incident Restoration — SafeInGame';
+const description = 'Calm, step-by-step emergency instructions, direct support links, and automated official support ticket generator to recover your scammed or hijacked gaming account.';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  currentLang="en"
+  canonicalSlug="recovery/"
+>
+  <div class="relative min-h-screen py-12 lg:py-16">
+    <CyberBackground />
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs text-slate-500 dark:text-cloud-subtle mb-8" aria-label="Breadcrumb">
+        <a href="/en/" class="hover:text-cyan transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-slate-800 dark:text-cloud font-medium">Recovery Wizard</span>
+      </nav>
+
+      <!-- Page Header -->
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border border-red-500/40 bg-red-500/10 text-red-600 dark:text-red-400 uppercase tracking-wider mb-4 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+          <span>SOS Incident Response Assistant</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight mb-4">
+          Account Recovery Wizard
+        </h1>
+        <p class="text-base sm:text-lg text-slate-600 dark:text-cloud-muted leading-relaxed">
+          Stay calm. Select the compromised gaming service, specify what data or tokens were leaked, and follow verified click-by-click instructions with an auto-generated official support ticket.
+        </p>
+      </div>
+
+      <!-- Main Recovery Wizard Component -->
+      <div class="mb-16">
+        <RecoveryWizard currentLang="en" />
+      </div>
+    </div>
+  </div>
+</BaseLayout>

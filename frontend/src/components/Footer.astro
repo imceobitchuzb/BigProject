@@ -34,6 +34,22 @@ const t = useTranslations(currentLang);
         </h3>
         <ul class="space-y-2 text-sm">
           <li>
+            <a href={`/${currentLang}/recovery/`} class="text-red-600 dark:text-red-400 font-semibold hover:underline transition-colors flex items-center gap-1.5">
+              <span>{t('nav.recovery')}</span>
+              <span class="text-[9px] px-1 py-0.2 rounded bg-red-500/15 text-red-600 dark:text-red-400 font-bold uppercase">SOS</span>
+            </a>
+          </li>
+          <li>
+            <a href={`/${currentLang}/scanner/`} class="text-slate-600 dark:text-cloud-muted hover:text-cyan-dark dark:hover:text-cyan transition-colors">
+              {t('nav.scanner')}
+            </a>
+          </li>
+          <li>
+            <a href={`/${currentLang}/lab/`} class="text-slate-600 dark:text-cloud-muted hover:text-cyan-dark dark:hover:text-cyan transition-colors">
+              {t('nav.lab')}
+            </a>
+          </li>
+          <li>
             <a href={`/${currentLang}/games/`} class="text-slate-600 dark:text-cloud-muted hover:text-cyan-dark dark:hover:text-cyan transition-colors">
               {t('nav.games')}
             </a>

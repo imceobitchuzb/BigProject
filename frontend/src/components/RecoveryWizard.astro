@@ -1,0 +1,835 @@
+---
+import { RECOVERY_PLATFORMS, COMPROMISE_TYPES, type PlatformRecoveryData, type CompromiseType } from '../data/recovery';
+
+interface Props {
+  currentLang: 'en' | 'ru';
+}
+
+const { currentLang } = Astro.props;
+const isRu = currentLang === 'ru';
+
+const platforms: PlatformRecoveryData[] = RECOVERY_PLATFORMS[currentLang];
+const compromiseOptions: CompromiseType[] = COMPROMISE_TYPES[currentLang];
+---
+
+<div class="w-full max-w-5xl mx-auto" id="recovery-wizard-container">
+  <!-- Progress Stepper Header -->
+  <div class="mb-10">
+    <div class="flex items-center justify-between max-w-2xl mx-auto relative px-4">
+      <!-- Step 1 Indicator -->
+      <div class="flex flex-col items-center relative z-10">
+        <div
+          id="step-bubble-1"
+          class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center font-heading font-extrabold text-sm sm:text-base transition-all duration-300 bg-cyan text-navy-950 shadow-glow-cyan"
+        >
+          1
+        </div>
+        <span class="text-xs font-heading font-bold text-slate-800 dark:text-cloud mt-2 text-center">
+          {isRu ? 'Выбор платформы' : 'Select Game'}
+        </span>
+      </div>
+
+      <!-- Connector 1-2 -->
+      <div class="flex-1 h-1 bg-slate-200 dark:bg-navy-800 mx-2 sm:mx-4 -mt-5 relative overflow-hidden">
+        <div id="step-connector-1" class="h-full bg-cyan w-0 transition-all duration-500"></div>
+      </div>
+
+      <!-- Step 2 Indicator -->
+      <div class="flex flex-col items-center relative z-10">
+        <div
+          id="step-bubble-2"
+          class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center font-heading font-extrabold text-sm sm:text-base transition-all duration-300 bg-slate-200 dark:bg-navy-800 text-slate-500 dark:text-cloud-subtle border border-slate-300 dark:border-navy-700"
+        >
+          2
+        </div>
+        <span class="text-xs font-heading font-bold text-slate-500 dark:text-cloud-muted mt-2 text-center">
+          {isRu ? 'Что произошло' : 'What Happened'}
+        </span>
+      </div>
+
+      <!-- Connector 2-3 -->
+      <div class="flex-1 h-1 bg-slate-200 dark:bg-navy-800 mx-2 sm:mx-4 -mt-5 relative overflow-hidden">
+        <div id="step-connector-2" class="h-full bg-cyan w-0 transition-all duration-500"></div>
+      </div>
+
+      <!-- Step 3 Indicator -->
+      <div class="flex flex-col items-center relative z-10">
+        <div
+          id="step-bubble-3"
+          class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center font-heading font-extrabold text-sm sm:text-base transition-all duration-300 bg-slate-200 dark:bg-navy-800 text-slate-500 dark:text-cloud-subtle border border-slate-300 dark:border-navy-700"
+        >
+          3
+        </div>
+        <span class="text-xs font-heading font-bold text-slate-500 dark:text-cloud-muted mt-2 text-center">
+          {isRu ? 'План и Тикет' : 'Action Plan'}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 1: SELECT PLATFORM -->
+  <section id="wizard-step-1" class="space-y-6">
+    <div class="text-center max-w-2xl mx-auto mb-8">
+      <h2 class="text-2xl sm:text-3xl font-heading font-extrabold text-slate-900 dark:text-cloud">
+        {isRu ? 'В какой игре или платформе произошел инцидент?' : 'Which game or platform was compromised?'}
+      </h2>
+      <p class="text-sm text-slate-600 dark:text-cloud-muted mt-2">
+        {isRu
+          ? 'Выберите игровую систему. У каждой платформы действуют свои правила верификации владения и каналы связи с поддержкой.'
+          : 'Select your gaming ecosystem. Each service enforces distinct ownership proof standards and dedicated support routing.'}
+      </p>
+    </div>
+
+    <!-- Platform Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="platform-grid">
+      {platforms.map((platform) => (
+        <button
+          type="button"
+          class="platform-card text-left p-5 rounded-2xl border-2 transition-all duration-200 border-slate-200 dark:border-navy-750 bg-white dark:bg-navy-850 hover:border-cyan/60 hover:shadow-lg group relative flex flex-col justify-between"
+          data-platform-id={platform.id}
+          data-platform-name={platform.name}
+        >
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-3xl p-2 rounded-xl bg-slate-100 dark:bg-navy-900 group-hover:scale-110 transition-transform">
+                {platform.icon}
+              </span>
+              <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border border-slate-300 dark:border-navy-700 text-slate-600 dark:text-cloud-subtle bg-slate-100/80 dark:bg-navy-900/80">
+                {platform.badge}
+              </span>
+            </div>
+            <h3 class="font-heading font-bold text-base text-slate-900 dark:text-cloud group-hover:text-cyan transition-colors">
+              {platform.name}
+            </h3>
+            <p class="text-xs text-slate-500 dark:text-cloud-subtle mt-0.5 font-medium">
+              {platform.publisher} • {platform.genre}
+            </p>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-navy-750 flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-cloud-muted group-hover:text-cyan">
+            <span>{isRu ? 'Выбрать' : 'Select'}</span>
+            <span class="platform-check opacity-0 transition-opacity text-base">✓</span>
+          </div>
+        </button>
+      ))}
+    </div>
+
+    <!-- Continue to Step 2 Button -->
+    <div class="flex justify-center pt-6">
+      <button
+        type="button"
+        id="btn-goto-step-2"
+        disabled
+        class="px-8 py-3.5 rounded-xl font-heading font-bold text-sm bg-slate-200 dark:bg-navy-800 text-slate-400 dark:text-cloud-subtle cursor-not-allowed transition-all shadow-sm"
+      >
+        <span>{isRu ? 'Далее: Что конкретно произошло →' : 'Continue: What happened →'}</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- STEP 2: SELECT COMPROMISE TYPES -->
+  <section id="wizard-step-2" class="space-y-6 hidden">
+    <div class="text-center max-w-2xl mx-auto mb-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border border-cyan-500/40 bg-cyan-500/10 text-cyan-800 dark:text-cyan mb-2">
+        <span id="selected-platform-name-badge"></span>
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-heading font-extrabold text-slate-900 dark:text-cloud">
+        {isRu ? 'Что именно произошло? Какие данные были переданы?' : 'What specific data was compromised?'}
+      </h2>
+      <p class="text-sm text-slate-600 dark:text-cloud-muted mt-1">
+        {isRu
+          ? 'Отметьте один или несколько пунктов. Это определит первые экстренные шаги и текст обращения.'
+          : 'Check all that apply. This customizes immediate containment steps and official support evidence.'}
+      </p>
+    </div>
+
+    <!-- Compromise Checkboxes Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-4xl mx-auto" id="compromise-grid">
+      {compromiseOptions.map((item) => (
+        <label
+          class="compromise-card flex items-start gap-3.5 p-4 rounded-2xl border-2 border-slate-200 dark:border-navy-750 bg-white dark:bg-navy-850 hover:border-cyan/50 cursor-pointer transition-all select-none group"
+          data-compromise-id={item.id}
+        >
+          <input
+            type="checkbox"
+            name="compromise_types"
+            value={item.id}
+            class="mt-1 w-4 h-4 rounded border-slate-300 dark:border-navy-700 text-cyan focus:ring-cyan bg-slate-100 dark:bg-navy-900"
+          />
+          <div class="flex-1">
+            <div class="flex items-center gap-2">
+              <span class="text-lg">{item.icon}</span>
+              <span class="font-heading font-bold text-sm text-slate-900 dark:text-cloud group-hover:text-cyan transition-colors">
+                {item.label}
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-cloud-muted mt-1 leading-relaxed">
+              {item.description}
+            </p>
+          </div>
+        </label>
+      ))}
+    </div>
+
+    <!-- Step 2 Navigation Controls -->
+    <div class="flex items-center justify-between max-w-4xl mx-auto pt-6">
+      <button
+        type="button"
+        id="btn-back-to-step-1"
+        class="px-6 py-3 rounded-xl font-heading font-bold text-xs sm:text-sm border border-slate-300 dark:border-navy-700 bg-white dark:bg-navy-850 hover:bg-slate-50 dark:hover:bg-navy-800 text-slate-700 dark:text-cloud transition-all"
+      >
+        <span>← {isRu ? 'Выбрать другую игру' : 'Back: Choose another game'}</span>
+      </button>
+
+      <button
+        type="button"
+        id="btn-goto-step-3"
+        disabled
+        class="px-8 py-3.5 rounded-xl font-heading font-bold text-sm bg-slate-200 dark:bg-navy-800 text-slate-400 dark:text-cloud-subtle cursor-not-allowed transition-all shadow-sm"
+      >
+        <span>{isRu ? 'Сформировать план спасения →' : 'Generate Recovery Plan →'}</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- STEP 3: CUSTOM ACTION PLAN & TICKET GENERATOR -->
+  <section id="wizard-step-3" class="space-y-8 hidden">
+    <!-- Active Selection Summary Bar -->
+    <div class="p-4 sm:p-5 rounded-2xl border border-cyan-500/30 bg-cyan-500/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl" id="summary-platform-icon">🎮</span>
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-cyan-dark dark:text-cyan">
+            {isRu ? 'Персональный план восстановления' : 'Personal Recovery Roadmap'}
+          </span>
+          <h3 class="font-heading font-extrabold text-base text-slate-900 dark:text-cloud" id="summary-platform-title"></h3>
+        </div>
+      </div>
+      <button
+        type="button"
+        id="btn-restart-wizard"
+        class="text-xs font-heading font-bold text-cyan-dark dark:text-cyan hover:underline self-end sm:self-auto"
+      >
+        ↺ {isRu ? 'Начать заново' : 'Start Over'}
+      </button>
+    </div>
+
+    <!-- 1. EMERGENCY TRIAGE (FIRST 5 MINUTES) -->
+    <div class="p-6 sm:p-8 rounded-3xl border-2 border-red-500/40 bg-red-500/5 dark:bg-red-500/10 shadow-sm relative overflow-hidden">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 rounded-2xl bg-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-center text-2xl flex-shrink-0">
+          🚨
+        </div>
+        <div class="space-y-3 flex-1">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-red-600 dark:text-red-400">
+              {isRu ? 'Критически срочно: Первые 5 минут' : 'Immediate Containment: First 5 Minutes'}
+            </span>
+            <h4 class="text-xl font-heading font-extrabold text-slate-900 dark:text-cloud mt-0.5">
+              {isRu ? 'Остановите утечку и заблокируйте активную сессию' : 'Halt the intrusion and purge active sessions'}
+            </h4>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white/90 dark:bg-navy-900/90 border border-red-500/20 text-sm text-slate-800 dark:text-cloud font-medium leading-relaxed" id="emergency-first-action-box">
+            <!-- Populated via JS -->
+          </div>
+
+          <!-- Dynamic Tailored Mitigations based on selected compromises -->
+          <div class="space-y-2 pt-2" id="tailored-mitigations-list">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. OFFICIAL SUPPORT PORTAL & EXACT CLICK-BY-CLICK STEPS -->
+    <div class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 shadow-sm space-y-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-navy-750">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-cyan-dark dark:text-cyan">
+            {isRu ? 'Официальная точка входа' : 'Official Verified Pathway'}
+          </span>
+          <h4 class="text-xl sm:text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud mt-1">
+            {isRu ? 'Куда именно переходить и что нажимать' : 'Exact Where-to-Click Navigation Guide'}
+          </h4>
+        </div>
+        <a
+          href="#"
+          id="btn-open-official-support"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-heading font-bold text-xs uppercase tracking-wider bg-cyan text-navy-950 hover:bg-cyan-light transition-all shadow-glow-cyan flex-shrink-0"
+        >
+          <span>{isRu ? 'Открыть официальный саппорт ↗' : 'Open Official Support ↗'}</span>
+        </a>
+      </div>
+
+      <!-- Step by Step instructions with UI badges -->
+      <div class="space-y-4" id="where-to-click-container">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+
+    <!-- 3. OFFICIAL SUPPORT TICKET GENERATOR -->
+    <div class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 shadow-sm space-y-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-cyan-dark dark:text-cyan">
+            {isRu ? 'Генератор официального обращения' : 'Official Support Ticket Generator'}
+          </span>
+          <h4 class="text-xl sm:text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud mt-1">
+            {isRu ? 'Готовый текст тикета для техподдержки' : 'Production-Ready Support Ticket Template'}
+          </h4>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-cloud-muted mt-1">
+            {isRu
+              ? 'Заполните поля ниже: текст обращения обновится в реальном времени. Рекомендуем отправлять на английском — техподдержка Valve, Epic, Supercell и Roblox отвечает на английском в 2-3 раза быстрее.'
+              : 'Fill out the inputs below to auto-populate your ticket. English tickets typically receive answers 2-3x faster from global support teams.'}
+          </p>
+        </div>
+
+        <!-- Language toggle for ticket text -->
+        <div class="inline-flex p-1 rounded-xl bg-slate-100 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 flex-shrink-0">
+          <button
+            type="button"
+            id="ticket-lang-en-btn"
+            class="px-4 py-2 rounded-lg text-xs font-heading font-bold transition-all bg-white dark:bg-navy-800 text-slate-900 dark:text-cloud shadow-sm"
+          >
+            English (Recommended)
+          </button>
+          <button
+            type="button"
+            id="ticket-lang-ru-btn"
+            class="px-4 py-2 rounded-lg text-xs font-heading font-bold transition-all text-slate-600 dark:text-cloud-muted hover:text-slate-900 dark:hover:text-cloud"
+          >
+            Русский
+          </button>
+        </div>
+      </div>
+
+      <!-- Ticket Variable Form Inputs -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-5 rounded-2xl bg-slate-50 dark:bg-navy-900/60 border border-slate-200 dark:border-navy-750">
+        <div>
+          <label for="input-ticket-user" class="block text-xs font-bold text-slate-700 dark:text-cloud mb-1">
+            {isRu ? 'Логин / Тег / Никнейм' : 'Login / Tag / Username'}
+          </label>
+          <input
+            type="text"
+            id="input-ticket-user"
+            placeholder={isRu ? 'Пример: ProGamer2026' : 'e.g. ProGamer2026'}
+            class="w-full px-3 py-2 rounded-xl text-xs bg-white dark:bg-navy-800 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-cloud focus:ring-2 focus:ring-cyan focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <label for="input-ticket-email" class="block text-xs font-bold text-slate-700 dark:text-cloud mb-1">
+            {isRu ? 'Первоначальный email' : 'Original Registration Email'}
+          </label>
+          <input
+            type="email"
+            id="input-ticket-email"
+            placeholder={isRu ? 'первая_почта@gmail.com' : 'first_email@gmail.com'}
+            class="w-full px-3 py-2 rounded-xl text-xs bg-white dark:bg-navy-800 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-cloud focus:ring-2 focus:ring-cyan focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <label for="input-ticket-safe-email" class="block text-xs font-bold text-slate-700 dark:text-cloud mb-1">
+            {isRu ? 'Новый безопасный email' : 'Safe Recovery Email'}
+          </label>
+          <input
+            type="email"
+            id="input-ticket-safe-email"
+            placeholder={isRu ? 'новая_почта@gmail.com' : 'safe_new@gmail.com'}
+            class="w-full px-3 py-2 rounded-xl text-xs bg-white dark:bg-navy-800 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-cloud focus:ring-2 focus:ring-cyan focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <label for="input-ticket-receipt" class="block text-xs font-bold text-slate-700 dark:text-cloud mb-1">
+            {isRu ? 'Чек / Карта / Order ID' : 'Order ID / Card Proof'}
+          </label>
+          <input
+            type="text"
+            id="input-ticket-receipt"
+            placeholder={isRu ? 'Чек GPA.1234 / Карты 4400' : 'Order #GPA.1234 / Card 4400'}
+            class="w-full px-3 py-2 rounded-xl text-xs bg-white dark:bg-navy-800 border border-slate-300 dark:border-navy-700 text-slate-900 dark:text-cloud focus:ring-2 focus:ring-cyan focus:outline-none"
+          />
+        </div>
+      </div>
+
+      <!-- Ticket Subject Box -->
+      <div>
+        <label class="block text-xs font-bold text-slate-600 dark:text-cloud-subtle uppercase tracking-wider mb-1">
+          {isRu ? 'Тема обращения (Subject):' : 'Subject Line:'}
+        </label>
+        <div
+          id="ticket-subject-box"
+          class="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 font-mono text-xs text-slate-900 dark:text-cloud font-bold select-all"
+        ></div>
+      </div>
+
+      <!-- Ticket Body Box -->
+      <div class="relative">
+        <label class="block text-xs font-bold text-slate-600 dark:text-cloud-subtle uppercase tracking-wider mb-1">
+          {isRu ? 'Текст тикета:' : 'Ticket Body:'}
+        </label>
+        <pre
+          id="ticket-body-box"
+          class="p-5 rounded-2xl bg-slate-900 text-cloud font-mono text-xs leading-relaxed overflow-x-auto whitespace-pre-wrap select-all max-h-96 border border-slate-800"
+        ></pre>
+
+        <!-- Copy Button Overlay -->
+        <div class="absolute top-8 right-3">
+          <button
+            type="button"
+            id="btn-copy-ticket"
+            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-heading font-bold bg-cyan text-navy-950 hover:bg-cyan-light shadow-md transition-all active:scale-95"
+          >
+            <span id="copy-ticket-icon">📋</span>
+            <span id="copy-ticket-text">{isRu ? 'Скопировать текст' : 'Copy Ticket Text'}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. INTERACTIVE PROOF OF OWNERSHIP CHECKLIST -->
+    <div class="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-850 shadow-sm space-y-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-lime-600 dark:text-lime">
+            {isRu ? 'Чек-лист доказательств владения' : 'Proof of Ownership Checklist'}
+          </span>
+          <h4 class="text-xl sm:text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud mt-1">
+            {isRu ? 'Что подготовить перед отправкой тикета' : 'Required Documentation Before Submission'}
+          </h4>
+        </div>
+        <div class="text-right">
+          <span class="text-xs font-bold text-slate-500 dark:text-cloud-subtle">{isRu ? 'Готовность:' : 'Readiness:'}</span>
+          <div class="text-lg font-heading font-extrabold text-cyan-dark dark:text-cyan" id="proof-score-badge">
+            0 / 0 (0%)
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-navy-900 overflow-hidden">
+        <div id="proof-progress-bar" class="h-full bg-gradient-to-r from-cyan to-lime transition-all duration-300 w-0"></div>
+      </div>
+
+      <!-- Checkboxes List -->
+      <div class="space-y-3" id="proof-items-container">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+
+    <!-- 5. CRITICAL ANTI-RECOVERY-SCAM ADVISORY -->
+    <div class="p-6 rounded-2xl border border-orange/40 bg-orange/10 dark:bg-orange/15 flex items-start gap-4">
+      <span class="text-3xl flex-shrink-0">⚠️</span>
+      <div class="space-y-1">
+        <h5 class="font-heading font-bold text-base text-slate-900 dark:text-cloud">
+          {isRu ? 'ВНИМАНИЕ: Остерегайтесь «рекавери-скаммеров»!' : 'WARNING: Beware of Recovery Scammers!'}
+        </h5>
+        <p class="text-xs sm:text-sm text-slate-700 dark:text-cloud-muted leading-relaxed">
+          {isRu
+            ? 'Если в Telegram, Instagram или комментариях вам пишет человек с предложением: «Мне помог вернуть аккаунт специалист @hacker_pro, напиши ему за $20» — это ПОВТОРНЫЙ ОБМАН. Никакие частные лица или хакеры не имеют доступа к серверам Valve, Microsoft, Supercell или Roblox. Вернуть аккаунт может ТОЛЬКО официальная поддержка по ссылкам выше.'
+            : 'If anyone in Telegram, Discord, or YouTube comments claims: "I recovered my account via expert @hack_pro for $25" — this is a SECONDARY SCAM. No third-party possesses direct access to Valve, Supercell, Roblox, or Microsoft servers. Only genuine support desks can restore your profile.'}
+        </p>
+      </div>
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="flex items-center justify-between pt-4">
+      <button
+        type="button"
+        id="btn-back-to-step-2"
+        class="px-6 py-3 rounded-xl font-heading font-bold text-xs sm:text-sm border border-slate-300 dark:border-navy-700 bg-white dark:bg-navy-850 hover:bg-slate-50 dark:hover:bg-navy-800 text-slate-700 dark:text-cloud transition-all"
+      >
+        <span>← {isRu ? 'Изменить параметры компрометации' : 'Back: Change compromise details'}</span>
+      </button>
+
+      <a
+        href={`/${currentLang}/safety/`}
+        class="text-xs sm:text-sm font-semibold text-slate-600 dark:text-cloud-muted hover:text-cyan transition-colors"
+      >
+        {isRu ? 'Справочник кибергигиены →' : 'Safety Center Library →'}
+      </a>
+    </div>
+  </section>
+</div>
+
+<!-- Embedded Platform Data for Client JS -->
+<script define:vars={{ platformsData: platforms, isRu }}>
+  let selectedPlatformId = null;
+  let selectedCompromises = new Set();
+  let ticketLanguage = 'en'; // default english for faster support resolution
+
+  // DOM Elements
+  const step1 = document.getElementById('wizard-step-1');
+  const step2 = document.getElementById('wizard-step-2');
+  const step3 = document.getElementById('wizard-step-3');
+
+  const bubble1 = document.getElementById('step-bubble-1');
+  const bubble2 = document.getElementById('step-bubble-2');
+  const bubble3 = document.getElementById('step-bubble-3');
+  const conn1 = document.getElementById('step-connector-1');
+  const conn2 = document.getElementById('step-connector-2');
+
+  const btnGotoStep2 = document.getElementById('btn-goto-step-2');
+  const btnGotoStep3 = document.getElementById('btn-goto-step-3');
+  const btnBackToStep1 = document.getElementById('btn-back-to-step-1');
+  const btnBackToStep2 = document.getElementById('btn-back-to-step-2');
+  const btnRestart = document.getElementById('btn-restart-wizard');
+
+  const platformCards = document.querySelectorAll('.platform-card');
+  const compromiseCards = document.querySelectorAll('.compromise-card');
+
+  // STEP 1 SELECTION LOGIC
+  platformCards.forEach((card) => {
+    card.addEventListener('click', () => {
+      const platformId = card.getAttribute('data-platform-id');
+      selectedPlatformId = platformId;
+
+      platformCards.forEach((c) => {
+        c.classList.remove('border-cyan', 'shadow-glow-cyan', 'dark:border-cyan');
+        c.classList.add('border-slate-200', 'dark:border-navy-750');
+        const check = c.querySelector('.platform-check');
+        if (check) check.classList.add('opacity-0');
+      });
+
+      card.classList.remove('border-slate-200', 'dark:border-navy-750');
+      card.classList.add('border-cyan', 'shadow-glow-cyan', 'dark:border-cyan');
+      const check = card.querySelector('.platform-check');
+      if (check) check.classList.remove('opacity-0');
+
+      // Enable Next Button
+      btnGotoStep2.disabled = false;
+      btnGotoStep2.classList.remove('bg-slate-200', 'dark:bg-navy-800', 'text-slate-400', 'dark:text-cloud-subtle', 'cursor-not-allowed');
+      btnGotoStep2.classList.add('bg-cyan', 'text-navy-950', 'hover:bg-cyan-light', 'shadow-glow-cyan', 'cursor-pointer');
+    });
+  });
+
+  // GOTO STEP 2
+  btnGotoStep2.addEventListener('click', () => {
+    if (!selectedPlatformId) return;
+
+    const platform = platformsData.find((p) => p.id === selectedPlatformId);
+    const badgeEl = document.getElementById('selected-platform-name-badge');
+    if (badgeEl && platform) {
+      badgeEl.textContent = `🎮 ${platform.name}`;
+    }
+
+    step1.classList.add('hidden');
+    step2.classList.remove('hidden');
+    window.scrollTo({ top: document.getElementById('recovery-wizard-container').offsetTop - 80, behavior: 'smooth' });
+
+    // Update stepper
+    bubble2.classList.remove('bg-slate-200', 'dark:bg-navy-800', 'text-slate-500', 'dark:text-cloud-subtle');
+    bubble2.classList.add('bg-cyan', 'text-navy-950', 'shadow-glow-cyan');
+    conn1.classList.remove('w-0');
+    conn1.classList.add('w-full');
+  });
+
+  // STEP 2 SELECTION LOGIC
+  compromiseCards.forEach((card) => {
+    const checkbox = card.querySelector('input[type="checkbox"]');
+    card.addEventListener('click', (e) => {
+      if (e.target !== checkbox) {
+        checkbox.checked = !checkbox.checked;
+      }
+      const val = checkbox.value;
+      if (checkbox.checked) {
+        selectedCompromises.add(val);
+        card.classList.add('border-cyan', 'bg-cyan-500/5', 'dark:border-cyan');
+        card.classList.remove('border-slate-200', 'dark:border-navy-750');
+      } else {
+        selectedCompromises.delete(val);
+        card.classList.remove('border-cyan', 'bg-cyan-500/5', 'dark:border-cyan');
+        card.classList.add('border-slate-200', 'dark:border-navy-750');
+      }
+
+      if (selectedCompromises.size > 0) {
+        btnGotoStep3.disabled = false;
+        btnGotoStep3.classList.remove('bg-slate-200', 'dark:bg-navy-800', 'text-slate-400', 'dark:text-cloud-subtle', 'cursor-not-allowed');
+        btnGotoStep3.classList.add('bg-cyan', 'text-navy-950', 'hover:bg-cyan-light', 'shadow-glow-cyan', 'cursor-pointer');
+      } else {
+        btnGotoStep3.disabled = true;
+        btnGotoStep3.classList.add('bg-slate-200', 'dark:bg-navy-800', 'text-slate-400', 'dark:text-cloud-subtle', 'cursor-not-allowed');
+        btnGotoStep3.classList.remove('bg-cyan', 'text-navy-950', 'hover:bg-cyan-light', 'shadow-glow-cyan', 'cursor-pointer');
+      }
+    });
+  });
+
+  // BACK TO STEP 1
+  btnBackToStep1.addEventListener('click', () => {
+    step2.classList.add('hidden');
+    step1.classList.remove('hidden');
+
+    bubble2.classList.add('bg-slate-200', 'dark:bg-navy-800', 'text-slate-500', 'dark:text-cloud-subtle');
+    bubble2.classList.remove('bg-cyan', 'text-navy-950', 'shadow-glow-cyan');
+    conn1.classList.add('w-0');
+    conn1.classList.remove('w-full');
+  });
+
+  // GOTO STEP 3
+  btnGotoStep3.addEventListener('click', () => {
+    renderStep3Plan();
+    step2.classList.add('hidden');
+    step3.classList.remove('hidden');
+    window.scrollTo({ top: document.getElementById('recovery-wizard-container').offsetTop - 80, behavior: 'smooth' });
+
+    bubble3.classList.remove('bg-slate-200', 'dark:bg-navy-800', 'text-slate-500', 'dark:text-cloud-subtle');
+    bubble3.classList.add('bg-cyan', 'text-navy-950', 'shadow-glow-cyan');
+    conn2.classList.remove('w-0');
+    conn2.classList.add('w-full');
+  });
+
+  // BACK TO STEP 2
+  btnBackToStep2.addEventListener('click', () => {
+    step3.classList.add('hidden');
+    step2.classList.remove('hidden');
+
+    bubble3.classList.add('bg-slate-200', 'dark:bg-navy-800', 'text-slate-500', 'dark:text-cloud-subtle');
+    bubble3.classList.remove('bg-cyan', 'text-navy-950', 'shadow-glow-cyan');
+    conn2.classList.add('w-0');
+    conn2.classList.remove('w-full');
+  });
+
+  // RESTART
+  btnRestart.addEventListener('click', () => {
+    step3.classList.add('hidden');
+    step2.classList.add('hidden');
+    step1.classList.remove('hidden');
+
+    bubble2.classList.add('bg-slate-200', 'dark:bg-navy-800', 'text-slate-500', 'dark:text-cloud-subtle');
+    bubble2.classList.remove('bg-cyan', 'text-navy-950', 'shadow-glow-cyan');
+    bubble3.classList.add('bg-slate-200', 'dark:bg-navy-800', 'text-slate-500', 'dark:text-cloud-subtle');
+    bubble3.classList.remove('bg-cyan', 'text-navy-950', 'shadow-glow-cyan');
+    conn1.classList.add('w-0');
+    conn1.classList.remove('w-full');
+    conn2.classList.add('w-0');
+    conn2.classList.remove('w-full');
+  });
+
+  // RENDER STEP 3 FUNCTION
+  function renderStep3Plan() {
+    const platform = platformsData.find((p) => p.id === selectedPlatformId);
+    if (!platform) return;
+
+    // Header summary
+    document.getElementById('summary-platform-icon').textContent = platform.icon;
+    document.getElementById('summary-platform-title').textContent = `${platform.name} (${platform.publisher})`;
+
+    // Emergency First Action
+    document.getElementById('emergency-first-action-box').textContent = platform.emergencyFirstAction;
+
+    // Tailored Mitigations
+    const mitigationsContainer = document.getElementById('tailored-mitigations-list');
+    mitigationsContainer.innerHTML = '';
+    selectedCompromises.forEach((compKey) => {
+      const advice = platform.mitigationsByCompromise[compKey];
+      if (advice) {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'p-3 rounded-xl bg-red-500/10 dark:bg-red-500/15 border border-red-500/30 text-xs text-red-700 dark:text-red-300 flex items-start gap-2.5';
+        itemEl.innerHTML = `<span class="text-base flex-shrink-0">⚡</span><div><strong>${isRu ? 'Тактическое действие' : 'Targeted Countermeasure'}:</strong> ${advice}</div>`;
+        mitigationsContainer.appendChild(itemEl);
+      }
+    });
+
+    // Official support button
+    const btnOfficial = document.getElementById('btn-open-official-support');
+    btnOfficial.href = platform.officialSupportUrl;
+    btnOfficial.title = platform.officialSupportLabel;
+
+    // Where to click steps
+    const whereContainer = document.getElementById('where-to-click-container');
+    whereContainer.innerHTML = '';
+    platform.whereToClickSteps.forEach((st) => {
+      const card = document.createElement('div');
+      card.className = 'flex items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-750';
+      card.innerHTML = `
+        <div class="w-8 h-8 rounded-xl bg-cyan-500/15 text-cyan-dark dark:text-cyan font-heading font-extrabold text-sm flex items-center justify-center flex-shrink-0">
+          ${st.stepNumber}
+        </div>
+        <div class="space-y-1 flex-1">
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <h5 class="font-heading font-bold text-sm text-slate-900 dark:text-cloud">${st.title}</h5>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded-md bg-slate-200/80 dark:bg-navy-800 text-slate-700 dark:text-cloud-muted border border-slate-300 dark:border-navy-700">
+              ${st.targetButtonOrLink}
+            </span>
+          </div>
+          <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">${st.instruction}</p>
+        </div>
+      `;
+      whereContainer.appendChild(card);
+    });
+
+    // Proof checklist
+    const proofContainer = document.getElementById('proof-items-container');
+    proofContainer.innerHTML = '';
+    let totalProofs = platform.ownershipProofs.length;
+    let checkedProofs = 0;
+
+    platform.ownershipProofs.forEach((pf) => {
+      const label = document.createElement('label');
+      label.className = 'flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 dark:border-navy-750 bg-slate-50 dark:bg-navy-900 cursor-pointer hover:border-cyan/40 transition-colors select-none';
+      label.innerHTML = `
+        <input type="checkbox" class="proof-checkbox mt-1 w-4 h-4 rounded text-cyan focus:ring-cyan border-slate-300 dark:border-navy-700 bg-white dark:bg-navy-800" />
+        <div class="flex-1 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="font-heading font-bold text-slate-900 dark:text-cloud">${pf.label}</span>
+            ${pf.required ? `<span class="text-[9px] uppercase font-extrabold px-1.5 py-0.2 rounded bg-red-500/20 text-red-600 dark:text-red-400">${isRu ? 'Обязательно' : 'Mandatory'}</span>` : ''}
+          </div>
+          <p class="text-slate-500 dark:text-cloud-muted mt-0.5">${pf.description}</p>
+        </div>
+      `;
+      const cb = label.querySelector('.proof-checkbox');
+      cb.addEventListener('change', () => {
+        if (cb.checked) {
+          checkedProofs++;
+          label.classList.add('border-lime-500/40', 'bg-lime-500/5');
+        } else {
+          checkedProofs--;
+          label.classList.remove('border-lime-500/40', 'bg-lime-500/5');
+        }
+        updateProofProgressBar(checkedProofs, totalProofs);
+      });
+      proofContainer.appendChild(label);
+    });
+    updateProofProgressBar(0, totalProofs);
+
+    // Update Live Ticket
+    updateLiveTicket();
+  }
+
+  function updateProofProgressBar(current, total) {
+    const pct = total === 0 ? 0 : Math.round((current / total) * 100);
+    const scoreBadge = document.getElementById('proof-score-badge');
+    const bar = document.getElementById('proof-progress-bar');
+    if (scoreBadge) scoreBadge.textContent = `${current} / ${total} (${pct}%)`;
+    if (bar) bar.style.width = `${pct}%`;
+  }
+
+  // TICKET LIVE UPDATE
+  function updateLiveTicket() {
+    const platform = platformsData.find((p) => p.id === selectedPlatformId);
+    if (!platform) return;
+
+    const userInput = document.getElementById('input-ticket-user')?.value.trim() || (isRu ? '[ВАШ_ЛОГИН/ТЕГ]' : '[YOUR_LOGIN/TAG]');
+    const emailInput = document.getElementById('input-ticket-email')?.value.trim() || (isRu ? '[ПЕРВОНАЧАЛЬНЫЙ_EMAIL]' : '[ORIGINAL_EMAIL]');
+    const safeEmailInput = document.getElementById('input-ticket-safe-email')?.value.trim() || (isRu ? '[НОВЫЙ_БЕЗОПАСНЫЙ_EMAIL]' : '[SAFE_RECOVERY_EMAIL]');
+    const receiptInput = document.getElementById('input-ticket-receipt')?.value.trim() || (isRu ? '[НОМЕР_ЧЕКА_ИЛИ_КАРТЫ]' : '[ORDER_ID_OR_CARD_LAST4]');
+    const incidentDate = new Date().toLocaleDateString(ticketLanguage === 'ru' ? 'ru-RU' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    let tpl = ticketLanguage === 'ru' ? platform.ticketTemplate : platform.englishTicketTemplate;
+    if (!tpl) tpl = platform.ticketTemplate;
+
+    let subject = tpl.subject
+      .replace(/\[ВАШ_ЛОГИН\]/g, userInput)
+      .replace(/\[YOUR_LOGIN\]/g, userInput)
+      .replace(/\[ВАШ_ТЕГ\]/g, userInput)
+      .replace(/\[YOUR_TAG\]/g, userInput)
+      .replace(/\[ВАШ_ЮЗЕРНЕЙМ\]/g, userInput)
+      .replace(/\[YOUR_USERNAME\]/g, userInput)
+      .replace(/\[ВАШ_GAMERTAG\]/g, userInput)
+      .replace(/\[YOUR_GAMERTAG\]/g, userInput)
+      .replace(/\[ВАШ_ДИСКОРД_ТЕГ\]/g, userInput)
+      .replace(/\[YOUR_DISCORD_TAG\]/g, userInput)
+      .replace(/\[ВАШЕ_ОТОБРАЖАЕМОЕ_ИМЯ\]/g, userInput)
+      .replace(/\[YOUR_DISPLAY_NAME\]/g, userInput)
+      .replace(/\[ВАШ_UID\]/g, userInput)
+      .replace(/\[YOUR_UID\]/g, userInput);
+
+    let body = tpl.body
+      .replace(/\[ВАШ_ЛОГИН\]/g, userInput)
+      .replace(/\[YOUR_LOGIN\]/g, userInput)
+      .replace(/\[ВАШ_ТЕГ\]/g, userInput)
+      .replace(/\[YOUR_TAG\]/g, userInput)
+      .replace(/\[ВАШ_ЮЗЕРНЕЙМ\]/g, userInput)
+      .replace(/\[YOUR_USERNAME\]/g, userInput)
+      .replace(/\[ВАШ_GAMERTAG\]/g, userInput)
+      .replace(/\[YOUR_GAMERTAG\]/g, userInput)
+      .replace(/\[ВАШ_ДИСКОРД_ТЕГ\]/g, userInput)
+      .replace(/\[YOUR_DISCORD_TAG\]/g, userInput)
+      .replace(/\[ВАШЕ_ОТОБРАЖАЕМОЕ_ИМЯ\]/g, userInput)
+      .replace(/\[YOUR_DISPLAY_NAME\]/g, userInput)
+      .replace(/\[ВАШ_UID\]/g, userInput)
+      .replace(/\[YOUR_UID\]/g, userInput)
+      .replace(/\[ДАТА_ИНЦИДЕНТА\]/g, incidentDate)
+      .replace(/\[INCIDENT_DATE\]/g, incidentDate)
+      .replace(/\[ПЕРВАЯ_ПОЧТА\]/g, emailInput)
+      .replace(/\[FIRST_EMAIL\]/g, emailInput)
+      .replace(/\[ОРИГИНАЛЬНАЯ_ПОЧТА\]/g, emailInput)
+      .replace(/\[ORIGINAL_EMAIL\]/g, emailInput)
+      .replace(/\[СТАРЫЙ_EMAIL\]/g, emailInput)
+      .replace(/\[ПЕРВОНАЧАЛЬНЫЙ_EMAIL\]/g, emailInput)
+      .replace(/\[НОВАЯ_БЕЗОПАСНАЯ_ПОЧТА\]/g, safeEmailInput)
+      .replace(/\[NEW_SAFE_EMAIL\]/g, safeEmailInput)
+      .replace(/\[НОВЫЙ_EMAIL\]/g, safeEmailInput)
+      .replace(/\[NEW_EMAIL\]/g, safeEmailInput)
+      .replace(/\[НОМЕР_ЧЕКА_ИЛИ_КАРТЫ\]/g, receiptInput)
+      .replace(/\[ORDER_ID\]/g, receiptInput)
+      .replace(/\[TRANSACTION_ID\]/g, receiptInput)
+      .replace(/\[INVOICE_ID\]/g, receiptInput)
+      .replace(/\[ORDER_NUMBER_AND_DATE\]/g, receiptInput);
+
+    const subjectBox = document.getElementById('ticket-subject-box');
+    const bodyBox = document.getElementById('ticket-body-box');
+    if (subjectBox) subjectBox.textContent = subject;
+    if (bodyBox) bodyBox.textContent = body;
+  }
+
+  // Listen to input changes for dynamic ticket generation
+  ['input-ticket-user', 'input-ticket-email', 'input-ticket-safe-email', 'input-ticket-receipt'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', updateLiveTicket);
+  });
+
+  // Ticket Language Buttons
+  const langEnBtn = document.getElementById('ticket-lang-en-btn');
+  const langRuBtn = document.getElementById('ticket-lang-ru-btn');
+
+  langEnBtn.addEventListener('click', () => {
+    ticketLanguage = 'en';
+    langEnBtn.classList.add('bg-white', 'dark:bg-navy-800', 'text-slate-900', 'dark:text-cloud', 'shadow-sm');
+    langEnBtn.classList.remove('text-slate-600', 'dark:text-cloud-muted');
+    langRuBtn.classList.remove('bg-white', 'dark:bg-navy-800', 'text-slate-900', 'dark:text-cloud', 'shadow-sm');
+    langRuBtn.classList.add('text-slate-600', 'dark:text-cloud-muted');
+    updateLiveTicket();
+  });
+
+  langRuBtn.addEventListener('click', () => {
+    ticketLanguage = 'ru';
+    langRuBtn.classList.add('bg-white', 'dark:bg-navy-800', 'text-slate-900', 'dark:text-cloud', 'shadow-sm');
+    langRuBtn.classList.remove('text-slate-600', 'dark:text-cloud-muted');
+    langEnBtn.classList.remove('bg-white', 'dark:bg-navy-800', 'text-slate-900', 'dark:text-cloud', 'shadow-sm');
+    langEnBtn.classList.add('text-slate-600', 'dark:text-cloud-muted');
+    updateLiveTicket();
+  });
+
+  // COPY TICKET TEXT BUTTON
+  const btnCopy = document.getElementById('btn-copy-ticket');
+  btnCopy.addEventListener('click', async () => {
+    const subject = document.getElementById('ticket-subject-box')?.textContent || '';
+    const body = document.getElementById('ticket-body-box')?.textContent || '';
+    const fullText = `Subject: ${subject}\n\n${body}`;
+
+    try {
+      await navigator.clipboard.writeText(fullText);
+      const icon = document.getElementById('copy-ticket-icon');
+      const txt = document.getElementById('copy-ticket-text');
+      if (icon) icon.textContent = '✅';
+      if (txt) txt.textContent = isRu ? 'Скопировано в буфер!' : 'Copied to Clipboard!';
+      btnCopy.classList.remove('bg-cyan', 'hover:bg-cyan-light');
+      btnCopy.classList.add('bg-lime', 'text-navy-950');
+
+      setTimeout(() => {
+        if (icon) icon.textContent = '📋';
+        if (txt) txt.textContent = isRu ? 'Скопировать текст' : 'Copy Ticket Text';
+        btnCopy.classList.add('bg-cyan', 'hover:bg-cyan-light');
+        btnCopy.classList.remove('bg-lime', 'text-navy-950');
+      }, 3000);
+    } catch (err) {
+      console.error('Clipboard copy failed', err);
+    }
+  });
+</script>

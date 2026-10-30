@@ -15,6 +15,7 @@ const pathname = Astro.url.pathname;
 const navItems = [
   { href: `/${currentLang}/scanner/`, label: t('nav.scanner') },
   { href: `/${currentLang}/lab/`, label: t('nav.lab'), badge: 'LAB' },
+  { href: `/${currentLang}/recovery/`, label: t('nav.recovery'), badge: 'SOS', isSos: true },
   { href: `/${currentLang}/games/`, label: t('nav.games') },
   { href: `/${currentLang}/safety/`, label: t('nav.safety') },
   { href: `/${currentLang}/threats/`, label: t('nav.threats') },
@@ -31,19 +32,30 @@ const navItems = [
     </a>
 
     <!-- Desktop Navigation -->
-    <nav class="hidden md:flex items-center gap-6" aria-label="Main Navigation">
+    <nav class="hidden lg:flex items-center gap-4 xl:gap-5" aria-label="Main Navigation">
       {navItems.map((item) => {
         const isActive = pathname === item.href || (item.href !== `/${currentLang}/` && pathname.startsWith(item.href));
         return (
           <a
             href={item.href}
-            class={`text-sm font-medium transition-colors hover:text-cyan ${
+            class={`text-sm font-medium transition-colors hover:text-cyan flex items-center gap-1.5 ${
               isActive
                 ? 'text-cyan-dark dark:text-cyan font-semibold border-b-2 border-cyan pb-1'
-                : 'text-slate-600 dark:text-cloud-muted hover:text-cyan-dark dark:hover:text-cyan'
+                : item.isSos
+                  ? 'text-red-600 dark:text-red-400 font-bold hover:text-red-700 dark:hover:text-red-300'
+                  : 'text-slate-600 dark:text-cloud-muted hover:text-cyan-dark dark:hover:text-cyan'
             }`}
           >
-            {item.label}
+            <span>{item.label}</span>
+            {item.badge && (
+              <span class={`text-[10px] font-extrabold uppercase px-1.5 py-0.2 rounded ${
+                item.isSos
+                  ? 'bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/30 animate-pulse'
+                  : 'bg-cyan-500/15 text-cyan-dark dark:text-cyan'
+              }`}>
+                {item.badge}
+              </span>
+            )}
           </a>
         );
       })}
@@ -58,7 +70,7 @@ const navItems = [
       <button
         id="mobile-menu-btn"
         type="button"
-        class="md:hidden p-2 rounded-xl text-slate-600 dark:text-cloud-muted hover:text-slate-900 dark:hover:text-cloud bg-slate-100 dark:bg-navy-800 border border-slate-200 dark:border-navy-700 focus:outline-none focus:ring-2 focus:ring-cyan"
+        class="lg:hidden p-2 rounded-xl text-slate-600 dark:text-cloud-muted hover:text-slate-900 dark:hover:text-cloud bg-slate-100 dark:bg-navy-800 border border-slate-200 dark:border-navy-700 focus:outline-none focus:ring-2 focus:ring-cyan"
         aria-controls="mobile-menu"
         aria-expanded="false"
         aria-label="Toggle Navigation Menu"
@@ -74,19 +86,30 @@ const navItems = [
   </div>
 
   <!-- Mobile Dropdown Menu -->
-  <div id="mobile-menu" class="hidden md:hidden border-b border-slate-200 dark:border-navy-800 bg-white dark:bg-navy-850 px-4 pt-2 pb-4 space-y-1 shadow-lg">
+  <div id="mobile-menu" class="hidden lg:hidden border-b border-slate-200 dark:border-navy-800 bg-white dark:bg-navy-850 px-4 pt-2 pb-4 space-y-1 shadow-lg">
     {navItems.map((item) => {
       const isActive = pathname === item.href || (item.href !== `/${currentLang}/` && pathname.startsWith(item.href));
       return (
         <a
           href={item.href}
-          class={`block px-3 py-2 rounded-lg text-base font-medium ${
+          class={`flex items-center justify-between px-3 py-2 rounded-lg text-base font-medium ${
             isActive
               ? 'bg-slate-100 dark:bg-navy-800 text-cyan-dark dark:text-cyan font-semibold'
-              : 'text-slate-600 dark:text-cloud-muted hover:bg-slate-100 dark:hover:bg-navy-800 hover:text-slate-900 dark:hover:text-cloud'
+              : item.isSos
+                ? 'text-red-600 dark:text-red-400 font-bold bg-red-500/5'
+                : 'text-slate-600 dark:text-cloud-muted hover:bg-slate-100 dark:hover:bg-navy-800 hover:text-slate-900 dark:hover:text-cloud'
           }`}
         >
-          {item.label}
+          <span>{item.label}</span>
+          {item.badge && (
+            <span class={`text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded ${
+              item.isSos
+                ? 'bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/30'
+                : 'bg-cyan-500/15 text-cyan-dark dark:text-cyan'
+            }`}>
+              {item.badge}
+            </span>
+          )}
         </a>
       );
     })}
