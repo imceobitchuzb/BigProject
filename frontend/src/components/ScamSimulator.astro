@@ -1,0 +1,243 @@
+---
+import SafiMascot from './SafiMascot.astro';
+
+interface Props {
+  currentLang?: 'en' | 'ru' | 'uz';
+}
+
+const { currentLang = 'en' } = Astro.props;
+const isRu = currentLang === 'ru';
+
+const scenarios = [
+  {
+    id: 1,
+    game: 'Counter-Strike 2',
+    gameSlug: 'cs2',
+    title: isRu ? 'Сценарий 1: Подмена обмена в Steam (MitM)' : 'Scenario 1: Steam Trade MitM Interception',
+    type: 'Trade Interception',
+    chatName: 'TradeBot_Official',
+    message: isRu
+      ? 'Здравствуйте! Вы отправили трейд на нож игроку [FriendName]. Наш сервер безопасности требует временную верификацию. Подтвердите дубликат обмена в мобильном Steam Guard.'
+      : 'Hello! You sent a knife trade to [FriendName]. Our escrow server requires verification. Confirm the duplicate trade offer in your Steam Mobile Guard immediately.',
+    choices: [
+      {
+        id: 'a',
+        text: isRu ? 'Подтвердить повторный трейд в мобильном приложении' : 'Confirm the secondary trade offer in Steam Guard app',
+        isSafe: false,
+        feedback: isRu
+          ? 'КРИТИЧЕСКАЯ ОШИБКА: Ваши скины украдены! Мошеннический API-ключ отменил ваш оригинальный трейд и отправил нож боту-клону.'
+          : 'CRITICAL FAILURE: Your items were stolen! An unauthorized Steam Web API Key cancelled your original trade and sent the knife to an impersonator bot.',
+      },
+      {
+        id: 'b',
+        text: isRu ? 'Отклонить оба трейда, проверить steamcommunity.com/dev/apikey и сменить пароль' : 'Decline both trades, check steamcommunity.com/dev/apikey and revoke API keys',
+        isSafe: true,
+        feedback: isRu
+          ? 'ОТЛИЧНО! Вы пресекли классическую атаку перехвата API-ключа и спасли свои скины.'
+          : 'OUTSTANDING! You identified the classic Steam API key MitM attack and successfully protected your inventory.',
+      },
+    ],
+  },
+  {
+    id: 2,
+    game: 'Roblox',
+    gameSlug: 'roblox',
+    title: isRu ? 'Сценарий 2: "Рендер скина" и консоль F12' : 'Scenario 2: "3D Avatar Render" & F12 Console',
+    type: 'Session Theft',
+    chatName: 'GFX_Artist_Pro',
+    message: isRu
+      ? 'Привет! Я делаю бесплатные 3D-рендеры персонажей Roblox. Нажми F12, открой вкладку Network, скопируй файл .HAR или строку cURL и отправь мне, чтобы текстуры подгрузились.'
+      : 'Hey! I create free 3D gfx renders for Roblox. Press F12 in your browser, click Network tab, copy your .HAR file and send it to me so textures load.',
+    choices: [
+      {
+        id: 'a',
+        text: isRu ? 'Скопировать .HAR файл и отправить' : 'Export and send the .HAR file',
+        isSafe: false,
+        feedback: isRu
+          ? 'ВЗЛОМ: В файле .HAR содержится куки .ROBLOSECURITY. Мошенник вошел в ваш аккаунт без пароля и 2FA.'
+          : 'COMPROMISED: The .HAR file contains your .ROBLOSECURITY session cookie. The attacker logged into your account bypassing 2FA.',
+      },
+      {
+        id: 'b',
+        text: isRu ? 'Отказаться и отправить жалобу на профиль' : 'Refuse and report the profile for credential harvesting',
+        isSafe: true,
+        feedback: isRu
+          ? 'ВЕРНО! Никогда не передавайте .HAR файлы или данные из DevTools посторонним.'
+          : 'CORRECT! Never share .HAR files or DevTools network logs with anyone.',
+      },
+    ],
+  },
+  {
+    id: 3,
+    game: 'Brawl Stars',
+    gameSlug: 'brawl-stars',
+    title: isRu ? 'Сценарий 3: Подарок Brawl Pass Plus' : 'Scenario 3: Brawl Pass Plus Gifting',
+    chatName: 'GemGiver_YouTube',
+    type: 'Code Theft',
+    message: isRu
+      ? 'Поздравляю, ты выиграл Brawl Pass Plus! Напиши свой email от Supercell ID, а затем продиктуй 6-значный проверочный код из письма, чтобы я активировал донат.'
+      : 'Congratulations, you won a free Brawl Pass Plus! Send me your Supercell ID email and then read me the 6-digit verification code from your inbox.',
+    choices: [
+      {
+        id: 'a',
+        text: isRu ? 'Назвать 6 цифр из письма от Supercell' : 'Provide the 6-digit Supercell ID code',
+        isSafe: false,
+        feedback: isRu
+          ? 'АККАУНТ ПОТЕРЯН: 6 цифр — это код входа на устройство мошенника. Донатить через код невозможно.'
+          : 'ACCOUNT LOST: The 6 digits are a device login code. Official gifts never require an account authorization code.',
+      },
+      {
+        id: 'b',
+        text: isRu ? 'Заблокировать: официальные подарки в Supercell Store отправляются по Player ID' : 'Block sender: Supercell Store gifting only requires Player ID',
+        isSafe: true,
+        feedback: isRu
+          ? 'БЛЕСТЯЩЕ! Настоящие подарки в Supercell Store приходят внутри игры или требуют только тег игрока (#XXXX).'
+          : 'BRILLIANT! Real Supercell Store gifting strictly requires player tag, never email verification codes.',
+      },
+    ],
+  },
+  {
+    id: 4,
+    game: 'Minecraft',
+    gameSlug: 'minecraft',
+    title: isRu ? 'Сценарий 4: Кастомный мод на FPS и плащи' : 'Scenario 4: Custom FPS & Free Cape Mod',
+    chatName: 'Server_Mod_Staff',
+    type: 'Malware',
+    message: isRu
+      ? 'Привет! Чтобы зайти на наш турнирный сервер, скачай этот обязательный мод ClientFPS_Boost.jar из нашего Discord. Если Windows Defender ругается, просто отключи его.'
+      : 'Hey! To join our Bedwars tournament server, download this mandatory mod ClientFPS_Boost.jar from our Discord. If Windows Defender flags it, just disable real-time protection.',
+    choices: [
+      {
+        id: 'a',
+        text: isRu ? 'Отключить антивирус и запустить JAR файл' : 'Disable antivirus and launch the JAR mod',
+        isSafe: false,
+        feedback: isRu
+          ? 'ИНФЕКЦИЯ: JAR файл содержал троян RedLine/AsyncRAT, который украл сессионные токены Minecraft и пароли браузера.'
+          : 'INFECTED: The JAR file executed an infostealer payload that extracted Minecraft Microsoft tokens and browser passwords.',
+      },
+      {
+        id: 'b',
+        text: isRu ? 'Удалить файл и покинуть сервер: моды нужно брать только с Modrinth/CurseForge' : 'Delete file: legitimate mods are sourced from Modrinth or CurseForge',
+        isSafe: true,
+        feedback: isRu
+          ? 'ВЕРНО! Никогда не запускайте неизвестные .jar файлы из личных сообщений и не отключайте защиту.'
+          : 'CORRECT! Never run unverified JAR files sent in Discord DMs and never disable system antivirus.',
+      },
+    ],
+  },
+];
+---
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <!-- Header Card -->
+  <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-navy-900 to-slate-950 border border-cyan/20 p-6 sm:p-8 mb-8 shadow-2xl">
+    <div class="flex flex-col sm:flex-row items-center gap-6 justify-between">
+      <div class="space-y-3 text-center sm:text-left">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan text-xs font-semibold">
+          <svg class="w-4 h-4 text-cyan" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+          </svg>
+          <span>{isRu ? 'Интерактивный тренажер' : 'Interactive 2.5D Simulation'}</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          {isRu ? 'Симулятор реальных атак' : 'Scam Attack Simulator'}
+        </h1>
+        <p class="text-slate-400 text-sm sm:text-base max-w-xl">
+          {isRu
+            ? 'Проверьте свои рефлексы в 4 реалистичных игровых сценариях с симуляцией чатов и диалогов подтверждения.'
+            : 'Test your tactical defense instincts across 4 authentic simulation scenarios without risking real assets.'}
+        </p>
+      </div>
+
+      <div class="shrink-0 flex flex-col items-center">
+        <SafiMascot mood="guard" size="lg" />
+        <span class="text-xs font-bold text-cyan mt-2">SAFI Simulator Engine</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Scenario Arena -->
+  <div class="space-y-8">
+    {scenarios.map((scen, idx) => (
+      <div class="scenario-box rounded-3xl bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-800 p-6 sm:p-8 shadow-sm">
+        <div class="flex items-center justify-between gap-4 mb-4 pb-3 border-b border-slate-200 dark:border-navy-800">
+          <div>
+            <span class="text-xs font-bold text-cyan uppercase tracking-wider">{scen.game}</span>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">{scen.title}</h2>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-cloud">
+            {scen.type}
+          </span>
+        </div>
+
+        <!-- Simulated Chat Bubble UI -->
+        <div class="bg-slate-900 rounded-2xl p-4 mb-6 border border-slate-800 space-y-2">
+          <div class="flex items-center gap-2 text-xs font-bold text-slate-400">
+            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+            <span>{scen.chatName}</span>
+            <span class="text-[10px] text-slate-500">Today at 18:42</span>
+          </div>
+          <p class="text-sm text-slate-200 bg-navy-950 p-3.5 rounded-xl border border-slate-800 leading-relaxed">
+            {scen.message}
+          </p>
+        </div>
+
+        <!-- Decision Choices -->
+        <div class="space-y-3">
+          <div class="text-xs font-bold uppercase text-slate-400">
+            {isRu ? 'Ваше действие:' : 'Your tactical decision:'}
+          </div>
+          <div class="grid grid-cols-1 gap-2.5">
+            {scen.choices.map((choice) => (
+              <button
+                type="button"
+                class="sim-choice-btn w-full text-left p-4 rounded-2xl border border-slate-200 dark:border-navy-700 hover:border-cyan text-sm font-medium text-slate-800 dark:text-cloud transition"
+                data-safe={choice.isSafe ? 'true' : 'false'}
+                data-feedback={choice.feedback}
+              >
+                {choice.text}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- Feedback Result Panel -->
+        <div class="sim-feedback-panel hidden mt-4 p-4 rounded-2xl text-xs sm:text-sm font-semibold transition">
+          <!-- Dynamically displayed -->
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  const choiceBtns = document.querySelectorAll('.sim-choice-btn') as NodeListOf<HTMLButtonElement>;
+
+  choiceBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const parent = btn.closest('.scenario-box');
+      if (!parent) return;
+
+      const isSafe = btn.dataset.safe === 'true';
+      const feedback = btn.dataset.feedback || '';
+      const feedbackPanel = parent.querySelector('.sim-feedback-panel') as HTMLElement;
+
+      // Disable sibling buttons
+      parent.querySelectorAll('.sim-choice-btn').forEach((b) => {
+        b.setAttribute('disabled', 'true');
+        b.classList.add('opacity-60', 'cursor-not-allowed');
+      });
+
+      if (feedbackPanel) {
+        feedbackPanel.classList.remove('hidden');
+        if (isSafe) {
+          feedbackPanel.className = 'sim-feedback-panel mt-4 p-4 rounded-2xl text-xs sm:text-sm font-semibold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400';
+          feedbackPanel.innerHTML = `<strong>✔ SUCCESS:</strong> ${feedback}`;
+        } else {
+          feedbackPanel.className = 'sim-feedback-panel mt-4 p-4 rounded-2xl text-xs sm:text-sm font-semibold bg-red-500/10 border border-red-500/30 text-red-400';
+          feedbackPanel.innerHTML = `<strong>✖ THREAT DETECTED:</strong> ${feedback}`;
+        }
+      }
+    });
+  });
+</script>

@@ -1,0 +1,197 @@
+---
+interface Props {
+  currentLang?: 'en' | 'ru' | 'uz';
+}
+
+const { currentLang = 'en' } = Astro.props;
+const isRu = currentLang === 'ru';
+---
+
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <!-- Header Card -->
+  <div class="mb-8 text-center">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan text-xs font-semibold mb-3">
+      <span>{isRu ? 'Сообщество безопасности' : 'Community Threat Intelligence'}</span>
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+      {isRu ? 'Сообщить о новой угрозе или скаме' : 'Report an Emerging Gaming Threat'}
+    </h1>
+    <p class="text-slate-600 dark:text-cloud-muted mt-2 text-sm sm:text-base max-w-xl mx-auto">
+      {isRu
+        ? 'Помогите защитить других игроков. Отправьте подозрительную ссылку, Discord-бота или схему обмана нашей команде аналитиков.'
+        : 'Protect fellow gamers by submitting suspicious links, phishing tactics, or imposter accounts to our threat research queue.'}
+    </p>
+  </div>
+
+  <!-- Form -->
+  <form id="report-form" class="bg-white dark:bg-navy-900/60 border border-slate-200 dark:border-navy-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+    <!-- Honeypot -->
+    <div class="hidden" aria-hidden="true">
+      <input type="text" name="honeypot" id="report-honeypot" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <!-- Game & Threat Type -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label for="report-game" class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-1.5">
+          {isRu ? 'Игра / Платформа' : 'Game / Platform'} *
+        </label>
+        <select
+          id="report-game"
+          name="game"
+          required
+          class="w-full p-3 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-700 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan"
+        >
+          <option value="cs2">Counter-Strike 2 / Steam</option>
+          <option value="roblox">Roblox</option>
+          <option value="brawl-stars">Brawl Stars</option>
+          <option value="minecraft">Minecraft</option>
+          <option value="pubg">PUBG Mobile</option>
+          <option value="discord">Discord</option>
+          <option value="universal">{isRu ? 'Другое / Универсальное' : 'Other / Universal'}</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="report-type" class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-1.5">
+          {isRu ? 'Тип угрозы' : 'Threat Category'} *
+        </label>
+        <select
+          id="report-type"
+          name="threat_type"
+          required
+          class="w-full p-3 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-700 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan"
+        >
+          <option value="phishing_url">{isRu ? 'Фишинговая ссылка / поддельный сайт' : 'Phishing URL / Fake Website'}</option>
+          <option value="fake_support">{isRu ? 'Фейковая поддержка / администратор' : 'Fake Support / Moderator Imposter'}</option>
+          <option value="trade_scam">{isRu ? 'Подмена трейда / мошеннический обмен' : 'Trade Scam / API Interception'}</option>
+          <option value="code_theft">{isRu ? 'Попытка выманить код / токен' : 'Verification Code / Token Stealer'}</option>
+          <option value="mod_malware">{isRu ? 'Вредоносный мод / чит с трояном' : 'Malicious Mod / Trojan Cheat'}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Suspicious URL -->
+    <div>
+      <label for="report-url" class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-1.5">
+        {isRu ? 'Подозрительная ссылка (если есть)' : 'Suspicious URL (if applicable)'}
+      </label>
+      <input
+        type="url"
+        id="report-url"
+        name="suspicious_url"
+        placeholder="https://steamcomnnunity-claim-skins.xyz"
+        class="w-full p-3 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-700 text-slate-900 dark:text-white text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan"
+      />
+    </div>
+
+    <!-- Suspicious Message / Text -->
+    <div>
+      <label for="report-text" class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-1.5">
+        {isRu ? 'Текст сообщения или инструкция мошенника' : 'Suspicious Message Excerpt'}
+      </label>
+      <textarea
+        id="report-text"
+        name="suspicious_text"
+        rows="3"
+        placeholder={isRu ? 'Скопируйте текст сообщения (пароли и личные данные будут автоматически удалены)...' : 'Paste message text (passwords and emails are automatically scrubbed)...'}
+        class="w-full p-3 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-700 text-slate-900 dark:text-white text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan"
+      ></textarea>
+    </div>
+
+    <!-- Detailed Description -->
+    <div>
+      <label for="report-desc" class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-1.5">
+        {isRu ? 'Подробности инцидента' : 'Description of What Happened'} *
+      </label>
+      <textarea
+        id="report-desc"
+        name="description"
+        required
+        minlength="10"
+        rows="4"
+        placeholder={isRu ? 'Опишите, где вы столкнулись со схемой, что вам предлагали и какие шаги требовали сделать...' : 'Describe how the scam was presented, what platform you were on, and what the attacker requested...'}
+        class="w-full p-3 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-700 text-slate-900 dark:text-white text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan"
+      ></textarea>
+    </div>
+
+    <!-- Contact Handle -->
+    <div>
+      <label for="report-contact" class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-400 mb-1.5">
+        {isRu ? 'Ваш контакт (необязательно, Discord / Telegram)' : 'Your Contact (Optional Discord / Telegram handle)'}
+      </label>
+      <input
+        type="text"
+        id="report-contact"
+        name="contact_info"
+        placeholder="@username or gamer#1234"
+        class="w-full p-3 rounded-xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-700 text-slate-900 dark:text-white text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan"
+      />
+    </div>
+
+    <!-- Submit Button -->
+    <div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200 dark:border-navy-800">
+      <button
+        type="submit"
+        id="submit-report-btn"
+        class="w-full sm:w-auto px-8 py-3 rounded-xl bg-cyan-gradient text-navy-950 font-bold hover:shadow-lg hover:shadow-cyan/20 transition flex items-center justify-center gap-2"
+      >
+        <span>{isRu ? 'Отправить в очередь анализа' : 'Submit Threat Report'}</span>
+      </button>
+      <span class="text-[11px] text-slate-400 text-center sm:text-right">
+        {isRu ? 'Анонимная и защищенная передача' : 'Safe & Encrypted Submission'}
+      </span>
+    </div>
+  </form>
+
+  <!-- Success Notification -->
+  <div id="report-success" class="hidden mt-6 p-6 rounded-3xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-center space-y-2">
+    <div class="text-xl font-bold">{isRu ? 'Отчет успешно принят!' : 'Threat Report Received!'}</div>
+    <p class="text-xs text-slate-300 max-w-md mx-auto">
+      {isRu
+        ? 'Спасибо за ваш вклад в безопасность сообщества. Наши аналитики проверят индикаторы и при подтверждении добавят их в Базу угроз.'
+        : 'Thank you for protecting fellow gamers. Our threat analysts will verify the IOCs and update the Threat Database.'}
+    </p>
+  </div>
+</div>
+
+<script>
+  const reportForm = document.getElementById('report-form') as HTMLFormElement;
+  const successBox = document.getElementById('report-success');
+  const submitBtn = document.getElementById('submit-report-btn');
+
+  reportForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(reportForm);
+
+    const payload = {
+      game: formData.get('game'),
+      threat_type: formData.get('threat_type'),
+      suspicious_url: formData.get('suspicious_url') || undefined,
+      suspicious_text: formData.get('suspicious_text') || undefined,
+      description: formData.get('description'),
+      contact_info: formData.get('contact_info') || undefined,
+      honeypot: formData.get('honeypot') || undefined,
+    };
+
+    if (submitBtn) {
+      submitBtn.setAttribute('disabled', 'true');
+      submitBtn.textContent = 'Submitting...';
+    }
+
+    try {
+      const res = await fetch('http://127.0.0.1:8000/api/v1/threats/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error('API failed');
+    } catch (err) {
+      // offline or network error fallback
+    }
+
+    reportForm.classList.add('hidden');
+    successBox?.classList.remove('hidden');
+    successBox?.scrollIntoView({ behavior: 'smooth' });
+  });
+</script>

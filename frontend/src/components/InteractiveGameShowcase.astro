@@ -1,0 +1,479 @@
+---
+import type { GameSecurityProfile } from '../data/games';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  games: GameSecurityProfile[];
+  currentLang: 'en' | 'ru';
+}
+
+const { games, currentLang } = Astro.props;
+const isRu = currentLang === 'ru';
+const t = useTranslations(currentLang);
+
+// Mapping of genuine uploaded images for each game slug
+const gameImages: Record<string, string> = {
+  'cs2-steam': '/images/games/cs2-steam.jpg',
+  'brawl-stars': '/images/games/brawl-stars.jpg',
+  'roblox': '/images/games/roblox.webp',
+  'minecraft': '/images/games/minecraft.webp',
+  'pubg': '/images/games/pubg.jpg',
+};
+
+// Theme presets for animated background and accents per game
+const gameThemes: Record<string, {
+  accent: string;
+  glow: string;
+  gradient: string;
+  border: string;
+  badgeBg: string;
+  badgeText: string;
+  bgParticles: string;
+}> = {
+  'cs2-steam': {
+    accent: '#FFAD66',
+    glow: 'rgba(255, 173, 102, 0.25)',
+    gradient: 'from-amber-500/20 via-orange-500/10 to-transparent',
+    border: 'border-orange-500/50',
+    badgeBg: 'bg-orange-500/15',
+    badgeText: 'text-orange-400',
+    bgParticles: 'radial-gradient(circle at 30% 20%, rgba(255, 173, 102, 0.2), transparent 50%), radial-gradient(circle at 80% 80%, rgba(217, 119, 6, 0.15), transparent 50%)',
+  },
+  'brawl-stars': {
+    accent: '#FFE066',
+    glow: 'rgba(255, 224, 102, 0.25)',
+    gradient: 'from-yellow-500/20 via-purple-600/15 to-transparent',
+    border: 'border-yellow-400/50',
+    badgeBg: 'bg-yellow-400/15',
+    badgeText: 'text-yellow-400',
+    bgParticles: 'radial-gradient(circle at 20% 30%, rgba(250, 204, 21, 0.25), transparent 50%), radial-gradient(circle at 85% 70%, rgba(147, 51, 234, 0.2), transparent 50%)',
+  },
+  'roblox': {
+    accent: '#22D3EE',
+    glow: 'rgba(34, 211, 238, 0.25)',
+    gradient: 'from-blue-600/20 via-cyan-500/10 to-transparent',
+    border: 'border-cyan-400/50',
+    badgeBg: 'bg-cyan-500/15',
+    badgeText: 'text-cyan-400',
+    bgParticles: 'radial-gradient(circle at 25% 25%, rgba(37, 99, 235, 0.25), transparent 50%), radial-gradient(circle at 75% 75%, rgba(34, 211, 238, 0.2), transparent 50%)',
+  },
+  'minecraft': {
+    accent: '#4ADE80',
+    glow: 'rgba(74, 222, 128, 0.25)',
+    gradient: 'from-emerald-600/20 via-green-500/10 to-transparent',
+    border: 'border-emerald-400/50',
+    badgeBg: 'bg-emerald-500/15',
+    badgeText: 'text-emerald-400',
+    bgParticles: 'radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.25), transparent 50%), radial-gradient(circle at 80% 70%, rgba(5, 150, 105, 0.15), transparent 50%)',
+  },
+  'pubg': {
+    accent: '#FB923C',
+    glow: 'rgba(251, 146, 60, 0.25)',
+    gradient: 'from-orange-600/20 via-amber-700/10 to-transparent',
+    border: 'border-amber-500/50',
+    badgeBg: 'bg-amber-500/15',
+    badgeText: 'text-amber-400',
+    bgParticles: 'radial-gradient(circle at 20% 40%, rgba(217, 119, 6, 0.25), transparent 50%), radial-gradient(circle at 80% 60%, rgba(180, 83, 9, 0.15), transparent 50%)',
+  },
+};
+---
+
+<div class="w-full max-w-7xl mx-auto my-8 select-none" id="interactive-games-showcase">
+  <!-- Section Badge & Title -->
+  <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-6 px-2">
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border border-cyan-500/40 bg-cyan-500/10 text-cyan-800 dark:text-cyan uppercase tracking-wider mb-2">
+        <span class="w-2 h-2 rounded-full bg-cyan animate-pulse"></span>
+        <span>{isRu ? 'Интерактивная витрина безопасности' : 'Interactive Security Showroom'}</span>
+      </div>
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-heading font-extrabold text-slate-900 dark:text-cloud">
+        {isRu ? 'Выберите игру для анализа угроз' : 'Select Game to Inspect Threats'}
+      </h2>
+    </div>
+
+    <!-- Stepper / Slide Navigator Controls -->
+    <div class="flex items-center gap-2 self-end sm:self-auto bg-slate-100 dark:bg-navy-900 p-1.5 rounded-2xl border border-slate-200 dark:border-navy-750 shadow-sm">
+      <button
+        type="button"
+        id="showcase-prev-btn"
+        class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-600 dark:text-cloud-muted hover:text-slate-900 dark:hover:text-cloud hover:bg-white dark:hover:bg-navy-800 transition-all active:scale-95 border border-transparent hover:border-slate-200 dark:hover:border-navy-700"
+        aria-label="Previous Game"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+
+      <span id="showcase-counter" class="px-2 font-mono text-xs font-extrabold text-slate-800 dark:text-cloud">
+        01 / 05
+      </span>
+
+      <button
+        type="button"
+        id="showcase-next-btn"
+        class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-600 dark:text-cloud-muted hover:text-slate-900 dark:hover:text-cloud hover:bg-white dark:hover:bg-navy-800 transition-all active:scale-95 border border-transparent hover:border-slate-200 dark:hover:border-navy-700"
+        aria-label="Next Game"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Showcase Container with Dynamic Themed Animated Backdrop -->
+  <div
+    id="showcase-stage"
+    class="relative rounded-3xl border border-slate-200 dark:border-navy-700/80 bg-white/95 dark:bg-navy-900/95 backdrop-blur-xl shadow-2xl overflow-hidden transition-all duration-700 p-4 sm:p-6 lg:p-8"
+  >
+    <!-- Dynamic Ambient Radial Glow Background Canvas -->
+    <div
+      id="showcase-ambient-glow"
+      class="absolute inset-0 pointer-events-none transition-all duration-700 opacity-70 dark:opacity-85"
+      style={`background: ${gameThemes['cs2-steam'].bgParticles};`}
+    ></div>
+
+    <!-- Layout Grid: Left Stage (Lineup Carousel) + Right Panel (Dossier) -->
+    <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+      
+      <!-- LEFT / TOP COLUMN: Interactive Lineup / Product Card Stage (lg:col-span-6) -->
+      <div class="lg:col-span-6 flex flex-col items-center">
+        <!-- Big Active Visual Feature Card (Like the featured product in the video) -->
+        <div class="relative w-full max-w-md sm:max-w-lg aspect-[4/3] sm:aspect-[16/11] rounded-3xl overflow-hidden border-2 transition-all duration-500 shadow-2xl group" id="featured-image-wrapper">
+          <!-- Main genuine game image -->
+          <img
+            id="featured-game-img"
+            src={gameImages['cs2-steam']}
+            alt="Game Cover"
+            class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+            loading="eager"
+          />
+
+          <!-- Gradient overlay for text contrast at the bottom -->
+          <div class="absolute inset-0 bg-gradient-to-t from-navy-950/95 via-navy-950/40 to-transparent pointer-events-none"></div>
+
+          <!-- Floating Badges on Image -->
+          <div class="absolute top-4 left-4 z-20 flex items-center gap-2">
+            <span
+              id="featured-risk-badge"
+              class="px-3 py-1 rounded-full text-xs font-heading font-extrabold uppercase tracking-wider backdrop-blur-md border shadow-md transition-all"
+            >
+              {games[0]?.riskBadge}
+            </span>
+          </div>
+
+          <!-- Bottom Card Caption -->
+          <div class="absolute bottom-4 left-4 right-4 z-20 flex items-end justify-between gap-3">
+            <div>
+              <span id="featured-genre-tag" class="text-[11px] font-bold uppercase tracking-wider text-cloud-subtle block">
+                {games[0]?.genre}
+              </span>
+              <h3 id="featured-game-title" class="text-xl sm:text-2xl font-heading font-extrabold text-white tracking-tight leading-tight">
+                {games[0]?.title}
+              </h3>
+            </div>
+            <a
+              id="featured-direct-link"
+              href={`/${currentLang}/games/${games[0]?.slug}/`}
+              class="flex-shrink-0 px-4 py-2.5 rounded-xl font-heading font-extrabold text-xs bg-cyan text-navy-950 hover:bg-cyan-light transition-all shadow-glow-cyan active:scale-95 flex items-center gap-1.5"
+            >
+              <span>{isRu ? 'Открыть' : 'Explore'}</span>
+              <span>→</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Horizontal Game Selector Thumbnails (Mini Products Lineup like the models in the video) -->
+        <div class="flex items-center justify-center gap-2.5 sm:gap-3 mt-4 sm:mt-6 overflow-x-auto py-2 px-1 max-w-full" id="showcase-thumbnails-bar">
+          {games.map((g, idx) => (
+            <button
+              type="button"
+              class={`showcase-thumb-btn flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border-2 transition-all duration-300 relative group cursor-pointer ${
+                idx === 0
+                  ? 'border-cyan scale-105 shadow-glow-cyan ring-2 ring-cyan/40'
+                  : 'border-slate-200 dark:border-navy-750 opacity-60 hover:opacity-100 hover:scale-100'
+              }`}
+              data-index={idx}
+              data-slug={g.slug}
+              title={g.title}
+            >
+              <img
+                src={gameImages[g.slug] || '/images/games/cs2-steam.jpg'}
+                alt={g.title}
+                class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-300"
+                loading="lazy"
+              />
+              <span class="absolute bottom-1 right-1 text-[9px] font-mono font-black px-1 rounded bg-black/70 text-white">
+                0{idx + 1}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- RIGHT / BOTTOM COLUMN: Threat Dossier Panel ("In this look" -> "Scam Methods & Protection Info") -->
+      <div class="lg:col-span-6 flex flex-col justify-between space-y-4 sm:space-y-5">
+        
+        <!-- Header Info Block -->
+        <div class="p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-navy-750 bg-slate-50/80 dark:bg-navy-850/80 backdrop-blur-md shadow-sm transition-all duration-300" id="dossier-header-box">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-cyan-dark dark:text-cyan" id="dossier-verified-label">
+                {games[0]?.verificationStatus || 'Verified Defense Guide'}
+              </span>
+              <h4 class="text-xl sm:text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud mt-0.5" id="dossier-game-title">
+                {games[0]?.title}
+              </h4>
+              <p class="text-xs text-slate-500 dark:text-cloud-subtle font-medium mt-0.5" id="dossier-platforms-text">
+                {games[0]?.platforms.join(' • ')}
+              </p>
+            </div>
+            
+            <!-- Quick Risk Score Pill -->
+            <div class="flex flex-col items-end">
+              <span class="text-[10px] uppercase font-bold text-slate-500 dark:text-cloud-subtle">{isRu ? 'Уровень риска' : 'Risk Profile'}</span>
+              <span class="text-xs font-mono font-bold px-2 py-0.5 rounded-lg bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20" id="dossier-risk-tag">
+                {games[0]?.riskBadge}
+              </span>
+            </div>
+          </div>
+
+          <!-- Description paragraph -->
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-cloud-muted leading-relaxed mt-3" id="dossier-description">
+            {games[0]?.cardDescription}
+          </p>
+        </div>
+
+        <!-- Documented Attack Vectors / Scam Methods Section -->
+        <div class="p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-navy-750 bg-white dark:bg-navy-850 shadow-sm space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-cloud flex items-center gap-1.5">
+              <span>⚠️</span>
+              <span>{isRu ? 'Главные схемы обмана и векторы атак:' : 'Key Scam Methods & Attack Vectors:'}</span>
+            </span>
+            <span class="text-[11px] font-mono text-slate-500 dark:text-cloud-subtle" id="dossier-vectors-count">
+              {games[0]?.commonRiskTags.length} {isRu ? 'вектора' : 'vectors'}
+            </span>
+          </div>
+
+          <!-- Attack vectors tags list -->
+          <div class="flex flex-wrap gap-1.5 sm:gap-2" id="dossier-vectors-container">
+            {games[0]?.commonRiskTags.map((tag) => (
+              <span class="px-2.5 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-navy-800 text-slate-800 dark:text-cloud border border-slate-200 dark:border-navy-700 flex items-center gap-1">
+                <span class="text-red-500">•</span>
+                <span>{tag}</span>
+              </span>
+            ))}
+          </div>
+
+          <!-- Featured Scam Scenario Preview -->
+          <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-750 text-xs mt-3">
+            <div class="font-heading font-bold text-slate-900 dark:text-cloud flex items-center justify-between" id="dossier-scenario-title">
+              {games[0]?.scamScenarios[0]?.title}
+            </div>
+            <p class="text-slate-600 dark:text-cloud-muted mt-1 leading-relaxed" id="dossier-scenario-summary">
+              {games[0]?.scamScenarios[0]?.summary}
+            </p>
+          </div>
+        </div>
+
+        <!-- "What NOT to Share" Critical Alert Box -->
+        <div class="p-4 rounded-2xl border border-red-500/30 bg-red-500/5 dark:bg-red-500/10 flex items-start gap-3">
+          <span class="text-xl flex-shrink-0">⛔</span>
+          <div class="space-y-1">
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-red-600 dark:text-red-400 block">
+              {isRu ? 'Что КАТЕГОРИЧЕСКИ нельзя передавать:' : 'What You Must NEVER Disclose:'}
+            </span>
+            <p class="text-xs text-slate-700 dark:text-cloud font-medium leading-relaxed" id="dossier-what-not-to-share">
+              {games[0]?.whatNotToShare.slice(0, 2).join(' • ')}
+            </p>
+          </div>
+        </div>
+
+        <!-- Full Hub Page Button CTA -->
+        <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
+          <a
+            id="dossier-cta-btn"
+            href={`/${currentLang}/games/${games[0]?.slug}/`}
+            class="w-full sm:flex-1 py-3.5 px-6 rounded-xl font-heading font-extrabold text-xs uppercase tracking-wider bg-cyan text-navy-950 hover:bg-cyan-light transition-all shadow-glow-cyan text-center flex items-center justify-center gap-2 group active:scale-95"
+          >
+            <span id="dossier-cta-text">
+              {isRu ? `Изучить полный центр защиты ${games[0]?.title}` : `Open Full ${games[0]?.title} Defense Hub`}
+            </span>
+            <span class="group-hover:translate-x-1 transition-transform">→</span>
+          </a>
+
+          <a
+            href={`/${currentLang}/recovery/`}
+            class="w-full sm:w-auto py-3.5 px-5 rounded-xl font-heading font-bold text-xs border border-red-500/40 bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 transition-all text-center flex items-center justify-center gap-1.5"
+          >
+            <span>🚨</span>
+            <span>{isRu ? 'Меня заскамили (SOS)' : 'I Was Scammed'}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Client-side script for dynamic transition & showcase interaction -->
+<script define:vars={{ gamesData: games, gameImages, gameThemes, isRu, currentLang }}>
+  let currentIndex = 0;
+  const total = gamesData.length;
+
+  const counterEl = document.getElementById('showcase-counter');
+  const prevBtn = document.getElementById('showcase-prev-btn');
+  const nextBtn = document.getElementById('showcase-next-btn');
+
+  const stageEl = document.getElementById('showcase-stage');
+  const ambientGlowEl = document.getElementById('showcase-ambient-glow');
+  const featuredWrapper = document.getElementById('featured-image-wrapper');
+  const featuredImg = document.getElementById('featured-game-img');
+  const featuredTitle = document.getElementById('featured-game-title');
+  const featuredGenre = document.getElementById('featured-genre-tag');
+  const featuredRiskBadge = document.getElementById('featured-risk-badge');
+  const featuredDirectLink = document.getElementById('featured-direct-link');
+
+  const dossierTitle = document.getElementById('dossier-game-title');
+  const dossierVerified = document.getElementById('dossier-verified-label');
+  const dossierPlatforms = document.getElementById('dossier-platforms-text');
+  const dossierRiskTag = document.getElementById('dossier-risk-tag');
+  const dossierDesc = document.getElementById('dossier-description');
+  const dossierVectorsCount = document.getElementById('dossier-vectors-count');
+  const dossierVectorsContainer = document.getElementById('dossier-vectors-container');
+  const dossierScenarioTitle = document.getElementById('dossier-scenario-title');
+  const dossierScenarioSummary = document.getElementById('dossier-scenario-summary');
+  const dossierWhatNotToShare = document.getElementById('dossier-what-not-to-share');
+  const dossierCtaBtn = document.getElementById('dossier-cta-btn');
+  const dossierCtaText = document.getElementById('dossier-cta-text');
+
+  const thumbBtns = document.querySelectorAll('.showcase-thumb-btn');
+
+  function updateShowcase(index) {
+    if (index < 0) index = total - 1;
+    if (index >= total) index = 0;
+    currentIndex = index;
+
+    const game = gamesData[currentIndex];
+    const theme = gameThemes[game.slug] || gameThemes['cs2-steam'];
+    const imgUrl = gameImages[game.slug] || '/images/games/cs2-steam.jpg';
+
+    // 1. Counter
+    if (counterEl) counterEl.textContent = `0${currentIndex + 1} / 0${total}`;
+
+    // 2. Animated Background & Theme Glow
+    if (ambientGlowEl) {
+      ambientGlowEl.style.background = theme.bgParticles;
+    }
+    if (featuredWrapper) {
+      featuredWrapper.className = `relative w-full max-w-md sm:max-w-lg aspect-[4/3] sm:aspect-[16/11] rounded-3xl overflow-hidden border-2 ${theme.border} transition-all duration-500 shadow-2xl group`;
+    }
+
+    // 3. Featured Image & Text with smooth fade
+    if (featuredImg) {
+      featuredImg.style.opacity = '0.4';
+      featuredImg.src = imgUrl;
+      featuredImg.alt = game.title;
+      setTimeout(() => {
+        featuredImg.style.opacity = '1';
+      }, 80);
+    }
+    if (featuredTitle) featuredTitle.textContent = game.title;
+    if (featuredGenre) featuredGenre.textContent = game.genre;
+    if (featuredRiskBadge) {
+      featuredRiskBadge.textContent = game.riskBadge;
+      featuredRiskBadge.className = `px-3 py-1 rounded-full text-xs font-heading font-extrabold uppercase tracking-wider backdrop-blur-md border shadow-md transition-all ${theme.badgeBg} ${theme.badgeText} ${theme.border}`;
+    }
+    if (featuredDirectLink) {
+      featuredDirectLink.href = `/${currentLang}/games/${game.slug}/`;
+    }
+
+    // 4. Dossier Panel
+    if (dossierTitle) dossierTitle.textContent = game.title;
+    if (dossierVerified) dossierVerified.textContent = game.verificationStatus || 'Verified Security Hub';
+    if (dossierPlatforms) dossierPlatforms.textContent = game.platforms.join(' • ');
+    if (dossierRiskTag) dossierRiskTag.textContent = game.riskBadge;
+    if (dossierDesc) dossierDesc.textContent = game.cardDescription;
+
+    if (dossierVectorsCount) {
+      dossierVectorsCount.textContent = `${game.commonRiskTags.length} ${isRu ? 'вектора' : 'vectors'}`;
+    }
+
+    // Render vectors
+    if (dossierVectorsContainer) {
+      dossierVectorsContainer.innerHTML = '';
+      game.commonRiskTags.forEach((tag) => {
+        const span = document.createElement('span');
+        span.className = 'px-2.5 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-navy-800 text-slate-800 dark:text-cloud border border-slate-200 dark:border-navy-700 flex items-center gap-1';
+        span.innerHTML = `<span class="text-red-500">•</span><span>${tag}</span>`;
+        dossierVectorsContainer.appendChild(span);
+      });
+    }
+
+    // Primary Scenario
+    if (game.scamScenarios && game.scamScenarios[0]) {
+      if (dossierScenarioTitle) dossierScenarioTitle.textContent = game.scamScenarios[0].title;
+      if (dossierScenarioSummary) dossierScenarioSummary.textContent = game.scamScenarios[0].summary;
+    }
+
+    // What not to share
+    if (dossierWhatNotToShare && game.whatNotToShare) {
+      dossierWhatNotToShare.textContent = game.whatNotToShare.slice(0, 2).join(' • ');
+    }
+
+    // CTA
+    if (dossierCtaBtn) dossierCtaBtn.href = `/${currentLang}/games/${game.slug}/`;
+    if (dossierCtaText) {
+      dossierCtaText.textContent = isRu
+        ? `Изучить полный центр защиты ${game.title}`
+        : `Open Full ${game.title} Defense Hub`;
+    }
+
+    // 5. Thumbnails highlight
+    thumbBtns.forEach((btn, idx) => {
+      if (idx === currentIndex) {
+        btn.className = 'showcase-thumb-btn flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border-2 transition-all duration-300 relative group cursor-pointer border-cyan scale-105 shadow-glow-cyan ring-2 ring-cyan/40 opacity-100';
+      } else {
+        btn.className = 'showcase-thumb-btn flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border-2 transition-all duration-300 relative group cursor-pointer border-slate-200 dark:border-navy-750 opacity-60 hover:opacity-100 hover:scale-100';
+      }
+    });
+  }
+
+  // Prev / Next Listeners
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => updateShowcase(currentIndex - 1));
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => updateShowcase(currentIndex + 1));
+  }
+
+  // Thumbnails click
+  thumbBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-index') || '0', 10);
+      updateShowcase(idx);
+    });
+  });
+
+  // Swipe support for mobile devices
+  let touchStartX = 0;
+  let touchEndX = 0;
+  if (stageEl) {
+    stageEl.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    stageEl.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+  }
+
+  function handleSwipe() {
+    if (touchEndX < touchStartX - 50) {
+      updateShowcase(currentIndex + 1); // Swipe left -> Next
+    }
+    if (touchEndX > touchStartX + 50) {
+      updateShowcase(currentIndex - 1); // Swipe right -> Prev
+    }
+  }
+</script>

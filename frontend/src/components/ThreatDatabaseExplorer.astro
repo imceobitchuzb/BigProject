@@ -1,0 +1,333 @@
+---
+interface Props {
+  currentLang?: 'en' | 'ru' | 'uz';
+}
+
+const { currentLang = 'en' } = Astro.props;
+const isRu = currentLang === 'ru';
+
+// Static base entries for instant load and SSR
+const baseThreats = [
+  {
+    slug: 'cs2-steam-api-key-hijack',
+    game: 'cs2',
+    gameName: 'Counter-Strike 2',
+    title: isRu ? 'CS2: Перехват трейдов через Steam Web API Key' : 'CS2 Steam Web API Key Hijacking & Trade Theft',
+    vector: 'mitm',
+    vectorName: isRu ? 'Подмена обмена (MitM)' : 'Trade Man-in-the-Middle',
+    severity: 'CRITICAL',
+    desc: isRu
+      ? 'Фишинговые сайты скрытно регистрируют Steam Web API Key. Бот перехватывает трейды: отменяет оригинальный обмен и отправляет дубликат на аккаунт-клон.'
+      : 'Phishing portals silently register a Steam Web API Key. A bot cancels legitimate skin trades and creates a duplicate trade to a cloned scammer profile.',
+    iocs: [
+      'Active unknown key at steamcommunity.com/dev/apikey',
+      'Sent trade offer suddenly cancelled within 2 seconds',
+      'Recipient profile level 0 despite identical avatar and nickname',
+    ],
+    prevention: isRu
+      ? 'Проверьте steamcommunity.com/dev/apikey и немедленно отзовите ключ. Смените пароль и деавторизуйте устройства в Steam Guard.'
+      : 'Visit steamcommunity.com/dev/apikey and revoke any key you did not create. Deauthorize devices in Steam Guard.',
+    rescueSlug: 'cs2-steam',
+  },
+  {
+    slug: 'roblox-roblosecurity-cookie-theft',
+    game: 'roblox',
+    gameName: 'Roblox',
+    title: isRu ? 'Roblox: Кража сессионного куки .ROBLOSECURITY' : 'Roblox .ROBLOSECURITY Session Cookie Stealing',
+    vector: 'token_stealer',
+    vectorName: isRu ? 'Кража сессии' : 'Session Hijacking',
+    severity: 'CRITICAL',
+    desc: isRu
+      ? 'Скрипты в консоль браузера (F12) или экспорт .HAR файлов. Крадет файл сессии и обходит 2FA без ввода пароля.'
+      : 'Tricking players into pasting code into browser console (F12) or exporting .HAR files, bypassing 2FA completely.',
+    iocs: [
+      'Requests to open DevTools / Inspect element or export cURL',
+      'Promises of free Robux via Javascript bookmarklet',
+      'Immediate logout from all Roblox experiences',
+    ],
+    prevention: isRu
+      ? 'Никогда не вставляйте скрипты в консоль браузера (F12) и не пересылайте файлы .HAR. В настройках Roblox нажмите "Выйти со всех других устройств".'
+      : 'Never paste code into DevTools or share .HAR files. Click "Log Out of All Other Sessions" in Roblox security settings.',
+    rescueSlug: 'roblox',
+  },
+  {
+    slug: 'minecraft-malicious-jar-infostealer',
+    game: 'minecraft',
+    gameName: 'Minecraft',
+    title: isRu ? 'Minecraft: Трояны под видом модов (.jar infostealer)' : 'Minecraft Trojan Mods (.jar InfoStealers)',
+    vector: 'malware',
+    vectorName: isRu ? 'Вредоносный софт' : 'Malicious Software',
+    severity: 'CRITICAL',
+    desc: isRu
+      ? 'Моды с внедренными стилерами, распространяемые через Discord или клоны сайтов. При запуске игры похищают токены Microsoft и сессии браузера.'
+      : 'Trojans disguised as mods distributed in Discord. Upon game launch, the payload steals Minecraft Microsoft access tokens and browser credentials.',
+    iocs: [
+      'Direct .jar download sent in Discord DMs',
+      'Minecraft launcher logs out with invalid session error',
+      'Foreign login alerts on Microsoft account',
+    ],
+    prevention: isRu
+      ? 'Скачивайте моды только с Modrinth или официального CurseForge. Проверяйте JAR файлы антивирусом.'
+      : 'Download mods strictly from Modrinth or official CurseForge. Use Microsoft Authenticator with passwordless login.',
+    rescueSlug: 'minecraft',
+  },
+  {
+    slug: 'brawl-stars-supercell-id-code-theft',
+    game: 'brawl-stars',
+    gameName: 'Brawl Stars',
+    title: isRu ? 'Brawl Stars: Перехват 6-значного кода Supercell ID' : 'Brawl Stars Supercell ID Login Code Theft',
+    vector: 'social_eng',
+    vectorName: isRu ? 'Социальная инженерия' : 'Social Engineering',
+    severity: 'CRITICAL',
+    desc: isRu
+      ? 'Мошенник обещает задонатить гемы или купить аккаунт, вызывает отправку кода от Supercell и выманивает 6 цифр из письма.'
+      : 'Attacker promises free gems or account purchase, triggers Supercell ID login email, and tricks the player into sharing the 6-digit verification code.',
+    iocs: [
+      'Stranger asks for your email and then the 6-digit login code',
+      'Supercell email explicitly warns: "Never share this code"',
+      'Account disconnected from mobile device shortly after',
+    ],
+    prevention: isRu
+      ? 'Никому и никогда не называйте код из письма. Для официального подарка Brawl Pass код подтверждения НЕ нужен.'
+      : 'Never share Supercell ID codes. Legitimate gifting never requires your login verification code.',
+    rescueSlug: 'brawl-stars',
+  },
+  {
+    slug: 'pubg-fake-uc-recharge-portals',
+    game: 'pubg',
+    gameName: 'PUBG Mobile',
+    title: isRu ? 'PUBG Mobile: Поддельные порталы пополнения UC' : 'PUBG Mobile Fake UC Recharge Portals',
+    vector: 'phishing',
+    vectorName: isRu ? 'Фишинг' : 'Phishing',
+    severity: 'HIGH',
+    desc: isRu
+      ? 'Сайты-клоны Midasbuy с нереальными скидками. Требуют вход через соцсети (Facebook, Twitter) и крадут аккаунт.'
+      : 'Cloned recharge sites offering 80% discounted UC. Demands social media logins and steals account credentials.',
+    iocs: [
+      'Domain is not official midasbuy.com or pubgmobile.com',
+      'Asks for password rather than your numeric Player ID',
+      'Unrealistically low prices for thousands of UC',
+    ],
+    prevention: isRu
+      ? 'Настоящий сервис Midasbuy запрашивает только цифровой ID игрока и никогда не требует пароли от соцсетей.'
+      : 'Official Midasbuy only asks for your numeric Player ID. It never asks for social login credentials.',
+    rescueSlug: 'pubg',
+  },
+  {
+    slug: 'discord-nitro-qr-code-token-grabber',
+    game: 'discord',
+    gameName: 'Discord',
+    title: isRu ? 'Discord: Кража токена через фальшивый QR-код Nitro' : 'Discord Fake Nitro QR Code Session Grabber',
+    vector: 'token_stealer',
+    vectorName: isRu ? 'Перехват сессии' : 'Session Hijacking',
+    severity: 'CRITICAL',
+    desc: isRu
+      ? 'Сообщение "Бесплатный Nitro! Отсканируй QR в приложении". Сканирование авторизует устройство мошенника в вашем аккаунте.'
+      : 'Scam message offering free Discord Nitro via QR scan. Scanning logs the attacker computer into your Discord account.',
+    iocs: [
+      'QR code claims to claim a gift instead of desktop login',
+      'Discord app prompts: "Are you logging in on another computer?"',
+      'Mass direct messages sent from account without your consent',
+    ],
+    prevention: isRu
+      ? 'Сканер QR в мобильном Discord предназначен только для входа на вашем личном компьютере. Не сканируйте чужие коды.'
+      : 'Mobile QR scanner is only for logging into your own desktop app. Never scan external QR codes.',
+    rescueSlug: 'discord',
+  },
+];
+---
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <!-- Header -->
+  <div class="mb-8">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan text-xs font-semibold mb-3">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+      </svg>
+      <span>{isRu ? 'База знаний угроз' : 'Threat Intelligence Database'}</span>
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+      {isRu ? 'Реестр подтвержденных игровых угроз' : 'Verified Gaming Threat Intelligence'}
+    </h1>
+    <p class="text-slate-600 dark:text-cloud-muted mt-2 max-w-3xl text-sm sm:text-base">
+      {isRu
+        ? 'Технический каталог схем социальной инженерии, вредоносного ПО и перехвата сессий, составленный на основе реальных инцидентов игроков.'
+        : 'Technical repository of documented social engineering exploits, session hijackers, and token stealers analyzed across gaming platforms.'}
+    </p>
+  </div>
+
+  <!-- Search & Filter Controls -->
+  <div class="bg-white dark:bg-navy-900/60 border border-slate-200 dark:border-navy-800 rounded-3xl p-5 mb-8 space-y-4 shadow-sm">
+    <div class="relative">
+      <input
+        type="search"
+        id="threat-search-input"
+        placeholder={isRu ? 'Поиск по названию, вектору атаки или индикаторам...' : 'Search threats by keyword, game or vector...'}
+        class="w-full pl-11 pr-4 py-3 rounded-2xl bg-slate-50 dark:bg-navy-800 border border-slate-200 dark:border-navy-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan text-sm"
+      />
+      <svg class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    </div>
+
+    <!-- Filter Pills -->
+    <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-200 dark:border-navy-800">
+      <span class="text-xs font-bold text-slate-400 uppercase mr-2">{isRu ? 'Игра:' : 'Game:'}</span>
+      <button type="button" class="filter-game-btn active px-3 py-1 rounded-xl text-xs font-semibold bg-cyan text-navy-950 transition" data-game="all">
+        {isRu ? 'Все игры' : 'All Games'}
+      </button>
+      <button type="button" class="filter-game-btn px-3 py-1 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-cloud-muted hover:text-cyan transition" data-game="cs2">
+        CS2
+      </button>
+      <button type="button" class="filter-game-btn px-3 py-1 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-cloud-muted hover:text-cyan transition" data-game="roblox">
+        Roblox
+      </button>
+      <button type="button" class="filter-game-btn px-3 py-1 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-cloud-muted hover:text-cyan transition" data-game="minecraft">
+        Minecraft
+      </button>
+      <button type="button" class="filter-game-btn px-3 py-1 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-cloud-muted hover:text-cyan transition" data-game="brawl-stars">
+        Brawl Stars
+      </button>
+      <button type="button" class="filter-game-btn px-3 py-1 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-cloud-muted hover:text-cyan transition" data-game="pubg">
+        PUBG
+      </button>
+      <button type="button" class="filter-game-btn px-3 py-1 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-cloud-muted hover:text-cyan transition" data-game="discord">
+        Discord
+      </button>
+    </div>
+  </div>
+
+  <!-- Threat Cards Grid -->
+  <div id="threats-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {baseThreats.map((threat) => (
+      <div
+        class="threat-card rounded-3xl bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-800 p-6 flex flex-col justify-between hover:border-cyan/40 transition duration-200 shadow-sm"
+        data-game={threat.game}
+        data-vector={threat.vector}
+        data-title={threat.title.toLowerCase()}
+        data-desc={threat.desc.toLowerCase()}
+      >
+        <div>
+          <!-- Badges -->
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold uppercase bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-cloud">
+                {threat.gameName}
+              </span>
+              <span class="px-2 py-0.5 rounded text-[11px] font-medium bg-cyan/10 text-cyan-dark dark:text-cyan">
+                {threat.vectorName}
+              </span>
+            </div>
+            <span class={`text-[10px] font-black uppercase px-2 py-0.5 rounded border ${
+              threat.severity === 'CRITICAL'
+                ? 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20'
+                : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+            }`}>
+              {threat.severity}
+            </span>
+          </div>
+
+          <!-- Title & Desc -->
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">
+            {threat.title}
+          </h3>
+          <p class="text-sm text-slate-600 dark:text-cloud-muted mb-4 leading-relaxed">
+            {threat.desc}
+          </p>
+
+          <!-- IOC Checklist -->
+          <div class="bg-slate-50 dark:bg-navy-950/60 rounded-2xl p-4 border border-slate-200 dark:border-navy-800/80 mb-4">
+            <div class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2">
+              {isRu ? 'Индикаторы компрометации (IOC):' : 'Indicators of Compromise (IOC):'}
+            </div>
+            <ul class="space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
+              {threat.iocs.map((ioc) => (
+                <li class="flex items-start gap-2">
+                  <span class="text-red-500 font-bold">!</span>
+                  <span>{ioc}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- Prevention -->
+          <div class="text-xs text-slate-600 dark:text-slate-400 mb-4">
+            <strong class="text-slate-900 dark:text-white font-semibold">{isRu ? 'Защита:' : 'Defense:'}</strong> {threat.prevention}
+          </div>
+        </div>
+
+        <!-- Footer Action -->
+        <div class="pt-3 border-t border-slate-200 dark:border-navy-800 flex items-center justify-between">
+          <a
+            href={`/${currentLang}/recovery/?game=${threat.rescueSlug}`}
+            class="text-xs font-bold text-red-600 dark:text-red-400 hover:underline flex items-center gap-1"
+          >
+            <span>{isRu ? 'План спасения для этой игры' : 'Incident Recovery Guide'}</span>
+            <span>➔</span>
+          </a>
+          <span class="text-[11px] text-slate-400">Status: ACTIVE</span>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div id="no-threats-msg" class="hidden text-center py-16 text-slate-400">
+    {isRu ? 'Угрозы по заданным фильтрам не найдены.' : 'No threats found matching your query.'}
+  </div>
+</div>
+
+<script>
+  const searchInput = document.getElementById('threat-search-input') as HTMLInputElement;
+  const gameButtons = document.querySelectorAll('.filter-game-btn');
+  const cards = document.querySelectorAll('.threat-card') as NodeListOf<HTMLElement>;
+  const noMsg = document.getElementById('no-threats-msg');
+
+  let activeGame = 'all';
+
+  function filterThreats() {
+    const query = (searchInput?.value || '').trim().toLowerCase();
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const cardGame = card.dataset.game || '';
+      const cardTitle = card.dataset.title || '';
+      const cardDesc = card.dataset.desc || '';
+
+      const matchesGame = activeGame === 'all' || cardGame === activeGame;
+      const matchesQuery = !query || cardTitle.includes(query) || cardDesc.includes(query);
+
+      if (matchesGame && matchesQuery) {
+        card.classList.remove('hidden');
+        visibleCount++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+
+    if (noMsg) {
+      if (visibleCount === 0) {
+        noMsg.classList.remove('hidden');
+      } else {
+        noMsg.classList.add('hidden');
+      }
+    }
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', filterThreats);
+  }
+
+  gameButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      gameButtons.forEach((b) => {
+        b.classList.remove('bg-cyan', 'text-navy-950');
+        b.classList.add('bg-slate-100', 'dark:bg-navy-800', 'text-slate-700', 'dark:text-cloud-muted');
+      });
+      btn.classList.add('bg-cyan', 'text-navy-950');
+      btn.classList.remove('bg-slate-100', 'dark:bg-navy-800', 'text-slate-700', 'dark:text-cloud-muted');
+
+      activeGame = (btn as HTMLElement).dataset.game || 'all';
+      filterThreats();
+    });
+  });
+</script>

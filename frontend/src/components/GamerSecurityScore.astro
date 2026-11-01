@@ -1,0 +1,287 @@
+---
+import SafiMascot from './SafiMascot.astro';
+
+interface Props {
+  currentLang?: 'en' | 'ru' | 'uz';
+}
+
+const { currentLang = 'en' } = Astro.props;
+
+const isRu = currentLang === 'ru';
+const isUz = currentLang === 'uz';
+
+const labels = {
+  title: isRu ? 'Рейтинг безопасности геймера' : isUz ? "Geymer Xavfsizlik Reytingi" : 'Gamer Security Score',
+  subtitle: isRu
+    ? 'Оцените уровень защиты своих игровых аккаунтов по 12 ключевым критериям без ввода паролей.'
+    : isUz
+    ? "O'yin akkauntlaringiz himoya darajasini parollarni kiritmasdan 12 ta mezon bo'yicha baholang."
+    : 'Evaluate your gaming defense posture across 12 crucial security vectors without ever sharing credentials.',
+  privacyBadge: isRu ? '100% Приватно: расчет в браузере' : isUz ? "100% Maxfiy: hisoblash brauzerda" : '100% Private: Client-Side Evaluation',
+  calculateBtn: isRu ? 'Рассчитать мой рейтинг' : isUz ? "Reytingimni hisoblash" : 'Calculate My Score',
+  resetBtn: isRu ? 'Сбросить' : isUz ? "Qaytadan" : 'Reset Assessment',
+  yourScore: isRu ? 'Ваш итоговый счет' : isUz ? "Sizning yakuniy ballingiz" : 'Your Security Score',
+  planTitle: isRu ? 'Персональный план усиления защиты' : isUz ? "Himoyani kuchaytirish shaxsiy rejasi" : 'Personalized Security Action Plan',
+};
+---
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <!-- Header Card -->
+  <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-navy-900 to-slate-950 border border-cyan/20 p-6 sm:p-8 mb-8 shadow-2xl">
+    <div class="flex flex-col sm:flex-row items-center gap-6 justify-between">
+      <div class="space-y-3 text-center sm:text-left">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan text-xs font-semibold">
+          <svg class="w-4 h-4 text-cyan" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944z" clip-rule="evenodd"/>
+          </svg>
+          <span>{labels.privacyBadge}</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          {labels.title}
+        </h1>
+        <p class="text-slate-400 text-sm sm:text-base max-w-xl">
+          {labels.subtitle}
+        </p>
+      </div>
+
+      <div class="shrink-0 flex flex-col items-center">
+        <SafiMascot mood="guard" size="lg" />
+        <span class="text-xs font-bold text-cyan mt-2">SAFI Advisor</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Form -->
+  <form id="score-form" class="space-y-8 bg-white dark:bg-navy-900/60 border border-slate-200 dark:border-navy-800 rounded-3xl p-6 sm:p-8 shadow-sm">
+    <!-- Category 1: Authentication & 2FA -->
+    <div class="space-y-4">
+      <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 border-b border-slate-200 dark:border-navy-800 pb-2">
+        <span class="w-6 h-6 rounded-lg bg-cyan/10 text-cyan text-xs font-bold flex items-center justify-center">1</span>
+        <span>{isRu ? 'Аутентификация и двухфакторная защита (2FA)' : 'Authentication & Two-Factor Hygiene'}</span>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-navy-800 hover:bg-slate-50 dark:hover:bg-navy-800/50 cursor-pointer transition">
+          <input type="checkbox" name="auth_2fa_app" value="10" class="mt-1 w-4 h-4 rounded text-cyan focus:ring-cyan" />
+          <span class="text-sm text-slate-700 dark:text-slate-300">
+            {isRu ? 'Использую мобильный аутентификатор (Steam Guard, Google Auth, Supercell ID) вместо SMS' : 'Use App-based 2FA (Steam Guard, Authenticator) instead of plain SMS'}
+          </span>
+        </label>
+        <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-navy-800 hover:bg-slate-50 dark:hover:bg-navy-800/50 cursor-pointer transition">
+          <input type="checkbox" name="auth_unique_pwd" value="10" class="mt-1 w-4 h-4 rounded text-cyan focus:ring-cyan" />
+          <span class="text-sm text-slate-700 dark:text-slate-300">
+            {isRu ? 'Пароль от почты и игровых аккаунтов уникален и никогда не повторяется' : 'Gaming email and account passwords are completely unique'}
+          </span>
+        </label>
+        <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-navy-800 hover:bg-slate-50 dark:hover:bg-navy-800/50 cursor-pointer transition">
+          <input type="checkbox" name="auth_backup_codes" value="5" class="mt-1 w-4 h-4 rounded text-cyan focus:ring-cyan" />
+          <span class="text-sm text-slate-700 dark:text-slate-300">
+            {isRu ? 'Резервные коды восстановления сохранены офлайн в надежном месте' : 'Offline backup recovery codes are stored safely'}
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Category 2: Phishing & Web Vigilance -->
+    <div class="space-y-4">
+      <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 border-b border-slate-200 dark:border-navy-800 pb-2">
+        <span class="w-6 h-6 rounded-lg bg-cyan/10 text-cyan text-xs font-bold flex items-center justify-center">2</span>
+        <span>{isRu ? 'Бдительность к ссылкам и фишингу' : 'Web & Link Vigilance'}</span>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-navy-800 hover:bg-slate-50 dark:hover:bg-navy-800/50 cursor-pointer transition">
+          <input type="checkbox" name="web_domain_check" value="10" class="mt-1 w-4 h-4 rounded text-cyan focus:ring-cyan" />
+          <span class="text-sm text-slate-700 dark:text-slate-300">
+            {isRu ? 'Всегда проверяю доменное имя в адресной строке перед вводом логина' : 'Always verify domain spelling in URL bar before entering credentials'}
+          </span>
+        </label>
+        <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-navy-800 hover:bg-slate-50 dark:hover:bg-navy-800/50 cursor-pointer transition">
+          <input type="checkbox" name="web_no_fake_tournaments" value="10" class="mt-1 w-4 h-4 rounded text-cyan focus:ring-cyan" />
+          <span class="text-sm text-slate-700 dark:text-slate-300">
+            {isRu ? 'Никогда не авторизуюсь в Steam на сайтах "голосования за команду"' : 'Never authorize Steam on unsolicited tournament voting links'}
+          </span>
+        </label>
+        <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-navy-800 hover:bg-slate-50 dark:hover:bg-navy-800/50 cursor-pointer transition">
+          <input type="checkbox" name="web_inspect_element_safe" value="10" class="mt-1 w-4 h-4 rounded text-cyan focus:ring-cyan" />
+          <span class="text-sm text-slate-700 dark:text-slate-300">
+            {isRu ? 'Знаю, что нельзя вставлять скрипты в консоль (F12) или слать .HAR файлы' : 'Never paste code into DevTools console (F12) or share .HAR files'}
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Category 3: Trading & Asset Defense -->
+    <div class="space-y-4">
+      <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 border-b border-slate-200 dark:border-navy-800 pb-2">
+        <span class="w-6 h-6 rounded-lg bg-cyan/10 text-cyan text-xs font-bold flex items-center justify-center">3</span>
+        <span>{isRu ? 'Безопасность инвентаря и обменов' : 'Inventory & Trading Defense'}</span>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-navy-800 hover:bg-slate-50 dark:hover:bg-navy-800/50 cursor-pointer transition">
+          <input type="checkbox" name="trade_api_key_check" value="10" class="mt-1 w-4 h-4 rounded text-cyan focus:ring-cyan" />
+          <span class="text-sm text-slate-700 dark:text-slate-300">
+            {isRu ? 'Проверяю steamcommunity.com/dev/apikey и не держу чужих API-ключей' : 'Regularly audit and revoke unneeded Steam Web API Keys'}
+          </span>
+        </label>
+        <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-navy-800 hover:bg-slate-50 dark:hover:bg-navy-800/50 cursor-pointer transition">
+          <input type="checkbox" name="trade_verify_level" value="10" class="mt-1 w-4 h-4 rounded text-cyan focus:ring-cyan" />
+          <span class="text-sm text-slate-700 dark:text-slate-300">
+            {isRu ? 'Сверяю дату регистрации и уровень аккаунта перед подтверждением трейда' : 'Verify partner account age and level before accepting high-value trades'}
+          </span>
+        </label>
+        <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-navy-800 hover:bg-slate-50 dark:hover:bg-navy-800/50 cursor-pointer transition">
+          <input type="checkbox" name="trade_no_free_generators" value="10" class="mt-1 w-4 h-4 rounded text-cyan focus:ring-cyan" />
+          <span class="text-sm text-slate-700 dark:text-slate-300">
+            {isRu ? 'Понимаю, что сайтов "генераторов бесплатных Robux/Gems/UC" не существует' : 'Know that free Robux/Gems/UC web generators are 100% scams'}
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Category 4: Downloads & Mod Hygiene -->
+    <div class="space-y-4">
+      <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 border-b border-slate-200 dark:border-navy-800 pb-2">
+        <span class="w-6 h-6 rounded-lg bg-cyan/10 text-cyan text-xs font-bold flex items-center justify-center">4</span>
+        <span>{isRu ? 'Загрузки, моды и цифровая гигиена' : 'Downloads & Mod Hygiene'}</span>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-navy-800 hover:bg-slate-50 dark:hover:bg-navy-800/50 cursor-pointer transition">
+          <input type="checkbox" name="mod_trusted_sources" value="10" class="mt-1 w-4 h-4 rounded text-cyan focus:ring-cyan" />
+          <span class="text-sm text-slate-700 dark:text-slate-300">
+            {isRu ? 'Скачиваю моды только с Modrinth или официального CurseForge' : 'Download Minecraft/PC mods exclusively from trusted platforms'}
+          </span>
+        </label>
+        <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-navy-800 hover:bg-slate-50 dark:hover:bg-navy-800/50 cursor-pointer transition">
+          <input type="checkbox" name="mod_no_disable_antivirus" value="10" class="mt-1 w-4 h-4 rounded text-cyan focus:ring-cyan" />
+          <span class="text-sm text-slate-700 dark:text-slate-300">
+            {isRu ? 'Никогда не отключаю Windows Defender или антивирус по просьбе файла' : 'Never disable Windows Defender/antivirus to run gaming tools'}
+          </span>
+        </label>
+        <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-navy-800 hover:bg-slate-50 dark:hover:bg-navy-800/50 cursor-pointer transition">
+          <input type="checkbox" name="social_no_staff_dms" value="5" class="mt-1 w-4 h-4 rounded text-cyan focus:ring-cyan" />
+          <span class="text-sm text-slate-700 dark:text-slate-300">
+            {isRu ? 'Помню, что модераторы Valve/Supercell не пишут в Discord в личку' : 'Remember that platform admins never mediate issues via Discord DMs'}
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-4 pt-4 border-t border-slate-200 dark:border-navy-800">
+      <button
+        type="submit"
+        class="px-6 py-3 rounded-xl bg-cyan-gradient text-navy-950 font-bold hover:shadow-lg hover:shadow-cyan/20 transition"
+      >
+        {labels.calculateBtn}
+      </button>
+      <button
+        type="reset"
+        id="reset-btn"
+        class="px-4 py-3 rounded-xl border border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-navy-800 transition"
+      >
+        {labels.resetBtn}
+      </button>
+    </div>
+  </form>
+
+  <!-- Results Section -->
+  <div id="results-panel" class="hidden mt-8 rounded-3xl bg-slate-900 border border-cyan/30 p-6 sm:p-8 space-y-6">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pb-6 border-b border-navy-800">
+      <div>
+        <div class="text-xs uppercase font-extrabold tracking-wider text-cyan">{labels.yourScore}</div>
+        <div class="flex items-baseline gap-3 mt-1">
+          <span id="score-number" class="text-5xl font-black text-white">0</span>
+          <span class="text-2xl font-bold text-slate-400">/ 100</span>
+        </div>
+        <div id="score-rank" class="text-sm font-bold mt-1 text-cyan">Novice</div>
+      </div>
+      <div id="safi-reaction">
+        <SafiMascot id="result-safi" mood="celebrate" size="lg" />
+      </div>
+    </div>
+
+    <div>
+      <h3 class="text-lg font-bold text-white mb-4">{labels.planTitle}</h3>
+      <ul id="action-list" class="space-y-2 text-sm text-slate-300">
+        <!-- Dynamically injected checklist items -->
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('score-form') as HTMLFormElement;
+  const resultsPanel = document.getElementById('results-panel');
+  const scoreNumber = document.getElementById('score-number');
+  const scoreRank = document.getElementById('score-rank');
+  const actionList = document.getElementById('action-list');
+  const resetBtn = document.getElementById('reset-btn');
+
+  if (form && resultsPanel && scoreNumber && scoreRank && actionList) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      let total = 0;
+      const missedActions = [];
+
+      const checklistMap: Record<string, string> = {
+        auth_2fa_app: 'Switch 2FA from plain SMS to an Authenticator app (Steam Guard or Google Authenticator).',
+        auth_unique_pwd: 'Set a unique, strong passphrase for your gaming email and game accounts.',
+        auth_backup_codes: 'Download and safely store offline backup recovery keys.',
+        web_domain_check: 'Always inspect the exact top-level domain in your address bar before logging in.',
+        web_no_fake_tournaments: 'Never sign into Steam on unverified tournament or voting portals.',
+        web_inspect_element_safe: 'Never paste commands into browser DevTools or send .HAR files.',
+        trade_api_key_check: 'Audit steamcommunity.com/dev/apikey and revoke any unauthorized keys.',
+        trade_verify_level: 'Check partner profile age, inventory history, and level prior to high-value trades.',
+        trade_no_free_generators: 'Avoid all "free currency generator" websites.',
+        mod_trusted_sources: 'Only download mods from verified portals (Modrinth, official CurseForge).',
+        mod_no_disable_antivirus: 'Never disable real-time Windows Defender or antivirus protection.',
+        social_no_staff_dms: 'Remember official staff never investigate bans or items via Discord DMs.',
+      };
+
+      for (const [key, text] of Object.entries(checklistMap)) {
+        if (formData.has(key)) {
+          total += parseInt(formData.get(key) as string, 10);
+        } else {
+          missedActions.push(text);
+        }
+      }
+
+      scoreNumber.textContent = String(total);
+
+      if (total >= 90) {
+        scoreRank.textContent = 'Cyber Sentinel (Level 4) — Excellent Protection!';
+        scoreRank.className = 'text-sm font-bold mt-1 text-emerald-400';
+      } else if (total >= 70) {
+        scoreRank.textContent = 'Inventory Guardian (Level 3) — Solid Defense, Minor Gaps.';
+        scoreRank.className = 'text-sm font-bold mt-1 text-cyan';
+      } else if (total >= 40) {
+        scoreRank.textContent = 'Active Gamer (Level 2) — Vulnerable to advanced social engineering.';
+        scoreRank.className = 'text-sm font-bold mt-1 text-amber-400';
+      } else {
+        scoreRank.textContent = 'Cyber Novice (Level 1) — High Risk of Account Compromise.';
+        scoreRank.className = 'text-sm font-bold mt-1 text-red-400';
+      }
+
+      actionList.innerHTML = '';
+      if (missedActions.length === 0) {
+        actionList.innerHTML = '<li class="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 rounded-xl">Outstanding! Your gaming security hygiene meets maximum standards.</li>';
+      } else {
+        missedActions.forEach((item) => {
+          const li = document.createElement('li');
+          li.className = 'p-3 bg-navy-800/60 border border-slate-700 rounded-xl flex items-start gap-2.5';
+          li.innerHTML = `<span class="text-cyan font-bold">➔</span> <span>${item}</span>`;
+          actionList.appendChild(li);
+        });
+      }
+
+      resultsPanel.classList.remove('hidden');
+      resultsPanel.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        resultsPanel.classList.add('hidden');
+      });
+    }
+  }
+</script>

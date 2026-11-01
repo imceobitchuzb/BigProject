@@ -1,0 +1,77 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SafiMascot from '../../components/SafiMascot.astro';
+
+const newsItems = [
+  {
+    date: 'Ноябрь 2026',
+    tag: 'ПРЕДУПРЕЖДЕНИЕ ОБ УГРОЗЕ',
+    tagColor: 'bg-red-500/10 text-red-400 border-red-500/30',
+    title: 'Всплеск подмены трейдов через Steam Web API Key среди игроков в CS2',
+    summary: 'Фишинговые порталы под видом голосований на турнирах скрытно регистрируют чужие API-ключи, незаметно подменяя обмены скинами на ботов-клонов.',
+  },
+  {
+    date: 'Октябрь 2026',
+    tag: 'ОБНОВЛЕНИЕ ПЛАТФОРМЫ',
+    tagColor: 'bg-cyan-500/10 text-cyan border-cyan-500/30',
+    title: 'Запуск Академии SafeInGame и интерактивного 2.5D Симулятора атак',
+    summary: 'Геймеры теперь могут бесплатно отрабатывать отражение 10 реальных атак и получать именные сертификаты киберзащитника без риска для скинов.',
+  },
+  {
+    date: 'Октябрь 2026',
+    tag: 'АНАЛИТИЧЕСКИЙ ОТЧЕТ',
+    tagColor: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
+    title: 'Исследование схем кражи куки .ROBLOSECURITY через консоль разработчика',
+    summary: 'Подробный технический разбор методов психологического давления на детей для копирования сетевых логов .HAR ради фальшивых 3D-рендеров.',
+  },
+];
+---
+
+<Layout
+  title="Медиа и новости — SafeInGame"
+  description="Официальные предупреждения об угрозах, бюллетени кибербезопасности и новости проекта SafeInGame."
+  currentLang="ru"
+>
+  <div class="max-w-5xl mx-auto px-4 py-12">
+    <!-- Header Card -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-navy-900 to-slate-950 border border-cyan/20 p-6 sm:p-10 mb-12 shadow-2xl">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="space-y-4 text-center md:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan text-xs font-semibold">
+            <span>Пресс-центр и исследования</span>
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
+            Медиа и новости SafeInGame
+          </h1>
+          <p class="text-slate-400 text-sm sm:text-base max-w-xl leading-relaxed">
+            Следите за подтвержденными бюллетенями угроз, техническими отчетами и официальными анонсами команды исследователей SafeInGame.
+          </p>
+        </div>
+
+        <div class="shrink-0 flex flex-col items-center">
+          <SafiMascot mood="guard" size="xl" />
+          <span class="text-xs font-bold text-cyan mt-3">Press & Research</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- News List -->
+    <div class="space-y-6 mb-12">
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Свежие бюллетени безопасности</h2>
+      <div class="grid grid-cols-1 gap-4">
+        {newsItems.map((item) => (
+          <div class="rounded-3xl bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-800 p-6 sm:p-8 hover:border-cyan/40 transition">
+            <div class="flex items-center gap-3 mb-3">
+              <span class={`text-[10px] font-black uppercase px-2.5 py-0.5 rounded border ${item.tagColor}`}>
+                {item.tag}
+              </span>
+              <span class="text-xs text-slate-400">{item.date}</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">{item.title}</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-cloud-muted leading-relaxed">{item.summary}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CyberBackground from '../../components/CyberBackground.astro';
+import InteractiveGameShowcase from '../../components/InteractiveGameShowcase.astro';
 import GameCard from '../../components/GameCard.astro';
 import ScamPatterns from '../../components/ScamPatterns.astro';
 import ScamQuiz from '../../components/ScamQuiz.astro';
@@ -195,17 +196,154 @@ const categories = [
             Проверяйте подозрительные ссылки из Discord, Steam или Telegram. Детектирует подмену букв (Homoglyph), тайпосквоттинг и опасные доменные зоны в реальном времени.
           </p>
         </div>
-        <div class="flex-shrink-0">
+        <div class="flex-shrink-0 flex items-center gap-3">
+          <a
+            href="/ru/detective/"
+            class="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl font-heading font-bold text-sm border border-cyan/40 bg-navy-900 text-cyan hover:bg-navy-800 transition"
+          >
+            <span>ИИ-Детектив</span>
+          </a>
           <a
             href="/ru/scanner/"
             class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl font-heading font-bold text-sm bg-cyan text-navy-950 hover:bg-cyan-light shadow-lg hover:scale-105 active:scale-95 transition-all"
           >
-            <span>Запустить сканер ссылок</span>
+            <span>Запустить сканер</span>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
           </a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Ecosystem Pillars Grid -->
+  <section class="py-16 border-b border-slate-200 dark:border-navy-800 bg-white dark:bg-navy-900/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border border-cyan-500/30 bg-cyan-500/10 text-cyan uppercase tracking-wider mb-3">
+          Модули экосистемы
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight">
+          Комплексная защита всей вашей игровой жизни
+        </h2>
+        <p class="text-sm sm:text-base text-slate-600 dark:text-cloud-muted mt-2">
+          От ИИ-анализа сомнительных сообщений и интерактивных симуляторов до базы знаний угроз и родительского режима.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Module 1: AI Scam Detective -->
+        <a href="/ru/detective/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-cyan/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              🤖
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-cyan transition">ИИ-Детектив скама</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Анализируйте сомнительные предложения, угрозы баном и скриншоты переписок на приемы социальной инженерии.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-cyan flex items-center gap-1">Открыть Детектив ➔</span>
+        </a>
+
+        <!-- Module 2: SafeInGame Academy -->
+        <a href="/ru/academy/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-emerald-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              🎓
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-emerald-400 transition">Академия SafeInGame</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Пройдите 3 интерактивных трека, зарабатывайте очки опыта (XP) и сгенерируйте подтвержденный сертификат.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-emerald-400 flex items-center gap-1">Перейти в Академию ➔</span>
+        </a>
+
+        <!-- Module 3: Threat Database -->
+        <a href="/ru/threats/database/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-amber-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              🗄️
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-amber-400 transition">База знаний угроз</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Поиск подтвержденных индикаторов компрометации (IOC) и методов кражи по CS2, Roblox, Brawl Stars и Minecraft.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-amber-400 flex items-center gap-1">Изучить Базу ➔</span>
+        </a>
+
+        <!-- Module 4: Parent Mode -->
+        <a href="/ru/parents/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-purple-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              🛡️
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-400 transition">Родительский режим</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Как устроены донаты в играх, риски незнакомцев и настройка официального родительского контроля без слежки.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-purple-400 flex items-center gap-1">Открыть для родителей ➔</span>
+        </a>
+
+        <!-- Module 5: 2.5D Scam Simulator -->
+        <a href="/ru/simulator/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-red-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-red-500/10 text-red-400 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              🎮
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-red-400 transition">Симулятор атак</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Интерактивная отработка ситуаций с чатами, фальшивыми турнирами и подменой обменов в Steam.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-red-400 flex items-center gap-1">Начать симуляцию ➔</span>
+        </a>
+
+        <!-- Module 6: Global Scam Radar -->
+        <a href="/ru/radar/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-cyan/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              📡
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-cyan transition">Глобальный Радар скама</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Сводка активности мошеннических кампаний по платформам и типам атак в реальном времени.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-cyan flex items-center gap-1">Смотреть Радар ➔</span>
+        </a>
+
+        <!-- Module 7: Gamer Security Score -->
+        <a href="/ru/score/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-emerald-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              🎯
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-emerald-400 transition">Рейтинг безопасности</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Оцените защиту своих аккаунтов по 12 критериям без паролей и получите персональный чек-лист усиления.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-emerald-400 flex items-center gap-1">Рассчитать рейтинг ➔</span>
+        </a>
+
+        <!-- Module 8: Browser Guardian -->
+        <a href="/ru/guardian/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-blue-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              🛡️
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-blue-400 transition">Browser Guardian</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Браузерное расширение для Chromium, блокирующее омоглифы и предупреждающее о фейковых окнах входа Steam.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-blue-400 flex items-center gap-1">Установить расширение ➔</span>
+        </a>
       </div>
     </div>
   </section>
@@ -236,11 +374,24 @@ const categories = [
         </a>
       </div>
 
-      <!-- 5 Games Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {games.map((g) => (
-          <GameCard game={g} currentLang={currentLang} />
-        ))}
+      <!-- Interactive Showroom Showcase -->
+      <InteractiveGameShowcase games={games} currentLang={currentLang} />
+
+      <!-- Quick Access Game Threat Cards -->
+      <div class="mt-12 pt-8 border-t border-slate-200 dark:border-navy-800">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud">
+            Быстрый переход к досье игр
+          </h3>
+          <a href="/ru/games/" class="text-xs font-heading font-bold text-cyan-dark dark:text-cyan hover:underline">
+            {t('games.view_all')} →
+          </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {games.slice(0, 3).map((g) => (
+            <GameCard game={g} currentLang={currentLang} />
+          ))}
+        </div>
       </div>
     </div>
   </section>

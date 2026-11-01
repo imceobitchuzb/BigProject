@@ -6,7 +6,7 @@ interface Props {
   format?: 'svg' | 'raster';
 }
 
-const { type, size = 'md', class: extraClass = '', format = 'svg' } = Astro.props;
+const { type, size = 'md', class: extraClass = '', format = 'raster' } = Astro.props;
 
 const dimensions = {
   sm: 'w-10 h-10',

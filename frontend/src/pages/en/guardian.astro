@@ -1,0 +1,111 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SafiMascot from '../../components/SafiMascot.astro';
+---
+
+<Layout
+  title="SafeInGame Guardian — Browser Security Extension"
+  description="Real-time gaming phishing protection, typosquatting detection, and brand impersonation alerts for Chromium browsers."
+  currentLang="en"
+>
+  <div class="max-w-5xl mx-auto px-4 py-12">
+    <!-- Hero Card -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-navy-900 to-slate-950 border border-cyan/20 p-6 sm:p-10 mb-12 shadow-2xl">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="space-y-4 text-center md:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan text-xs font-semibold">
+            <span>Manifest V3 • Chromium Extension</span>
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
+            SafeInGame Guardian
+          </h1>
+          <p class="text-slate-400 text-sm sm:text-base max-w-xl leading-relaxed">
+            Lightweight, privacy-first browser extension for Chrome, Edge, and Brave. Identifies fake gaming tournament sites, Steam OpenID impersonators, and session stealers before you enter your credentials.
+          </p>
+          <div class="pt-2 flex flex-wrap items-center gap-3 justify-center md:justify-start">
+            <a
+              href="#installation-guide"
+              class="px-6 py-3 rounded-xl bg-cyan-gradient text-navy-950 font-bold hover:shadow-lg hover:shadow-cyan/20 transition text-sm"
+            >
+              Installation Guide
+            </a>
+            <a
+              href="/en/scanner/"
+              class="px-5 py-3 rounded-xl border border-slate-700 hover:border-cyan text-slate-300 hover:text-white transition text-sm"
+            >
+              Try Web Link Scanner
+            </a>
+          </div>
+        </div>
+
+        <div class="shrink-0 flex flex-col items-center">
+          <SafiMascot mood="guard" size="xl" />
+          <span class="text-xs font-bold text-cyan mt-3">Browser Guardian</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Core Features -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <div class="p-6 rounded-3xl bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-800">
+        <div class="w-10 h-10 rounded-xl bg-cyan/10 text-cyan flex items-center justify-center font-bold mb-4">
+          01
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Typosquatting Shield</h3>
+        <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+          Detects homoglyphs (Cyrillic lookalikes), Damerau-Levenshtein brand variations, and fake top-level domains targeting Steam, Roblox, and Supercell.
+        </p>
+      </div>
+
+      <div class="p-6 rounded-3xl bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-800">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold mb-4">
+          02
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Fake OpenID Warning</h3>
+        <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+          Flags simulated browser-in-browser popups that mimic official Steam community sign-in screens while actually stealing your 2FA credentials.
+        </p>
+      </div>
+
+      <div class="p-6 rounded-3xl bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-800">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold mb-4">
+          03
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">100% Privacy Guarantee</h3>
+        <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
+          Does not record your browsing history, does not harvest passwords, and performs heuristic domain audits locally in your browser.
+        </p>
+      </div>
+    </div>
+
+    <!-- Installation Instructions Guide -->
+    <div id="installation-guide" class="rounded-3xl bg-slate-900 border border-slate-800 p-6 sm:p-10 space-y-6">
+      <div class="max-w-2xl">
+        <div class="text-xs font-bold uppercase tracking-wider text-cyan mb-1">Developer & User Setup</div>
+        <h2 class="text-2xl font-black text-white">How to Install in Google Chrome or Microsoft Edge</h2>
+        <p class="text-xs text-slate-400 mt-2">
+          The extension source code is ready in the repository under the <code class="text-cyan bg-navy-950 px-1.5 py-0.5 rounded">extension/</code> directory. Follow these 4 simple steps:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-300">
+        <div class="p-4 rounded-2xl bg-navy-950 border border-slate-800 space-y-1.5">
+          <strong class="text-white font-bold text-sm">Step 1: Open Extensions Page</strong>
+          <p>Navigate to <code class="text-cyan">chrome://extensions</code> or <code class="text-cyan">edge://extensions</code> in your Chromium browser.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-navy-950 border border-slate-800 space-y-1.5">
+          <strong class="text-white font-bold text-sm">Step 2: Enable Developer Mode</strong>
+          <p>Toggle the <strong>Developer mode</strong> switch located in the top-right corner of the Extensions dashboard.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-navy-950 border border-slate-800 space-y-1.5">
+          <strong class="text-white font-bold text-sm">Step 3: Load Unpacked</strong>
+          <p>Click the <strong>Load unpacked</strong> button and select the <code class="text-cyan">extension/</code> folder inside your SafeInGame directory.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-navy-950 border border-slate-800 space-y-1.5">
+          <strong class="text-white font-bold text-sm">Step 4: Pin to Toolbar</strong>
+          <p>Pin the SafeInGame Guardian shield icon to your browser toolbar for real-time status and quick link audits.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

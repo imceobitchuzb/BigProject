@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import CyberBackground from '../../../components/CyberBackground.astro';
+import InteractiveGameShowcase from '../../../components/InteractiveGameShowcase.astro';
 import GameCard from '../../../components/GameCard.astro';
 import { getAllGames } from '../../../data/games';
 import { useTranslations } from '../../../i18n/ui';
@@ -21,7 +22,7 @@ const games = getAllGames(currentLang);
 
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
-      <div class="max-w-3xl mb-12">
+      <div class="max-w-3xl mb-8">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-800 dark:text-cyan text-xs font-semibold mb-4 shadow-sm">
           {t('games.hero.badge')}
         </div>
@@ -33,7 +34,18 @@ const games = getAllGames(currentLang);
         </p>
       </div>
 
+      <!-- Featured Interactive Showroom Showcase -->
+      <div class="mb-14">
+        <InteractiveGameShowcase games={games} currentLang={currentLang} />
+      </div>
+
       <!-- Games Grid with 3D Tilt Cards -->
+      <div class="mb-6 flex items-center justify-between">
+        <h2 class="text-xl sm:text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud">
+          Все игровые досье и центры угроз
+        </h2>
+        <span class="text-xs font-mono font-bold text-slate-500 dark:text-cloud-subtle">5 игровых центров</span>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
         {games.map((game) => (
           <GameCard game={game} currentLang={currentLang} />

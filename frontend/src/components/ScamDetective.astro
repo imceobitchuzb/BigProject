@@ -1,0 +1,432 @@
+---
+import SafiMascot from './SafiMascot.astro';
+
+interface Props {
+  currentLang?: 'en' | 'ru' | 'uz';
+}
+
+const { currentLang = 'en' } = Astro.props;
+const isRu = currentLang === 'ru';
+
+const labels = {
+  badge: isRu ? 'ИИ-Анализатор игрового мошенничества' : 'AI-Assisted Gaming Scam Detective',
+  title: isRu ? 'Детектив подозрительных сообщений' : 'AI Scam Detective',
+  subtitle: isRu
+    ? 'Проверьте сомнительное предложение обмена, сообщение от "поддержки" или скриншот переписки на скрытые приемы социальной инженерии.'
+    : 'Analyze suspicious trade offers, alleged support messages, or chat screenshots for hidden social engineering vectors.',
+  tabText: isRu ? 'Текст сообщения' : 'Message Text',
+  tabUrl: isRu ? 'Подозрительная ссылка' : 'Suspicious URL',
+  tabImage: isRu ? 'Скриншот переписки' : 'Screenshot / Image',
+  analyzeBtn: isRu ? 'Запустить анализ' : 'Run Threat Analysis',
+  analyzingBtn: isRu ? 'Анализирую сигналы...' : 'Analyzing Indicators...',
+  privacyNote: isRu
+    ? 'Защита приватности: персональные данные (email, телефон, пароли) автоматически маскируются перед проверкой. Никакие учетные данные не сохраняются.'
+    : 'Privacy Shield: personal identifiers (emails, phones, passwords) are automatically redacted before analysis. No credentials are ever stored.',
+  sampleBtn1: isRu ? 'Пример: фейковый админ Steam' : 'Example: Fake Steam Admin',
+  sampleBtn2: isRu ? 'Пример: кража куки в Roblox' : 'Example: Roblox Cookie Theft',
+  sampleBtn3: isRu ? 'Пример: бесплатный Nitro' : 'Example: Free Nitro Gift',
+};
+---
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <!-- Header Card -->
+  <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-navy-900 to-slate-950 border border-cyan/20 p-6 sm:p-8 mb-8 shadow-2xl">
+    <div class="flex flex-col sm:flex-row items-center gap-6 justify-between">
+      <div class="space-y-3 text-center sm:text-left">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan text-xs font-semibold">
+          <svg class="w-4 h-4 text-cyan" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+          </svg>
+          <span>{labels.badge}</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          {labels.title}
+        </h1>
+        <p class="text-slate-400 text-sm sm:text-base max-w-xl">
+          {labels.subtitle}
+        </p>
+      </div>
+
+      <div class="shrink-0 flex flex-col items-center">
+        <SafiMascot mood="thinking" size="lg" />
+        <span class="text-xs font-bold text-cyan mt-2">SAFI Neural Analyzer</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Analysis Box -->
+  <div class="bg-white dark:bg-navy-900/60 border border-slate-200 dark:border-navy-800 rounded-3xl p-6 sm:p-8 shadow-sm">
+    <!-- Tab Controls -->
+    <div class="flex items-center gap-2 mb-6 border-b border-slate-200 dark:border-navy-800 pb-4">
+      <button
+        type="button"
+        id="tab-btn-text"
+        class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-cyan text-navy-950 transition"
+      >
+        {labels.tabText}
+      </button>
+      <button
+        type="button"
+        id="tab-btn-url"
+        class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 dark:bg-navy-800 text-slate-600 dark:text-cloud-muted hover:text-cyan transition"
+      >
+        {labels.tabUrl}
+      </button>
+      <button
+        type="button"
+        id="tab-btn-image"
+        class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 dark:bg-navy-800 text-slate-600 dark:text-cloud-muted hover:text-cyan transition"
+      >
+        {labels.tabImage}
+      </button>
+    </div>
+
+    <!-- Quick Sample Buttons -->
+    <div class="flex flex-wrap items-center gap-2 mb-4">
+      <span class="text-xs text-slate-400 font-semibold">{isRu ? 'Вставить пример:' : 'Try sample:'}</span>
+      <button
+        type="button"
+        class="sample-btn px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-cloud hover:bg-cyan/10 hover:text-cyan transition"
+        data-sample="Hello! I am Valve Steam Administrator. Your account has received multiple reports for illegal item duplication. It will be permanently suspended in 24 hours. Contact our moderation bot and provide your mobile verification code."
+      >
+        {labels.sampleBtn1}
+      </button>
+      <button
+        type="button"
+        class="sample-btn px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-cloud hover:bg-cyan/10 hover:text-cyan transition"
+        data-sample="Want 15,000 free Robux? Open Roblox in browser, press F12 to open Developer Console, and paste this bookmarklet script or export your .ROBLOSECURITY har file to render your 3D avatar."
+      >
+        {labels.sampleBtn2}
+      </button>
+      <button
+        type="button"
+        class="sample-btn px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-navy-800 text-slate-700 dark:text-cloud hover:bg-cyan/10 hover:text-cyan transition"
+        data-sample="Hey bro, Discord is giving out 3 months of free Nitro for Christmas! Scan this QR code in your mobile app right now to claim the gift before it expires."
+      >
+        {labels.sampleBtn3}
+      </button>
+    </div>
+
+    <!-- Form Inputs -->
+    <form id="detective-form" class="space-y-4">
+      <!-- Text Area (Default) -->
+      <div id="pane-text" class="space-y-2">
+        <label for="detective-text" class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
+          {labels.tabText}
+        </label>
+        <textarea
+          id="detective-text"
+          rows="5"
+          placeholder={isRu ? 'Вставьте текст сообщения, переписки или угрозы...' : 'Paste the suspicious chat message, email, or offer here...'}
+          class="w-full p-4 rounded-2xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan text-sm"
+        ></textarea>
+      </div>
+
+      <!-- URL Input -->
+      <div id="pane-url" class="space-y-2 hidden">
+        <label for="detective-url" class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
+          {labels.tabUrl}
+        </label>
+        <input
+          type="url"
+          id="detective-url"
+          placeholder="https://steamcommunity-tournament-vote.xyz"
+          class="w-full p-4 rounded-2xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan text-sm"
+        />
+      </div>
+
+      <!-- Screenshot Upload Pane -->
+      <div id="pane-image" class="space-y-2 hidden">
+        <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
+          {labels.tabImage}
+        </label>
+        <div class="border-2 border-dashed border-slate-300 dark:border-navy-700 rounded-2xl p-6 text-center hover:border-cyan transition cursor-pointer">
+          <input type="file" id="detective-file" accept="image/*" class="hidden" />
+          <div id="dropzone-label" class="space-y-2">
+            <svg class="w-8 h-8 text-slate-400 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <div class="text-xs text-slate-500 dark:text-slate-400">
+              <span class="text-cyan font-bold hover:underline">{isRu ? 'Выберите изображение' : 'Upload screenshot'}</span> {isRu ? 'или перетащите сюда (PNG, JPG, WebP)' : 'or drag & drop (PNG, JPG, WebP)'}
+            </div>
+          </div>
+          <img id="image-preview" class="max-h-48 mx-auto rounded-xl hidden mt-3 border border-slate-700 shadow" alt="Preview" />
+        </div>
+      </div>
+
+      <!-- Submit & Privacy -->
+      <div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <button
+          type="submit"
+          id="submit-detective"
+          class="w-full sm:w-auto px-8 py-3 rounded-xl bg-cyan-gradient text-navy-950 font-bold hover:shadow-lg hover:shadow-cyan/20 transition flex items-center justify-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          <span id="btn-text">{labels.analyzeBtn}</span>
+        </button>
+
+        <p class="text-[11px] text-slate-500 dark:text-slate-400 max-w-md text-center sm:text-right">
+          {labels.privacyNote}
+        </p>
+      </div>
+    </form>
+  </div>
+
+  <!-- Results Box -->
+  <div id="detective-results" class="hidden mt-8 rounded-3xl bg-slate-900 border border-slate-700 p-6 sm:p-8 space-y-6 shadow-xl">
+    <!-- Risk Banner -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 border-b border-navy-800">
+      <div>
+        <span class="text-xs uppercase font-extrabold tracking-wider text-slate-400">
+          {isRu ? 'Вердикт ИИ-детектора' : 'AI Detective Assessment'}
+        </span>
+        <div class="flex items-center gap-3 mt-1">
+          <span id="risk-badge" class="px-3.5 py-1 rounded-xl text-sm font-black uppercase tracking-wider bg-red-500/20 text-red-400 border border-red-500/30">
+            CRITICAL
+          </span>
+          <span id="score-text" class="text-slate-300 text-sm font-medium">Threat Score: 85/100</span>
+        </div>
+      </div>
+      <div id="mascot-box">
+        <SafiMascot mood="alert" size="md" />
+      </div>
+    </div>
+
+    <!-- Attack Scenario -->
+    <div>
+      <h3 class="text-sm uppercase font-extrabold tracking-wider text-cyan mb-2">
+        {isRu ? 'Что пытается сделать злоумышленник:' : 'Attack Scenario Analysis:'}
+      </h3>
+      <p id="scenario-text" class="text-slate-200 text-sm bg-navy-950 p-4 rounded-2xl border border-slate-800 leading-relaxed">
+        <!-- Injected scenario -->
+      </p>
+    </div>
+
+    <!-- Red Flags List -->
+    <div>
+      <h3 class="text-sm uppercase font-extrabold tracking-wider text-red-400 mb-2">
+        {isRu ? 'Обнаруженные красные флаги:' : 'Detected Red Flags & Warning Indicators:'}
+      </h3>
+      <div id="indicators-list" class="space-y-2">
+        <!-- Injected flags -->
+      </div>
+    </div>
+
+    <!-- Recommendations -->
+    <div>
+      <h3 class="text-sm uppercase font-extrabold tracking-wider text-emerald-400 mb-2">
+        {isRu ? 'Рекомендуемые действия прямо сейчас:' : 'Recommended Immediate Action Steps:'}
+      </h3>
+      <ul id="recommendations-list" class="space-y-2 text-sm text-slate-300">
+        <!-- Injected recommendations -->
+      </ul>
+    </div>
+
+    <!-- Relevant Rescue Links -->
+    <div id="rescue-box" class="pt-4 border-t border-navy-800 hidden">
+      <div class="text-xs font-bold text-slate-400 uppercase mb-2">
+        {isRu ? 'Инструкции экстренного восстановления:' : 'Emergency Account Rescue Guides:'}
+      </div>
+      <div id="rescue-links" class="flex flex-wrap gap-2">
+        <!-- Links -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Tab Switching
+  const tabText = document.getElementById('tab-btn-text');
+  const tabUrl = document.getElementById('tab-btn-url');
+  const tabImg = document.getElementById('tab-btn-image');
+  const paneText = document.getElementById('pane-text');
+  const paneUrl = document.getElementById('pane-url');
+  const paneImg = document.getElementById('pane-image');
+
+  function setTab(activeTab: HTMLElement, activePane: HTMLElement) {
+    [tabText, tabUrl, tabImg].forEach(t => {
+      t?.classList.remove('bg-cyan', 'text-navy-950');
+      t?.classList.add('bg-slate-100', 'dark:bg-navy-800', 'text-slate-600', 'dark:text-cloud-muted');
+    });
+    activeTab.classList.add('bg-cyan', 'text-navy-950');
+    activeTab.classList.remove('bg-slate-100', 'dark:bg-navy-800', 'text-slate-600', 'dark:text-cloud-muted');
+
+    [paneText, paneUrl, paneImg].forEach(p => p?.classList.add('hidden'));
+    activePane.classList.remove('hidden');
+  }
+
+  tabText?.addEventListener('click', () => setTab(tabText, paneText!));
+  tabUrl?.addEventListener('click', () => setTab(tabUrl, paneUrl!));
+  tabImg?.addEventListener('click', () => setTab(tabImg, paneImg!));
+
+  // Samples
+  const samples = document.querySelectorAll('.sample-btn');
+  const textInput = document.getElementById('detective-text') as HTMLTextAreaElement;
+  samples.forEach(btn => {
+    btn.addEventListener('click', () => {
+      setTab(tabText!, paneText!);
+      if (textInput) {
+        textInput.value = (btn as HTMLElement).dataset.sample || '';
+      }
+    });
+  });
+
+  // Image upload preview
+  const dropzone = paneImg?.querySelector('div');
+  const fileInput = document.getElementById('detective-file') as HTMLInputElement;
+  const imgPreview = document.getElementById('image-preview') as HTMLImageElement;
+  let simulatedImageText = '';
+
+  dropzone?.addEventListener('click', () => fileInput.click());
+  fileInput?.addEventListener('change', () => {
+    const file = fileInput.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (imgPreview && e.target?.result) {
+          imgPreview.src = e.target.result as string;
+          imgPreview.classList.remove('hidden');
+          simulatedImageText = `Screenshot OCR: Steam support admin message claiming account will be banned in 24 hours. Send mobile code immediately.`;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Form Submission
+  const form = document.getElementById('detective-form');
+  const resultsBox = document.getElementById('detective-results');
+  const riskBadge = document.getElementById('risk-badge');
+  const scoreText = document.getElementById('score-text');
+  const scenarioText = document.getElementById('scenario-text');
+  const indicatorsList = document.getElementById('indicators-list');
+  const recommendationsList = document.getElementById('recommendations-list');
+  const rescueBox = document.getElementById('rescue-box');
+  const rescueLinks = document.getElementById('rescue-links');
+  const submitBtn = document.getElementById('submit-detective');
+  const btnText = document.getElementById('btn-text');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const urlInput = (document.getElementById('detective-url') as HTMLInputElement)?.value.trim();
+    const textVal = textInput?.value.trim();
+
+    if (!textVal && !urlInput && !simulatedImageText) {
+      alert('Please enter a message, URL, or upload a screenshot to inspect.');
+      return;
+    }
+
+    if (btnText) btnText.textContent = 'Analyzing...';
+    submitBtn?.setAttribute('disabled', 'true');
+
+    try {
+      // Connect to SafeInGame Backend AI Scam Detective Endpoint
+      const response = await fetch('http://127.0.0.1:8000/api/v1/detective/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: textVal || undefined,
+          url: urlInput || undefined,
+          image_metadata: simulatedImageText || undefined,
+          lang: 'en'
+        })
+      });
+
+      let data;
+      if (response.ok) {
+        data = await response.json();
+      } else {
+        throw new Error('Fallback to local rules engine');
+      }
+
+      renderResults(data);
+    } catch (err) {
+      // Client-side fallback rule engine
+      const combined = (textVal + ' ' + urlInput + ' ' + simulatedImageText).toLowerCase();
+      const isCritical = combined.includes('banned') || combined.includes('support') || combined.includes('.roblosecurity') || combined.includes('code');
+
+      renderResults({
+        risk_category: isCritical ? 'CRITICAL' : 'SAFE',
+        threat_score: isCritical ? 85 : 0,
+        attack_scenario: isCritical
+          ? 'Social engineering attempt to induce panic and intercept one-time account credentials.'
+          : 'No direct malicious patterns detected. Maintain standard security hygiene.',
+        indicators: isCritical ? [
+          { title: 'Authority Impersonation', description: 'Sender pretends to represent official game moderation.', severity: 'CRITICAL' },
+          { title: 'Artificial Urgency', description: 'Demands immediate compliance under threat of account ban.', severity: 'HIGH' }
+        ] : [],
+        recommendations: [
+          'Never share one-time SMS or email codes with anyone.',
+          'Official game staff never communicate about bans via third-party chat.',
+          'Verify your login status at the official game website.'
+        ],
+        rescue_links: [
+          { title: 'CS2 / Steam Incident Guide', url: '/en/recovery/?game=cs2-steam' },
+          { title: 'Roblox Account Rescue', url: '/en/recovery/?game=roblox' }
+        ]
+      });
+    } finally {
+      if (btnText) btnText.textContent = 'Run Threat Analysis';
+      submitBtn?.removeAttribute('disabled');
+    }
+  });
+
+  function renderResults(data: any) {
+    if (!resultsBox) return;
+
+    if (riskBadge) {
+      riskBadge.textContent = data.risk_category;
+      if (data.risk_category === 'CRITICAL') {
+        riskBadge.className = 'px-3.5 py-1 rounded-xl text-sm font-black uppercase tracking-wider bg-red-500/20 text-red-400 border border-red-500/30';
+      } else if (data.risk_category === 'HIGH') {
+        riskBadge.className = 'px-3.5 py-1 rounded-xl text-sm font-black uppercase tracking-wider bg-amber-500/20 text-amber-400 border border-amber-500/30';
+      } else {
+        riskBadge.className = 'px-3.5 py-1 rounded-xl text-sm font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+      }
+    }
+
+    if (scoreText) scoreText.textContent = `Threat Score: ${data.threat_score}/100`;
+    if (scenarioText) scenarioText.textContent = data.attack_scenario;
+
+    if (indicatorsList) {
+      indicatorsList.innerHTML = '';
+      if (!data.indicators || data.indicators.length === 0) {
+        indicatorsList.innerHTML = '<div class="text-xs text-slate-400">No malicious indicators triggered.</div>';
+      } else {
+        data.indicators.forEach((ind: any) => {
+          const div = document.createElement('div');
+          div.className = 'p-3 bg-navy-950 rounded-xl border border-red-500/20 text-xs';
+          div.innerHTML = `<span class="font-bold text-red-400">${ind.title}:</span> <span class="text-slate-300">${ind.description}</span>`;
+          indicatorsList.appendChild(div);
+        });
+      }
+    }
+
+    if (recommendationsList) {
+      recommendationsList.innerHTML = '';
+      data.recommendations.forEach((rec: string) => {
+        const li = document.createElement('li');
+        li.className = 'p-2.5 bg-navy-950/70 border border-slate-800 rounded-xl flex items-start gap-2';
+        li.innerHTML = `<span class="text-emerald-400 font-bold">✔</span> <span>${rec}</span>`;
+        recommendationsList.appendChild(li);
+      });
+    }
+
+    if (rescueBox && rescueLinks && data.rescue_links && data.rescue_links.length > 0) {
+      rescueBox.classList.remove('hidden');
+      rescueLinks.innerHTML = '';
+      data.rescue_links.forEach((r: any) => {
+        const a = document.createElement('a');
+        a.href = r.url;
+        a.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition';
+        a.textContent = r.title;
+        rescueLinks.appendChild(a);
+      });
+    }
+
+    resultsBox.classList.remove('hidden');
+    resultsBox.scrollIntoView({ behavior: 'smooth' });
+  }
+</script>

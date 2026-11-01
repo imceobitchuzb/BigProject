@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CyberBackground from '../../components/CyberBackground.astro';
+import InteractiveGameShowcase from '../../components/InteractiveGameShowcase.astro';
 import GameCard from '../../components/GameCard.astro';
 import ScamPatterns from '../../components/ScamPatterns.astro';
 import ScamQuiz from '../../components/ScamQuiz.astro';
@@ -195,7 +196,13 @@ const categories = [
             Inspect suspicious links received in Discord, Steam, or Telegram. Detects Cyrillic homoglyphs, typosquatting, and deceptive trade redirects in real time.
           </p>
         </div>
-        <div class="flex-shrink-0">
+        <div class="flex-shrink-0 flex items-center gap-3">
+          <a
+            href="/en/detective/"
+            class="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl font-heading font-bold text-sm border border-cyan/40 bg-navy-900 text-cyan hover:bg-navy-800 transition"
+          >
+            <span>AI Detective</span>
+          </a>
           <a
             href="/en/scanner/"
             class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl font-heading font-bold text-sm bg-cyan text-navy-950 hover:bg-cyan-light shadow-lg hover:scale-105 active:scale-95 transition-all"
@@ -206,6 +213,137 @@ const categories = [
             </svg>
           </a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Ecosystem Pillars Grid -->
+  <section class="py-16 border-b border-slate-200 dark:border-navy-800 bg-white dark:bg-navy-900/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border border-cyan-500/30 bg-cyan-500/10 text-cyan uppercase tracking-wider mb-3">
+          Ecosystem Modules
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight">
+          Comprehensive Protection Across Your Entire Gaming Life
+        </h2>
+        <p class="text-sm sm:text-base text-slate-600 dark:text-cloud-muted mt-2">
+          From AI message detection and realistic incident simulations to threat intelligence and parent guidance.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Module 1: AI Scam Detective -->
+        <a href="/en/detective/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-cyan/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              🤖
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-cyan transition">AI Scam Detective</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Analyze suspicious messages, fake admin threats, and screenshots for hidden social engineering vectors.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-cyan flex items-center gap-1">Open Detective ➔</span>
+        </a>
+
+        <!-- Module 2: SafeInGame Academy -->
+        <a href="/en/academy/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-emerald-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              🎓
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-emerald-400 transition">SafeInGame Academy</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Level up through 3 learning tracks (Rookie, Guardian, Sentinel), earn XP, and generate verified certificates.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-emerald-400 flex items-center gap-1">Explore Academy ➔</span>
+        </a>
+
+        <!-- Module 3: Threat Database -->
+        <a href="/en/threats/database/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-amber-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              🗄️
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-amber-400 transition">Threat Database</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Search verified IOCs, API key hijacks, and session stealers across CS2, Roblox, Brawl Stars, and Minecraft.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-amber-400 flex items-center gap-1">Browse Threats ➔</span>
+        </a>
+
+        <!-- Module 4: Parent Mode -->
+        <a href="/en/parents/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-purple-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              🛡️
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-400 transition">Parent Mode</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Understand gaming currencies, stranger risks, and set up official parental controls without invasive surveillance.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-purple-400 flex items-center gap-1">Open Parent Mode ➔</span>
+        </a>
+
+        <!-- Module 5: 2.5D Scam Simulator -->
+        <a href="/en/simulator/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-red-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-red-500/10 text-red-400 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              🎮
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-red-400 transition">Scam Simulator</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Interactive 2.5D simulation of Discord chat traps, fake tournament popups, and trade offer double-crosses.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-red-400 flex items-center gap-1">Start Simulator ➔</span>
+        </a>
+
+        <!-- Module 6: Global Scam Radar -->
+        <a href="/en/radar/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-cyan/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              📡
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-cyan transition">Global Scam Radar</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Live aggregated telemetry of attack vectors and platform targeting without fabricated geolocation.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-cyan flex items-center gap-1">View Radar ➔</span>
+        </a>
+
+        <!-- Module 7: Gamer Security Score -->
+        <a href="/en/score/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-emerald-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              🎯
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-emerald-400 transition">Security Score</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Evaluate your password, 2FA, and modding hygiene on a 0-100 scale with a customized offline action plan.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-emerald-400 flex items-center gap-1">Test Your Score ➔</span>
+        </a>
+
+        <!-- Module 8: Browser Guardian -->
+        <a href="/en/guardian/" class="p-6 rounded-3xl bg-slate-50 dark:bg-navy-950 border border-slate-200 dark:border-navy-800 hover:border-blue-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+              🛡️
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-blue-400 transition">Browser Guardian</h3>
+            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed mb-4">
+              Chromium Manifest V3 extension alerting on typosquatting and fake Steam OpenID login dialogs.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-blue-400 flex items-center gap-1">Get Extension ➔</span>
+        </a>
       </div>
     </div>
   </section>
@@ -236,11 +374,24 @@ const categories = [
         </a>
       </div>
 
-      <!-- 5 Games Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {games.map((g) => (
-          <GameCard game={g} currentLang={currentLang} />
-        ))}
+      <!-- Interactive Showroom Showcase -->
+      <InteractiveGameShowcase games={games} currentLang={currentLang} />
+
+      <!-- Quick Access Game Threat Cards -->
+      <div class="mt-12 pt-8 border-t border-slate-200 dark:border-navy-800">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-lg font-heading font-bold text-slate-900 dark:text-cloud">
+            Quick Access Game Threat Centers
+          </h3>
+          <a href="/en/games/" class="text-xs font-heading font-bold text-cyan-dark dark:text-cyan hover:underline">
+            {t('games.view_all')} →
+          </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {games.slice(0, 3).map((g) => (
+            <GameCard game={g} currentLang={currentLang} />
+          ))}
+        </div>
       </div>
     </div>
   </section>

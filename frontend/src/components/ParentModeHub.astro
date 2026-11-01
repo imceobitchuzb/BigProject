@@ -1,0 +1,198 @@
+---
+import SafiMascot from './SafiMascot.astro';
+
+interface Props {
+  currentLang?: 'en' | 'ru' | 'uz';
+}
+
+const { currentLang = 'en' } = Astro.props;
+const isRu = currentLang === 'ru';
+
+const parentGuides = [
+  {
+    game: 'Roblox',
+    gameSlug: 'roblox',
+    badge: isRu ? 'Детская платформа №1' : 'Top Kids Platform',
+    currency: 'Robux',
+    risks: isRu
+      ? 'Незнакомцы, выманивающие куки .ROBLOSECURITY под предлогом бесплатных вещей, и ссылки на сторонние сайты.'
+      : 'Strangers tricking young players into sharing .ROBLOSECURITY cookies for free items, and external phishing links.',
+    controls: isRu
+      ? 'Настройки -> Безопасность -> Установите 4-значный Родительский PIN (Parent PIN), ограничьте лимит расходов и включите фильтр чата для аккаунтов младше 13 лет.'
+      : 'Settings -> Security -> Enable 4-digit Account PIN, configure monthly spend limits, and restrict chat to friends only.',
+  },
+  {
+    game: 'Minecraft',
+    gameSlug: 'minecraft',
+    badge: isRu ? 'Песочница' : 'Creative Sandbox',
+    currency: 'Minecoins (Bedrock)',
+    risks: isRu
+      ? 'Вредоносные моды (.jar файлы), трояны в неофициальных лаунчерах и фишинговые боты на серверах Discord.'
+      : 'Malicious mod JARs containing infostealers, unofficial pirated launchers, and Discord OAuth phishing bots.',
+    controls: isRu
+      ? 'Используйте Microsoft Family Safety: ограничьте сетевую игру с незнакомцами и включите одобрение покупок родителем.'
+      : 'Configure Microsoft Family Safety: manage multiplayer access, block unknown servers, and require approval for purchases.',
+  },
+  {
+    game: 'Brawl Stars',
+    gameSlug: 'brawl-stars',
+    badge: isRu ? 'Мобильный шутер' : 'Mobile Arena',
+    currency: isRu ? 'Гемы (Кристаллы)' : 'Gems',
+    risks: isRu
+      ? 'Перехват 6-значного кода Supercell ID под обещанием подарить Brawl Pass или бесплатные гемы.'
+      : 'Interception of the 6-digit Supercell ID login verification code under the guise of free gems or gifts.',
+    controls: isRu
+      ? 'Отключите внутриигровые покупки в Google Play / Apple ID (Screen Time) и привяжите аккаунт к взрослой защищенной почте.'
+      : 'Disable In-App Purchases via Apple Screen Time or Google Play Family Link, and bind Supercell ID to a parent email.',
+  },
+  {
+    game: 'Counter-Strike 2',
+    gameSlug: 'cs2',
+    badge: isRu ? 'Соревновательный шутер (16+)' : 'Competitive Esports',
+    currency: isRu ? 'Скины и кейсы Steam' : 'Steam Skins & Wallet',
+    risks: isRu
+      ? 'Подмена обменов (API Key scam), фишинг турниров, азартные рулетки и давление на подростков ради дорогих скинов.'
+      : 'Trade interceptors (API Key phishing), fake tournaments, unregulated skin gambling, and peer pressure.',
+    controls: isRu
+      ? 'Включите Steam Family View (Семейный просмотр) с защитным PIN-кодом, заблокировав доступ к инвентарю и магазину без пароля.'
+      : 'Enable Steam Family View with a secret PIN to lock the Community Market, trading, and inventory without approval.',
+  },
+];
+---
+
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <!-- Hero Card -->
+  <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-navy-900 to-slate-950 border border-emerald-500/30 p-6 sm:p-10 mb-10 shadow-2xl">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+      <div class="space-y-4 text-center md:text-left">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+          <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
+          </svg>
+          <span>{isRu ? 'Родительский режим SafeInGame' : 'SafeInGame Parent Mode'}</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
+          {isRu ? 'Безопасный гейминг для всей семьи' : 'Digital Gaming Safety for Parents'}
+        </h1>
+        <p class="text-slate-400 text-sm sm:text-base max-w-2xl leading-relaxed">
+          {isRu
+            ? 'Понятный гид для родителей: как работают донаты, в чем опасность общения с незнакомцами и как настроить официальный родительский контроль без конфликтов и слежки.'
+            : 'Clear, supportive guidance for parents: understanding in-game purchases, stranger contact risks, and setting up official platform safeguards.'}
+        </p>
+      </div>
+
+      <div class="shrink-0 flex flex-col items-center">
+        <SafiMascot mood="guard" size="xl" />
+        <span class="text-xs font-bold text-emerald-400 mt-3">Family Safety Guardian</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Non-Invasive Privacy Guarantee (Phase 6 Core Requirement) -->
+  <div class="mb-10 rounded-2xl bg-slate-900 border border-slate-700 p-5 flex items-start gap-4">
+    <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 font-bold">
+      ✓
+    </div>
+    <div class="text-xs text-slate-300 space-y-1">
+      <div class="font-bold text-white uppercase tracking-wider">
+        {isRu ? 'Принцип приватности SafeInGame: Никакой слежки за детьми' : 'SafeInGame Family Privacy Commitment: No Child Surveillance'}
+      </div>
+      <p class="leading-relaxed">
+        {isRu
+          ? 'SafeInGame принципиально не создает шпионских программ, кейлоггеров или скрытых трекеров. Мы верим, что настоящая безопасность строится на доверии, образовании и правильной настройке официальных инструментов родительского контроля (Roblox PIN, Steam Family, Apple/Google Family).'
+          : 'SafeInGame does not provide covert monitoring software, keyloggers, or hidden trackers. True digital protection is built on mutual trust, security education, and configuring official platform safeguards (Roblox PIN, Steam Family View, Apple Screen Time).'}
+      </p>
+    </div>
+  </div>
+
+  <!-- Game Guides Grid -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-6">
+      {isRu ? 'Руководства по популярным играм' : 'Platform Guides for Popular Games'}
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {parentGuides.map((guide) => (
+        <div class="rounded-3xl bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-800 p-6 sm:p-8 flex flex-col justify-between shadow-sm hover:border-emerald-500/40 transition">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-xs font-black uppercase tracking-wider text-emerald-500">
+                {guide.game}
+              </span>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-navy-800 text-slate-600 dark:text-cloud">
+                {guide.badge}
+              </span>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">
+              {guide.game} — {isRu ? 'что нужно знать родителям' : 'parent briefing'}
+            </h3>
+
+            <div class="text-xs text-slate-500 dark:text-slate-400 mb-4">
+              <strong>{isRu ? 'Игровая валюта:' : 'In-game currency:'}</strong> {guide.currency}
+            </div>
+
+            <div class="space-y-3 mb-6">
+              <div class="p-3 bg-red-500/5 border border-red-500/15 rounded-xl text-xs text-slate-700 dark:text-slate-300">
+                <strong class="text-red-500 font-bold">{isRu ? 'Главный риск:' : 'Key threat:'}</strong> {guide.risks}
+              </div>
+              <div class="p-3 bg-emerald-500/5 border border-emerald-500/15 rounded-xl text-xs text-slate-700 dark:text-slate-300">
+                <strong class="text-emerald-500 font-bold">{isRu ? 'Как настроить защиту:' : 'Official protection:'}</strong> {guide.controls}
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-slate-200 dark:border-navy-800 flex items-center justify-between text-xs">
+            <a href={`/${currentLang}/games/${guide.gameSlug}/`} class="text-cyan font-bold hover:underline">
+              {isRu ? 'Открыть Центр игры' : 'View Game Center'} ➔
+            </a>
+            <span class="text-slate-400">Verified 2026</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Incident Response without Punishment Section -->
+  <div class="rounded-3xl bg-slate-900 border border-slate-800 p-6 sm:p-10 space-y-6">
+    <div class="max-w-3xl">
+      <div class="text-xs font-bold uppercase tracking-wider text-cyan mb-1">
+        {isRu ? 'Психологическая помощь семье' : 'Family Psychological First Aid'}
+      </div>
+      <h3 class="text-2xl font-black text-white">
+        {isRu ? 'Что делать, если ребенка обманули мошенники (Без криков и наказаний)' : 'What to Do if Your Child Was Scammed (Without Anger or Punishment)'}
+      </h3>
+      <p class="text-slate-400 text-sm mt-2 leading-relaxed">
+        {isRu
+          ? 'Потеря виртуальных предметов переживается детьми как настоящая трагедия. Наказание и отбор телефона заставляют ребенка замкнуться и скрывать будущие инциденты. Вот 4 шага правильной реакции:'
+          : 'Losing virtual items feels like a real loss for young gamers. Punishing them leads to secrecy in future incidents. Follow these 4 calm response steps:'}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+      <div class="p-4 rounded-2xl bg-navy-950 border border-slate-800 text-xs space-y-1.5">
+        <span class="text-cyan font-bold text-sm">1. {isRu ? 'Успокойте ребенка' : 'Stay Calm & Reassure'}</span>
+        <p class="text-slate-300 leading-relaxed">
+          {isRu ? 'Скажите: "Спасибо, что рассказал мне. Мошенники специально обманывают людей, ты не виноват". Это сохранит доверие.' : 'Say: "Thank you for telling me. Scammers target players deliberately, you are not bad." Preserve their trust.'}
+        </p>
+      </div>
+      <div class="p-4 rounded-2xl bg-navy-950 border border-slate-800 text-xs space-y-1.5">
+        <span class="text-cyan font-bold text-sm">2. {isRu ? 'Изолируйте доступ' : 'Isolate Access'}</span>
+        <p class="text-slate-300 leading-relaxed">
+          {isRu ? 'Немедленно нажмите "Выйти со всех устройств" в настройках и смените пароль от почты.' : 'Click "Log out of all other sessions" in settings and immediately change the linked email password.'}
+        </p>
+      </div>
+      <div class="p-4 rounded-2xl bg-navy-950 border border-slate-800 text-xs space-y-1.5">
+        <span class="text-cyan font-bold text-sm">3. {isRu ? 'Запустите Мастер спасения' : 'Run Recovery Wizard'}</span>
+        <p class="text-slate-300 leading-relaxed">
+          {isRu ? 'Откройте наш бесплатный раздел SOS Recovery для пошаговой подачи официального тикета.' : 'Use our free SOS Account Rescue wizard to submit official platform restoration tickets.'}
+        </p>
+      </div>
+      <div class="p-4 rounded-2xl bg-navy-950 border border-slate-800 text-xs space-y-1.5">
+        <span class="text-cyan font-bold text-sm">4. {isRu ? 'Превратите в опыт' : 'Turn into Learning'}</span>
+        <p class="text-slate-300 leading-relaxed">
+          {isRu ? 'Вместе разберите схему в нашей Академии, чтобы ребенок гордился новыми знаниями.' : 'Review the scenario together in our Academy so the child gains real cybersecurity resilience.'}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
