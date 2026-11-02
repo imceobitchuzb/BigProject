@@ -23,9 +23,33 @@ const {
 } = Astro.props;
 
 const canonicalUrl = new URL(`/${currentLang}/${canonicalSlug}`, Astro.site || 'https://safeingame.org').href;
-const enAltUrl = new URL(`/en/${canonicalSlug}`, Astro.site || 'https://safeingame.org').href;
-const ruAltUrl = new URL(`/ru/${canonicalSlug}`, Astro.site || 'https://safeingame.org').href;
-const ogImage = new URL('/images/logo.png', Astro.site || 'https://safeingame.org').href;
+const enAltUrl    = new URL(`/en/${canonicalSlug}`, Astro.site || 'https://safeingame.org').href;
+const ruAltUrl    = new URL(`/ru/${canonicalSlug}`, Astro.site || 'https://safeingame.org').href;
+const ogImage     = new URL('/images/logo.png', Astro.site || 'https://safeingame.org').href;
+
+const pathname = Astro.url.pathname;
+
+const navItems = [
+  { href: `/${currentLang}/`,             label: 'Overview',        icon: 'home',    section: 'main' },
+  { href: `/${currentLang}/scanner/`,     label: 'Link Scanner',    icon: 'scanner', section: 'main' },
+  { href: `/${currentLang}/detective/`,   label: 'AI Detective',    icon: 'ai',      section: 'main', badge: 'AI' },
+  { href: `/${currentLang}/simulator/`,   label: 'Scam Simulator',  icon: 'sim',     section: 'main' },
+  { href: `/${currentLang}/radar/`,       label: 'Threat Radar',    icon: 'radar',   section: 'main' },
+  { href: `/${currentLang}/games/`,       label: 'Game Centers',    icon: 'game',    section: 'learn' },
+  { href: `/${currentLang}/academy/`,     label: 'Academy',         icon: 'academy', section: 'learn' },
+  { href: `/${currentLang}/threats/`,     label: 'Threat Library',  icon: 'threats', section: 'learn' },
+  { href: `/${currentLang}/parents/`,     label: 'Parent Mode',     icon: 'family',  section: 'family', badge: 'FAMILY' },
+  { href: `/${currentLang}/recovery/`,    label: 'Account Rescue',  icon: 'rescue',  section: 'family', badge: 'SOS', isSos: true },
+  { href: `/${currentLang}/score/`,       label: 'Security Score',  icon: 'score',   section: 'community' },
+  { href: `/${currentLang}/report/`,      label: 'Community Report',icon: 'report',  section: 'community' },
+  { href: `/${currentLang}/about/`,       label: 'About',           icon: 'about',   section: 'meta' },
+  { href: `/${currentLang}/contact/`,     label: 'Contact',         icon: 'contact', section: 'meta' },
+];
+
+function isActive(href: string): boolean {
+  if (href === `/${currentLang}/`) return pathname === href || pathname === `/${currentLang}`;
+  return pathname.startsWith(href);
+}
 ---
 
 <!doctype html>
@@ -98,7 +122,7 @@ const ogImage = new URL('/images/logo.png', Astro.site || 'https://safeingame.or
       ]
     })} />
 
-    <!-- Google Fonts Preconnect & Space Grotesk / Inter -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -106,12 +130,571 @@ const ogImage = new URL('/images/logo.png', Astro.site || 'https://safeingame.or
       rel="stylesheet"
     />
   </head>
-  <body class="flex flex-col min-h-screen bg-slate-50 dark:bg-navy-900 text-slate-900 dark:text-cloud selection:bg-cyan selection:text-navy-950 transition-colors duration-200">
-    <Header currentLang={currentLang} />
-    <main class="flex-grow">
-      <slot />
-    </main>
-    <Footer currentLang={currentLang} />
+
+  <body class="bg-[var(--bg-page)] text-[var(--text-main)] selection:bg-ds-accent/30 selection:text-ds-text transition-colors duration-300">
+
+    <!-- ═══════════════════════════════════ DASHBOARD SHELL ═══════════════════════════════════ -->
+    <div class="dashboard-shell">
+
+      <!-- Mobile Overlay -->
+      <div id="sidebar-overlay" class="sidebar-overlay" aria-hidden="true"></div>
+
+      <!-- ════════════════════ LEFT SIDEBAR ════════════════════ -->
+      <aside id="dashboard-sidebar" class="dashboard-sidebar" aria-label="Main navigation">
+
+        <!-- Sidebar Header / Logo -->
+        <div class="flex items-center gap-3 px-5 py-4 border-b border-white/5 flex-shrink-0">
+          <a href={`/${currentLang}/`} class="flex items-center gap-3 group min-w-0">
+            <div class="relative w-9 h-9 flex-shrink-0">
+              <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-ds-accent to-ds-cyber opacity-20 group-hover:opacity-40 transition-opacity"></div>
+              <img
+                src="/images/logo.png"
+                alt="SafeInGame"
+                class="w-full h-full object-contain rounded-xl relative z-10 filter drop-shadow-[0_0_8px_rgba(72,214,232,0.4)]"
+                width="36"
+                height="36"
+              />
+            </div>
+            <div class="sidebar-label-group flex-col min-w-0 overflow-hidden">
+              <span class="font-heading font-extrabold text-base tracking-tight text-ds-text whitespace-nowrap">
+                Safe<span class="text-ds-cyber">In</span>Game
+              </span>
+              <span class="text-[10px] text-ds-text2 font-medium tracking-wide whitespace-nowrap">Gaming Cybersecurity</span>
+            </div>
+          </a>
+
+          <!-- Desktop collapse toggle -->
+          <button
+            id="sidebar-collapse-btn"
+            class="hidden lg:flex ml-auto flex-shrink-0 w-7 h-7 items-center justify-center rounded-lg text-ds-text2 hover:text-ds-text hover:bg-white/5 transition-all"
+            aria-label="Toggle sidebar"
+            title="Collapse sidebar"
+          >
+            <svg id="collapse-icon" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Sidebar Navigation -->
+        <nav class="flex-1 overflow-y-auto overflow-x-hidden py-3 space-y-0.5" aria-label="Sidebar navigation">
+
+          <!-- User Defense Mini-Card (Reference Image top-left) -->
+          <div class="sidebar-label-group px-4 py-3 mx-2 mb-2 rounded-2xl bg-white/5 border border-white/10 flex-shrink-0">
+            <div class="flex items-center gap-2.5 mb-2.5">
+              <div class="relative w-8 h-8 rounded-xl bg-ds-surface3 border border-ds-cyber/40 flex items-center justify-center flex-shrink-0 text-xs font-bold text-ds-cyber">
+                🛡️
+                <span class="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 border border-ds-bg"></span>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-ds-text truncate">Guardian_01</span>
+                  <span class="text-[9px] text-ds-cyber font-bold">LVL 12</span>
+                </div>
+                <div class="text-[10px] text-ds-text2">Cyber Defender</div>
+              </div>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="mb-2">
+              <div class="flex justify-between text-[9px] text-ds-text2 mb-1">
+                <span>Defense Hygiene</span>
+                <span class="text-emerald-400 font-bold">88%</span>
+              </div>
+              <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                <div class="h-full rounded-full bg-gradient-to-r from-ds-accent to-ds-cyber" style="width: 88%;"></div>
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="flex gap-1.5 pt-1">
+              <a
+                href={`/${currentLang}/scanner/`}
+                class="flex-1 py-1 rounded-lg bg-ds-cyber/15 hover:bg-ds-cyber/25 border border-ds-cyber/30 text-ds-cyber font-bold text-[10px] text-center transition-all"
+              >
+                Scan URL
+              </a>
+              <a
+                href={`/${currentLang}/score/`}
+                class="p-1 rounded-lg bg-white/5 hover:bg-white/10 text-ds-text2 hover:text-ds-text transition-all"
+                title="Settings & Score"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- MAIN section -->
+          <div class="sidebar-section-label sidebar-label-group">Main</div>
+          {navItems.filter(i => i.section === 'main').map(item => (
+            <a
+              href={item.href}
+              class={`sidebar-item ${isActive(item.href) ? 'active' : ''}`}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              <span class="item-icon flex-shrink-0">
+                {item.icon === 'home' && (
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                  </svg>
+                )}
+                {item.icon === 'scanner' && (
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                  </svg>
+                )}
+                {item.icon === 'ai' && (
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                  </svg>
+                )}
+                {item.icon === 'sim' && (
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                )}
+                {item.icon === 'radar' && (
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728M9 12a3 3 0 106 0 3 3 0 00-6 0M12 8v4"/>
+                  </svg>
+                )}
+              </span>
+              <span class="item-label sidebar-label-group">{item.label}</span>
+              {item.badge && !item.isSos && (
+                <span class="sidebar-label-group ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-ds-accent/20 text-ds-accent border border-ds-accent/30 uppercase tracking-wide">{item.badge}</span>
+              )}
+              {item.isSos && (
+                <span class="sidebar-label-group ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-red-500/20 text-red-400 border border-red-500/30 uppercase tracking-wide animate-pulse">{item.badge}</span>
+              )}
+            </a>
+          ))}
+
+          <!-- LEARN section -->
+          <div class="sidebar-section-label sidebar-label-group mt-2">Learn</div>
+          {navItems.filter(i => i.section === 'learn').map(item => (
+            <a
+              href={item.href}
+              class={`sidebar-item ${isActive(item.href) ? 'active' : ''}`}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              <span class="item-icon flex-shrink-0">
+                {item.icon === 'game' && (
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/>
+                  </svg>
+                )}
+                {item.icon === 'academy' && (
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                  </svg>
+                )}
+                {item.icon === 'threats' && (
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  </svg>
+                )}
+              </span>
+              <span class="item-label sidebar-label-group">{item.label}</span>
+            </a>
+          ))}
+
+          <!-- FAMILY section -->
+          <div class="sidebar-section-label sidebar-label-group mt-2">Safety</div>
+          {navItems.filter(i => i.section === 'family').map(item => (
+            <a
+              href={item.href}
+              class={`sidebar-item ${isActive(item.href) ? 'active' : ''} ${item.isSos ? 'border border-red-500/20 hover:border-red-500/40' : ''}`}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              <span class={`item-icon flex-shrink-0 ${item.isSos ? 'text-red-400' : ''}`}>
+                {item.icon === 'family' && (
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                )}
+                {item.icon === 'rescue' && (
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                  </svg>
+                )}
+              </span>
+              <span class={`item-label sidebar-label-group ${item.isSos ? 'text-red-400 font-bold' : ''}`}>{item.label}</span>
+              {item.isSos && (
+                <span class="sidebar-label-group ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-red-500/20 text-red-400 border border-red-500/30 uppercase tracking-wide animate-pulse">SOS</span>
+              )}
+            </a>
+          ))}
+
+          <!-- COMMUNITY section -->
+          <div class="sidebar-section-label sidebar-label-group mt-2">Community</div>
+          {navItems.filter(i => i.section === 'community').map(item => (
+            <a
+              href={item.href}
+              class={`sidebar-item ${isActive(item.href) ? 'active' : ''}`}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              <span class="item-icon flex-shrink-0">
+                {item.icon === 'score' && (
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                  </svg>
+                )}
+                {item.icon === 'report' && (
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/>
+                  </svg>
+                )}
+              </span>
+              <span class="item-label sidebar-label-group">{item.label}</span>
+            </a>
+          ))}
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="flex-shrink-0 border-t border-white/5 p-3 space-y-1">
+          {navItems.filter(i => i.section === 'meta').map(item => (
+            <a
+              href={item.href}
+              class={`sidebar-item text-sm ${isActive(item.href) ? 'active' : ''}`}
+            >
+              <span class="item-icon flex-shrink-0">
+                {item.icon === 'about' && (
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                )}
+                {item.icon === 'contact' && (
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                  </svg>
+                )}
+              </span>
+              <span class="item-label sidebar-label-group text-xs">{item.label}</span>
+            </a>
+          ))}
+
+          <!-- Lang switcher in sidebar footer -->
+          <div class="sidebar-item cursor-default hover:bg-transparent py-2">
+            <svg class="item-icon w-4 h-4 text-ds-text2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <div class="sidebar-label-group flex gap-1">
+              <a href={`/en${pathname.replace(/^\/(en|ru)/, '')}`} class={`text-xs px-2 py-0.5 rounded-md font-semibold transition-colors ${currentLang === 'en' ? 'bg-ds-accent/20 text-ds-accent' : 'text-ds-text2 hover:text-ds-text'}`}>EN</a>
+              <a href={`/ru${pathname.replace(/^\/(en|ru)/, '')}`} class={`text-xs px-2 py-0.5 rounded-md font-semibold transition-colors ${currentLang === 'ru' ? 'bg-ds-accent/20 text-ds-accent' : 'text-ds-text2 hover:text-ds-text'}`}>RU</a>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ════════════════════ TOP BAR ════════════════════ -->
+      <header id="dashboard-topbar" class="dashboard-topbar px-4 sm:px-6 gap-3">
+
+        <!-- Mobile menu button -->
+        <button
+          id="mobile-menu-btn"
+          class="lg:hidden flex items-center justify-center w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-ds-text2 hover:text-ds-text transition-all flex-shrink-0"
+          aria-label="Open navigation"
+          aria-expanded="false"
+          aria-controls="dashboard-sidebar"
+        >
+          <svg id="hamburger-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg id="close-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+
+        <!-- Page title (mobile) -->
+        <div class="lg:hidden flex-1 min-w-0">
+          <span class="font-heading font-bold text-sm text-ds-text truncate">SafeInGame</span>
+        </div>
+
+        <!-- Search bar (desktop) -->
+        <div class="hidden lg:flex flex-1 max-w-md relative">
+          <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+            <svg class="w-4 h-4 text-ds-text2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+          </div>
+          <input
+            type="text"
+            placeholder="Search features, games, threats..."
+            class="w-full pl-9 pr-4 py-2 text-sm bg-white/5 border border-white/10 rounded-xl text-ds-text placeholder-ds-text2 focus:outline-none focus:border-ds-cyber/50 focus:bg-white/8 transition-all"
+            aria-label="Search"
+          />
+          <kbd class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-ds-text2 bg-white/5 px-1.5 py-0.5 rounded border border-white/10 hidden sm:inline-flex items-center">⌘K</kbd>
+        </div>
+
+        <div class="flex items-center gap-2 ml-auto">
+          <!-- Security Status Badge -->
+          <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Protected</span>
+          </div>
+
+          <!-- Theme Toggle -->
+          <button
+            id="theme-toggle-btn"
+            class="flex items-center justify-center w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-ds-text2 hover:text-ds-text transition-all"
+            aria-label="Toggle theme"
+            title="Toggle light/dark mode"
+          >
+            <svg id="sun-icon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+            <svg id="moon-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+            </svg>
+          </button>
+
+          <!-- Notifications -->
+          <button
+            class="relative flex items-center justify-center w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-ds-text2 hover:text-ds-text transition-all"
+            aria-label="Notifications"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+            <!-- Notification dot -->
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-ds-accent border-2 border-ds-bg"></span>
+          </button>
+
+          <!-- SOS Button -->
+          <a
+            href={`/${currentLang}/recovery/`}
+            class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-500/15 border border-red-500/25 text-red-400 text-xs font-bold hover:bg-red-500/25 hover:border-red-500/40 transition-all"
+          >
+            <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span>
+            <span>SOS</span>
+          </a>
+
+          <!-- Language selector (desktop top bar) -->
+          <div class="hidden lg:flex items-center gap-0.5 bg-white/5 border border-white/10 rounded-xl p-0.5">
+            <a href={`/en${pathname.replace(/^\/(en|ru)/, '')}`} class={`text-xs px-2.5 py-1 rounded-lg font-semibold transition-all ${currentLang === 'en' ? 'bg-ds-accent/20 text-ds-accent' : 'text-ds-text2 hover:text-ds-text'}`}>EN</a>
+            <a href={`/ru${pathname.replace(/^\/(en|ru)/, '')}`} class={`text-xs px-2.5 py-1 rounded-lg font-semibold transition-all ${currentLang === 'ru' ? 'bg-ds-accent/20 text-ds-accent' : 'text-ds-text2 hover:text-ds-text'}`}>RU</a>
+          </div>
+
+          <!-- User Profile (Reference image: William_Prime avatar + rank) -->
+          <a
+            href={`/${currentLang}/score/`}
+            class="hidden md:flex items-center gap-2 pl-2 pr-3 py-1 rounded-xl bg-white/5 border border-white/10 hover:border-ds-cyber/40 transition-all group"
+            title="Gamer Security Profile & Score"
+          >
+            <div class="relative w-7 h-7 rounded-lg overflow-hidden border border-ds-cyber/40 flex-shrink-0 bg-ds-surface3 flex items-center justify-center text-xs">
+              <span class="font-heading font-black text-ds-cyber">SG</span>
+              <span class="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-400 border border-ds-bg"></span>
+            </div>
+            <div class="flex flex-col text-left">
+              <span class="text-xs font-bold text-ds-text leading-tight group-hover:text-ds-cyber transition-colors">Guardian_01</span>
+              <span class="text-[9px] text-emerald-400 font-semibold leading-tight">Shield Lv.12</span>
+            </div>
+          </a>
+        </div>
+      </header>
+
+      <!-- ════════════════════ MAIN CONTENT ════════════════════ -->
+      <main id="dashboard-main" class="dashboard-main min-h-screen">
+        <slot />
+      </main>
+
+    </div>
+
+    <!-- Footer — full width after main -->
+    <footer class="ml-0 lg:ml-[var(--sidebar-width)] border-t border-ds-border bg-ds-surface transition-all duration-300" id="dashboard-footer">
+      <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-2">
+            <span class="font-heading font-bold text-sm text-ds-text">Safe<span class="text-ds-cyber">In</span>Game</span>
+            <span class="text-ds-text2 text-xs">— Independent gaming cybersecurity platform.</span>
+          </div>
+          <div class="flex items-center gap-4 text-xs text-ds-text2">
+            <a href={`/${currentLang}/privacy/`} class="hover:text-ds-text transition-colors">Privacy</a>
+            <a href={`/${currentLang}/terms/`} class="hover:text-ds-text transition-colors">Terms</a>
+            <a href={`/${currentLang}/contact/`} class="hover:text-ds-text transition-colors">Contact</a>
+            <a href="https://t.me/SafeInGame" target="_blank" rel="noopener" class="hover:text-ds-cyber transition-colors">Telegram</a>
+          </div>
+        </div>
+        <p class="text-center text-[11px] text-ds-text2/50 mt-4">
+          © 2024–2026 SafeInGame. Educational platform for gaming cybersecurity awareness. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
     <ScrollToTop currentLang={currentLang} />
+
   </body>
 </html>
+
+<!-- ═══════════════════════════════════════════════════
+     DASHBOARD INTERACTION SCRIPTS
+     ═══════════════════════════════════════════════════ -->
+<script>
+  // ── Sidebar collapse (desktop) ──
+  const sidebar    = document.getElementById('dashboard-sidebar');
+  const topbar     = document.getElementById('dashboard-topbar');
+  const main       = document.getElementById('dashboard-main');
+  const footer     = document.getElementById('dashboard-footer');
+  const collapseBtn = document.getElementById('sidebar-collapse-btn');
+  const collapseIcon = document.getElementById('collapse-icon');
+  const labelGroups = document.querySelectorAll<HTMLElement>('.sidebar-label-group');
+
+  let isCollapsed = false;
+
+  function syncCollapsed() {
+    [topbar, main].forEach(el => {
+      if (!el) return;
+      el.classList.toggle('sidebar-collapsed', isCollapsed);
+    });
+    if (sidebar) sidebar.classList.toggle('collapsed', isCollapsed);
+    if (collapseIcon) collapseIcon.style.transform = isCollapsed ? 'rotate(180deg)' : '';
+    // Hide text labels when collapsed
+    labelGroups.forEach(el => {
+      el.style.opacity = isCollapsed ? '0' : '1';
+      el.style.width   = isCollapsed ? '0' : '';
+      el.style.overflow = isCollapsed ? 'hidden' : '';
+    });
+    if (footer) {
+      footer.style.marginLeft = isCollapsed ? 'var(--sidebar-collapsed-width)' : '';
+    }
+    try { localStorage.setItem('sig_sidebar_collapsed', String(isCollapsed)); } catch {}
+  }
+
+  // Restore state
+  try {
+    isCollapsed = localStorage.getItem('sig_sidebar_collapsed') === 'true';
+    syncCollapsed();
+  } catch {}
+
+  collapseBtn?.addEventListener('click', () => {
+    isCollapsed = !isCollapsed;
+    syncCollapsed();
+  });
+
+  // ── Mobile sidebar ──
+  const mobileBtn  = document.getElementById('mobile-menu-btn');
+  const overlay    = document.getElementById('sidebar-overlay');
+  const hamburger  = document.getElementById('hamburger-icon');
+  const closeIcon  = document.getElementById('close-icon');
+
+  function openMobileSidebar() {
+    sidebar?.classList.add('mobile-open');
+    overlay?.classList.add('visible');
+    hamburger?.classList.add('hidden');
+    closeIcon?.classList.remove('hidden');
+    mobileBtn?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobileSidebar() {
+    sidebar?.classList.remove('mobile-open');
+    overlay?.classList.remove('visible');
+    hamburger?.classList.remove('hidden');
+    closeIcon?.classList.add('hidden');
+    mobileBtn?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  mobileBtn?.addEventListener('click', () => {
+    const isOpen = sidebar?.classList.contains('mobile-open');
+    isOpen ? closeMobileSidebar() : openMobileSidebar();
+  });
+
+  overlay?.addEventListener('click', closeMobileSidebar);
+
+  // Close mobile sidebar on nav item click
+  sidebar?.querySelectorAll('a[href]').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth < 1024) closeMobileSidebar();
+    });
+  });
+
+  // ── Theme Toggle ──
+  const themeToggle = document.getElementById('theme-toggle-btn');
+  const sunIcon     = document.getElementById('sun-icon');
+  const moonIcon    = document.getElementById('moon-icon');
+
+  function updateThemeIcons() {
+    const isDark = document.documentElement.classList.contains('dark');
+    sunIcon?.classList.toggle('hidden', isDark);
+    moonIcon?.classList.toggle('hidden', !isDark);
+  }
+
+  updateThemeIcons();
+
+  themeToggle?.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.contains('dark');
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.classList.toggle('dark', !isDark);
+    document.documentElement.classList.toggle('light', isDark);
+    try { localStorage.setItem('safeingame_theme', newTheme); } catch {}
+    updateThemeIcons();
+  });
+
+  // ── Scroll Reveal ──
+  const reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => io.observe(el));
+  } else {
+    reveals.forEach(el => el.classList.add('visible'));
+  }
+
+  // ── 3D Tilt Effect ──
+  document.querySelectorAll<HTMLElement>('.tilt-card').forEach(card => {
+    const container = card.closest<HTMLElement>('.tilt-card-container');
+    if (!container) return;
+
+    // Skip on touch devices
+    if ('ontouchstart' in window) return;
+
+    container.addEventListener('mousemove', (e: MouseEvent) => {
+      const rect = container.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width  - 0.5;
+      const y = (e.clientY - rect.top)  / rect.height - 0.5;
+      card.style.transform = `perspective(1200px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateZ(4px)`;
+    });
+
+    container.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+
+  // ── Animated counters ──
+  function animateCounter(el: HTMLElement) {
+    const target = parseInt(el.dataset.target || '0', 10);
+    const duration = 2000;
+    const step = (target / duration) * 16;
+    let current = 0;
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = Math.floor(current).toLocaleString();
+      if (current >= target) clearInterval(timer);
+    }, 16);
+  }
+
+  const counters = document.querySelectorAll<HTMLElement>('[data-counter]');
+  if ('IntersectionObserver' in window && counters.length) {
+    const counterIO = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          animateCounter(e.target as HTMLElement);
+          counterIO.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(el => counterIO.observe(el));
+  }
+</script>

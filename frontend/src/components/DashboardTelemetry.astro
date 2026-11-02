@@ -1,0 +1,373 @@
+---
+interface Props {
+  currentLang?: 'en' | 'ru';
+}
+
+const { currentLang = 'en' } = Astro.props;
+const isRu = currentLang === 'ru';
+
+const labels = {
+  statisticTitle: isRu ? 'Статистика угроз & Защита' : 'Threat Telemetry & Defense',
+  timeframes: isRu ? ['День', 'Месяц', 'Год'] : ['Dayly', 'Month', 'Year'],
+  defenseIndex: isRu ? 'Индекс защиты' : 'Defense Index',
+  testDefense: isRu ? 'Проверить защиту' : 'Test Defense',
+  protectionHours: isRu ? 'Часов защиты' : 'Protection hours',
+  assetsProtected: isRu ? 'Предотвращенный ущерб' : 'Assets Protected',
+  gamersGuarded: isRu ? 'Защищенных игроков' : 'Gamers Guarded',
+  recentAlerts: isRu ? 'Свежие перехваченные угрозы' : 'Live Threat Feed',
+  chestTitle: isRu ? 'Сундук дня: Награда киберзащиты' : 'Chest of the day',
+  chestSubtitle: isRu ? 'Заберите ежедневный бонус безопасности' : 'Claim Daily Security XP',
+  claimBonus: isRu ? 'Забрать' : 'Claim',
+};
+
+const feedItems = [
+  {
+    name: 'cs2_fake_faceit.net',
+    val: '$2,450',
+    type: 'Steam API Phishing',
+    icon: 'key',
+    color: '#FFAD66',
+  },
+  {
+    name: 'robl0x-security.cc',
+    val: '$1,390',
+    type: 'Cookie Grabber',
+    icon: 'code',
+    color: '#22D3EE',
+  },
+  {
+    name: 'discord-free-nitro.vip',
+    val: '$3,820',
+    type: 'QR Auth Token Trap',
+    icon: 'zap',
+    color: '#A78BFA',
+  },
+  {
+    name: 'brawl-free-gems.fun',
+    val: '$850',
+    type: '2FA Intercept',
+    icon: 'shield',
+    color: '#C7F36B',
+  },
+];
+---
+
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-6 mb-10">
+
+  <!-- ═══════════════════════════════════════════════════
+       LEFT / CENTER: STATISTIC SECTION (from Reference)
+       ═══════════════════════════════════════════════════ -->
+  <div class="xl:col-span-8 flex flex-col gap-6">
+
+    <!-- Statistic Card Container -->
+    <div class="rounded-3xl border border-ds-border bg-gradient-to-br from-ds-surface to-ds-surface2 p-6 sm:p-7 shadow-premium relative overflow-hidden reveal">
+      
+      <!-- Top header with Dayly/Month/Year tabs -->
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="w-2 h-2 rounded-full bg-ds-cyber animate-pulse"></span>
+            <span class="text-xs font-bold text-ds-cyber uppercase tracking-wider">Live Telemetry</span>
+          </div>
+          <h3 class="font-heading font-extrabold text-xl text-ds-text">{labels.statisticTitle}</h3>
+        </div>
+
+        <!-- Timeframe selector pills -->
+        <div class="flex items-center gap-1 bg-white/5 border border-white/10 rounded-xl p-1 text-xs" role="tablist">
+          {labels.timeframes.map((tf, idx) => (
+            <button
+              type="button"
+              class={`telemetry-tab-btn px-3 py-1.5 rounded-lg font-semibold transition-all ${idx === 0 ? 'bg-ds-accent text-navy-950 font-bold shadow-sm' : 'text-ds-text2 hover:text-ds-text'}`}
+              data-tf={idx}
+            >
+              {tf}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Main Statistic Grid: Game Card + Wave Chart + Bar Meter -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-end">
+        
+        <!-- Game Spotlight Mini Card (like Fortnite in reference) -->
+        <div class="lg:col-span-3 rounded-2xl border border-ds-border bg-ds-surface3/60 p-4 relative overflow-hidden flex flex-col justify-between h-48 sm:h-52 group">
+          <div class="absolute inset-0 opacity-20 bg-gradient-to-t from-ds-accent to-transparent pointer-events-none"></div>
+          <div class="relative z-10 flex items-center justify-between">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-ds-cyber bg-ds-cyber/10 px-2 py-0.5 rounded border border-ds-cyber/20">CS2 & Steam</span>
+            <span class="text-xs text-emerald-400 font-bold">● High Threat</span>
+          </div>
+
+          <!-- Graphic vector representation -->
+          <div class="relative z-10 my-auto text-center py-2">
+            <div class="font-heading font-black text-2xl tracking-tighter text-ds-text group-hover:scale-105 transition-transform">
+              COUNTER<span class="text-orange">STRIKE</span>
+            </div>
+            <div class="text-[11px] text-ds-text2 mt-1">Skin Trading & BitB Phish</div>
+          </div>
+
+          <div class="relative z-10 flex items-center justify-between pt-2 border-t border-white/10 text-xs">
+            <span class="text-ds-text2 text-[10px]">API Key Status</span>
+            <span class="text-ds-cyber font-bold text-[11px]">Protected</span>
+          </div>
+        </div>
+
+        <!-- Wave Line Chart (Interactive SVG Curve) -->
+        <div class="lg:col-span-6 relative h-48 sm:h-52 flex flex-col justify-between py-2">
+          
+          <!-- Background Grid lines -->
+          <div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-15">
+            <div class="border-b border-ds-border w-full"></div>
+            <div class="border-b border-ds-border w-full"></div>
+            <div class="border-b border-ds-border w-full"></div>
+            <div class="border-b border-ds-border w-full"></div>
+          </div>
+
+          <!-- Interactive Floating Tooltip Pill (matching reference image) -->
+          <div class="relative z-20 flex justify-center mb-1">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-ds-surface3 border border-ds-cyber/40 shadow-glow-cyber text-xs">
+              <div class="w-5 h-5 rounded-full bg-ds-accent flex items-center justify-center text-navy-950 font-bold text-[10px]">
+                🛡️
+              </div>
+              <span class="text-ds-text font-bold text-[11px]">scamAVOID</span>
+              <span class="text-emerald-400 font-extrabold text-[11px] bg-emerald-500/15 px-1.5 py-0.2 rounded border border-emerald-500/30">+15.87 $</span>
+            </div>
+          </div>
+
+          <!-- Wave SVG -->
+          <div class="relative z-10 w-full h-28 my-auto">
+            <svg class="w-full h-full overflow-visible" viewBox="0 0 400 100" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="waveGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#48D6E8" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#6C8CFF" stop-opacity="0.0"/>
+                </linearGradient>
+                <filter id="waveGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur"/>
+                  <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                </filter>
+              </defs>
+
+              <!-- Filled area -->
+              <path
+                id="telemetry-area"
+                d="M 0,70 Q 50,20 100,55 T 200,40 T 300,75 T 400,30 L 400,100 L 0,100 Z"
+                fill="url(#waveGrad)"
+              />
+
+              <!-- Glowing line -->
+              <path
+                id="telemetry-line"
+                d="M 0,70 Q 50,20 100,55 T 200,40 T 300,75 T 400,30"
+                fill="none"
+                stroke="#48D6E8"
+                stroke-width="3"
+                filter="url(#waveGlow)"
+              />
+
+              <!-- Interactive Node Points -->
+              <circle cx="100" cy="55" r="4" fill="#6C8CFF" stroke="#090D1D" stroke-width="2" class="cursor-pointer hover:r-6 transition-all"/>
+              <circle cx="200" cy="40" r="5" fill="#48D6E8" stroke="#090D1D" stroke-width="2" class="cursor-pointer hover:r-7 transition-all filter drop-shadow-[0_0_6px_#48D6E8]"/>
+              <circle cx="300" cy="75" r="4" fill="#A78BFA" stroke="#090D1D" stroke-width="2" class="cursor-pointer hover:r-6 transition-all"/>
+              <circle cx="400" cy="30" r="4" fill="#6C8CFF" stroke="#090D1D" stroke-width="2" class="cursor-pointer hover:r-6 transition-all"/>
+            </svg>
+          </div>
+
+          <div class="flex justify-between text-[10px] text-ds-text2 font-mono px-1">
+            <span>00:00</span>
+            <span>06:00</span>
+            <span>12:00</span>
+            <span>18:00</span>
+            <span>Now</span>
+          </div>
+        </div>
+
+        <!-- Bar Meter Column ("Make a bet" / Defense Index in reference) -->
+        <div class="lg:col-span-3 rounded-2xl border border-ds-border bg-ds-surface3/60 p-4 flex flex-col justify-between h-48 sm:h-52">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold text-ds-text2 uppercase tracking-wider">{labels.defenseIndex}</span>
+            <span class="text-xs font-heading font-black text-ds-cyber bg-ds-cyber/10 px-2 py-0.5 rounded border border-ds-cyber/20">4.72x</span>
+          </div>
+
+          <!-- Vertical Bar visualization -->
+          <div class="flex items-end justify-between gap-1.5 h-24 my-auto px-1">
+            <div class="flex-1 bg-white/10 rounded-t h-[40%] transition-all hover:bg-ds-accent"></div>
+            <div class="flex-1 bg-white/10 rounded-t h-[55%] transition-all hover:bg-ds-accent"></div>
+            <div class="flex-1 bg-white/10 rounded-t h-[70%] transition-all hover:bg-ds-accent"></div>
+            <div class="flex-1 bg-gradient-to-t from-ds-accent to-ds-cyber rounded-t h-[95%] shadow-glow-cyber"></div>
+            <div class="flex-1 bg-white/10 rounded-t h-[65%] transition-all hover:bg-ds-accent"></div>
+            <div class="flex-1 bg-white/10 rounded-t h-[50%] transition-all hover:bg-ds-accent"></div>
+            <div class="flex-1 bg-white/10 rounded-t h-[80%] transition-all hover:bg-ds-accent"></div>
+          </div>
+
+          <!-- CTA button -->
+          <a
+            href={`/${currentLang}/score/`}
+            class="w-full py-2 rounded-xl bg-ds-accent hover:bg-ds-cyber text-navy-950 font-heading font-bold text-xs flex items-center justify-center gap-1.5 shadow-md hover:scale-[1.02] active:scale-95 transition-all"
+          >
+            <span>{labels.testDefense}</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       RIGHT COLUMN WIDGETS (Matching Reference Image)
+       ═══════════════════════════════════════════════════ -->
+  <div class="xl:col-span-4 flex flex-col gap-5">
+
+    <!-- 3 Mini Metric Cards with Sparklines (Matching reference top-right) -->
+    <div class="grid grid-cols-3 xl:grid-cols-1 gap-3">
+      
+      <!-- Metric 1: Protection Hours -->
+      <div class="rounded-2xl border border-ds-border bg-ds-surface p-3.5 sm:p-4 flex items-center justify-between shadow-premium hover:border-ds-accent/30 transition-all">
+        <div>
+          <div class="text-[10px] text-ds-text2 uppercase tracking-wider font-semibold">{labels.protectionHours}</div>
+          <div class="font-heading font-extrabold text-base sm:text-lg text-ds-text mt-0.5">755.5 h</div>
+        </div>
+        <!-- Sparkline 1 -->
+        <svg class="w-16 h-8 text-ds-cyber" viewBox="0 0 60 30" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M 0,20 Q 15,28 30,12 T 60,6" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <!-- Metric 2: Assets Protected -->
+      <div class="rounded-2xl border border-ds-border bg-ds-surface p-3.5 sm:p-4 flex items-center justify-between shadow-premium hover:border-violet/30 transition-all">
+        <div>
+          <div class="text-[10px] text-ds-text2 uppercase tracking-wider font-semibold">{labels.assetsProtected}</div>
+          <div class="font-heading font-extrabold text-base sm:text-lg text-emerald-400 mt-0.5">$5,432.4</div>
+        </div>
+        <!-- Sparkline 2 -->
+        <svg class="w-16 h-8 text-ds-accent2" viewBox="0 0 60 30" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M 0,25 Q 20,5 35,18 T 60,8" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <!-- Metric 3: Gamers Guarded -->
+      <div class="rounded-2xl border border-ds-border bg-ds-surface p-3.5 sm:p-4 flex items-center justify-between shadow-premium hover:border-orange/30 transition-all">
+        <div>
+          <div class="text-[10px] text-ds-text2 uppercase tracking-wider font-semibold">{labels.gamersGuarded}</div>
+          <div class="font-heading font-extrabold text-base sm:text-lg text-ds-accent mt-0.5">453k</div>
+        </div>
+        <!-- Sparkline 3 -->
+        <svg class="w-16 h-8 text-orange" viewBox="0 0 60 30" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M 0,15 Q 15,5 30,22 T 60,10" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Live Threat Feed ("Updating friends" in reference) -->
+    <div class="rounded-3xl border border-ds-border bg-ds-surface p-4 sm:p-5 shadow-premium reveal">
+      <div class="flex items-center justify-between mb-3.5">
+        <h4 class="font-heading font-bold text-sm text-ds-text">{labels.recentAlerts}</h4>
+        <a href={`/${currentLang}/radar/`} class="text-[11px] font-semibold text-ds-cyber hover:underline flex items-center gap-1">
+          <span>Live Radar</span>
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div class="space-y-2">
+        {feedItems.map((item) => (
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-ds-surface2/60 hover:bg-ds-surface2 border border-white/5 hover:border-ds-accent/20 transition-all group">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={`background: ${item.color}15; color: ${item.color}; border: 1px solid ${item.color}30;`}>
+                {item.icon === 'key' && (
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+                )}
+                {item.icon === 'code' && (
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                )}
+                {item.icon === 'zap' && (
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                )}
+                {item.icon === 'shield' && (
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                )}
+              </div>
+              <div class="min-w-0">
+                <div class="text-xs font-semibold text-ds-text truncate group-hover:text-ds-cyber transition-colors">{item.name}</div>
+                <div class="text-[10px] text-ds-text2 truncate">{item.type}</div>
+              </div>
+            </div>
+            <div class="text-xs font-bold text-emerald-400 flex-shrink-0 ml-2">{item.val}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Chest of the Day / 3D Cyber Trophy (Matching Reference bottom-left widget) -->
+    <div class="rounded-3xl border border-ds-cyber/20 bg-gradient-to-b from-ds-surface to-ds-surface3 p-5 shadow-glow-cyber/20 text-center relative overflow-hidden group">
+      <!-- Glow pedestal -->
+      <div class="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-ds-cyber/15 to-transparent pointer-events-none"></div>
+
+      <!-- 3D Holographic Cyber Chest / Shield SVG -->
+      <div class="relative z-10 w-24 h-24 mx-auto mb-2 flex items-center justify-center">
+        <!-- Floating animated rings -->
+        <div class="absolute inset-0 rounded-full border border-ds-cyber/30 animate-spin-slow"></div>
+        <div class="absolute inset-2 rounded-full border border-ds-accent/25 animate-spin-reverse"></div>
+        
+        <!-- Futuristic Chest graphic -->
+        <svg class="w-16 h-16 text-ds-cyber filter drop-shadow-[0_0_12px_rgba(72,214,232,0.6)] group-hover:scale-110 transition-transform duration-300" viewBox="0 0 64 64" fill="none">
+          <!-- Chest base -->
+          <path d="M12 24 L52 24 L48 48 L16 48 Z" fill="#182347" stroke="#48D6E8" stroke-width="2"/>
+          <!-- Chest Lid -->
+          <path d="M10 24 Q32 10 54 24 Z" fill="#202D55" stroke="#6C8CFF" stroke-width="2"/>
+          <!-- Glowing lock gem -->
+          <circle cx="32" cy="30" r="4" fill="#C7F36B" filter="drop-shadow(0 0 6px #C7F36B)"/>
+          <line x1="16" y1="36" x2="48" y2="36" stroke="#48D6E8" stroke-width="1.5" stroke-dasharray="3 3"/>
+        </svg>
+      </div>
+
+      <div class="relative z-10">
+        <h4 class="font-heading font-extrabold text-sm text-ds-text mb-1">{labels.chestTitle}</h4>
+        <p class="text-[11px] text-ds-text2 mb-3 leading-snug">{labels.chestSubtitle}</p>
+        
+        <a
+          href={`/${currentLang}/academy/`}
+          class="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-ds-cyber to-ds-accent text-navy-950 font-heading font-bold text-xs shadow-glow-cyber hover:scale-105 active:scale-95 transition-all"
+        >
+          <span>{labels.claimBonus}</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  // Simple timeframe switcher for chart animation
+  const buttons = document.querySelectorAll('.telemetry-tab-btn');
+  const line = document.getElementById('telemetry-line');
+  const area = document.getElementById('telemetry-area');
+
+  const paths = [
+    { line: 'M 0,70 Q 50,20 100,55 T 200,40 T 300,75 T 400,30', area: 'M 0,70 Q 50,20 100,55 T 200,40 T 300,75 T 400,30 L 400,100 L 0,100 Z' },
+    { line: 'M 0,50 Q 50,70 100,30 T 200,65 T 300,25 T 400,50', area: 'M 0,50 Q 50,70 100,30 T 200,65 T 300,25 T 400,50 L 400,100 L 0,100 Z' },
+    { line: 'M 0,80 Q 50,40 100,70 T 200,30 T 300,50 T 400,20', area: 'M 0,80 Q 50,40 100,70 T 200,30 T 300,50 T 400,20 L 400,100 L 0,100 Z' },
+  ];
+
+  buttons.forEach((btn, idx) => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => {
+        b.classList.remove('bg-ds-accent', 'text-navy-950', 'font-bold', 'shadow-sm');
+        b.classList.add('text-ds-text2');
+      });
+      btn.classList.add('bg-ds-accent', 'text-navy-950', 'font-bold', 'shadow-sm');
+      btn.classList.remove('text-ds-text2');
+
+      if (line && area && paths[idx]) {
+        line.setAttribute('d', paths[idx].line);
+        area.setAttribute('d', paths[idx].area);
+      }
+    });
+  });
+</script>

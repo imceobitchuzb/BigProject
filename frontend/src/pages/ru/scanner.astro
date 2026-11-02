@@ -1,10 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import LinkScanner from '../../components/LinkScanner.astro';
-import CyberBackground from '../../components/CyberBackground.astro';
 
-const title = 'Кибер-сканер подозрительных ссылок — SafeInGame';
-const description = 'Мгновенная проверка игровых ссылок на фишинг, скрытые символы (Homoglyph) и тайпосквоттинг. Защита аккаунтов и инвентарей от кражи.';
+const title = 'Игровой фишинг-сканер — SafeInGame';
+const description = 'Проверьте подозрительные ссылки из Discord, Telegram или Steam на гомоглифы, тайпсквотинг и фишинговые шаблоны.';
 ---
 
 <BaseLayout
@@ -13,79 +12,81 @@ const description = 'Мгновенная проверка игровых ссы
   currentLang="ru"
   canonicalSlug="scanner/"
 >
-  <div class="relative min-h-screen py-12 lg:py-16">
-    <CyberBackground />
+  <div class="fixed inset-0 pointer-events-none z-0" aria-hidden="true">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] opacity-20"
+         style="background: radial-gradient(ellipse, rgba(72,214,232,0.3) 0%, transparent 70%); filter: blur(60px);"></div>
+    <div class="absolute inset-0 opacity-[0.03]"
+         style="background-image: linear-gradient(rgba(72,214,232,1) 1px, transparent 1px), linear-gradient(90deg, rgba(72,214,232,1) 1px, transparent 1px); background-size: 50px 50px;"></div>
+    <div class="absolute inset-x-0 h-px animate-scanline opacity-30"
+         style="background: linear-gradient(90deg, transparent, rgba(72,214,232,0.6), transparent);"></div>
+  </div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Breadcrumb -->
-      <nav class="flex items-center gap-2 text-xs text-slate-500 dark:text-cloud-subtle mb-8" aria-label="Breadcrumb">
-        <a href="/ru/" class="hover:text-cyan transition-colors">Главная</a>
-        <span>/</span>
-        <span class="text-slate-800 dark:text-cloud font-medium">Кибер-сканер ссылок</span>
+  <div class="relative z-10 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+      <nav class="flex items-center gap-2 text-xs text-ds-text2 mb-8 reveal" aria-label="Навигация">
+        <a href="/ru/" class="hover:text-ds-cyber transition-colors flex items-center gap-1">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          </svg>
+          Главная
+        </a>
+        <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+        <span class="text-ds-text font-medium">Сканер ссылок</span>
       </nav>
 
-      <!-- Page Header -->
-      <div class="text-center max-w-3xl mx-auto mb-12">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border border-cyan-500/40 bg-cyan-500/10 text-cyan-800 dark:text-cyan uppercase tracking-wider mb-4">
-          <span>⚡ Инструмент активной диагностики безопасности</span>
+      <div class="text-center max-w-3xl mx-auto mb-10 reveal">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-ds-cyber/30 bg-ds-cyber/10 text-ds-cyber text-xs font-bold mb-4 tracking-wide uppercase">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-ds-cyber opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-ds-cyber"></span>
+          </span>
+          Инструмент диагностики безопасности
         </div>
-        <h1 class="text-3xl sm:text-5xl font-heading font-extrabold text-slate-900 dark:text-cloud tracking-tight mb-4">
-          Кибер-сканер игровых ссылок и фишинга
+        <h1 class="font-heading font-extrabold text-3xl sm:text-5xl tracking-tight text-ds-text mb-4">
+          Сканер URL &amp; <span class="gradient-text-cyber">Фишинга</span>
         </h1>
-        <p class="text-base sm:text-lg text-slate-600 dark:text-cloud-muted leading-relaxed">
-          Прислали ссылку в Discord, Telegram или чате игры? Проверьте подлинность домена, найдите скрытые поддельные символы и оцените уровень риска перед переходом и авторизацией.
+        <p class="text-sm sm:text-base text-ds-text2 leading-relaxed">
+          Получили подозрительную ссылку в Discord, Telegram или Steam? Проверьте домен,
+          обнаружьте скрытые гомоглифы и оцените риск фишинга.
         </p>
       </div>
 
-      <!-- Main Scanner Widget -->
-      <div class="mb-16">
+      <div class="mb-12 reveal reveal-delay-1">
         <LinkScanner currentLang="ru" />
       </div>
 
-      <!-- Technical Architecture & How It Works Info Section -->
-      <section class="max-w-4xl mx-auto pt-8 border-t border-slate-200 dark:border-navy-800">
-        <h2 class="text-2xl font-heading font-extrabold text-slate-900 dark:text-cloud mb-6 text-center">
-          Как алгоритмы SafeInGame распознают скам
+      <section class="max-w-4xl mx-auto">
+        <h2 class="font-heading font-bold text-xl text-ds-text text-center mb-6 reveal">
+          Как работает сканер
         </h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white/80 dark:bg-navy-850/80 backdrop-blur-sm">
-            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-700 dark:text-cyan flex items-center justify-center font-bold text-lg mb-4">
-              1
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            { num: '01', color: 'cyan',   title: 'Обнаружение гомоглифов', text: 'Выявляет интернационализованные домены (IDN/Punycode), где кириллические символы заменяют латинские.' },
+            { num: '02', color: 'violet', title: 'Анализ тайпсквотинга',  text: 'Вычисляет редакционное расстояние от официальных доменов Steam, Roblox, PUBG, Minecraft и других.' },
+            { num: '03', color: 'orange', title: 'Эвристическое профилирование', text: 'Проверяет опасные TLD, подозрительные поддомены, сырые IP-адреса и паттерны социальной инженерии.' },
+          ].map((item, i) => (
+            <div class={`reveal reveal-delay-${i+1} rounded-2xl border border-ds-border bg-ds-surface p-6`}>
+              <div class={`w-10 h-10 rounded-xl flex items-center justify-center font-heading font-extrabold text-sm mb-4 ${
+                item.color === 'cyan'   ? 'bg-cyan/10 text-cyan border border-cyan/20' :
+                item.color === 'violet' ? 'bg-violet/10 text-violet border border-violet/20' :
+                'bg-orange/10 text-orange border border-orange/20'
+              }`}>{item.num}</div>
+              <h3 class="font-heading font-bold text-sm text-ds-text mb-2">{item.title}</h3>
+              <p class="text-xs text-ds-text2 leading-relaxed">{item.text}</p>
             </div>
-            <h3 class="text-base font-heading font-bold text-slate-900 dark:text-cloud mb-2">
-              Детект Homoglyph атак
-            </h3>
-            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
-              Выявляет подмену символов в Punycode / IDN доменах, когда злоумышленник заменяет латинские буквы визуально неотличимыми русскими или греческими (например, «а» или «с» в слове steam).
-            </p>
-          </div>
-
-          <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white/80 dark:bg-navy-850/80 backdrop-blur-sm">
-            <div class="w-10 h-10 rounded-xl bg-violet-500/20 text-violet-700 dark:text-violet flex items-center justify-center font-bold text-lg mb-4">
-              2
-            </div>
-            <h3 class="text-base font-heading font-bold text-slate-900 dark:text-cloud mb-2">
-              Анализ Левенштейна
-            </h3>
-            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
-              Алгоритм Дамерау-Левенштейна вычисляет дистанцию редактирования относительно официальных баз Steam, Roblox, Supercell, PUBG и Minecraft для поиска тайпосквоттинга и сайтов-клонов.
-            </p>
-          </div>
-
-          <div class="p-6 rounded-2xl border border-slate-200 dark:border-navy-700 bg-white/80 dark:bg-navy-850/80 backdrop-blur-sm">
-            <div class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-600 dark:text-orange flex items-center justify-center font-bold text-lg mb-4">
-              3
-            </div>
-            <h3 class="text-base font-heading font-bold text-slate-900 dark:text-cloud mb-2">
-              Эвристический профиль
-            </h3>
-            <p class="text-xs text-slate-600 dark:text-cloud-muted leading-relaxed">
-              Анализирует опасные доменные зоны (.xyz, .top, .click), маскировку брендов в поддоменах, прямые IP-адреса и маркеры социальной инженерии («бесплатные скины», «голосование за турнир»).
-            </p>
-          </div>
+          ))}
         </div>
       </section>
+
+      <div class="max-w-2xl mx-auto mt-8 rounded-2xl border border-ds-border bg-ds-surface/50 p-4 text-center reveal">
+        <p class="text-xs text-ds-text2 leading-relaxed">
+          <span class="text-ds-cyber font-semibold">Конфиденциальность:</span> URL-адреса анализируются локально с помощью эвристических правил.
+          Никакие данные не сохраняются. Никогда не вводите здесь пароли или токены сессий.
+        </p>
+      </div>
     </div>
   </div>
 </BaseLayout>
