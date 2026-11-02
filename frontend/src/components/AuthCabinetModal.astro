@@ -41,7 +41,7 @@ const t = {
 <!-- ════════════════════ AUTH & PERSONAL CABINET MODAL ════════════════════ -->
 <div
   id="auth-cabinet-modal"
-  class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-all duration-300"
+  class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-all duration-300"
   role="dialog"
   aria-modal="true"
   aria-labelledby="modal-headline"
@@ -384,10 +384,13 @@ const t = {
   // Open & Close
   function openModal() {
     renderViews();
-    modal?.classList.remove('opacity-0', 'pointer-events-none');
-    const dialog = modal?.querySelector('.relative.w-full');
-    dialog?.classList.remove('scale-95');
-    dialog?.classList.add('scale-100');
+    modal?.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      modal?.classList.remove('opacity-0', 'pointer-events-none');
+      const dialog = modal?.querySelector('.relative.w-full');
+      dialog?.classList.remove('scale-95');
+      dialog?.classList.add('scale-100');
+    });
     document.body.style.overflow = 'hidden';
   }
 
@@ -396,6 +399,9 @@ const t = {
     const dialog = modal?.querySelector('.relative.w-full');
     dialog?.classList.remove('scale-100');
     dialog?.classList.add('scale-95');
+    setTimeout(() => {
+      modal?.classList.add('hidden');
+    }, 300);
     document.body.style.overflow = '';
   }
 

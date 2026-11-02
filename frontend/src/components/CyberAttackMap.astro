@@ -8,10 +8,10 @@ const isRu = currentLang === 'ru';
 
 const labels = {
   badge: isRu ? 'Глобальный мониторинг угроз' : 'Global Threat Radar Live',
-  title: isRu ? 'Карта кибератак на геймеров' : 'Global Gamer Cyber Attack Map',
+  title: isRu ? '3D Карта кибератак на геймеров' : '3D Global Gamer Cyber Attack Map',
   subtitle: isRu 
-    ? 'Интерактивная карта перехваченных фишинговых атак, краж игровых сессий и фейковых турниров по странам в реальном времени.'
-    : 'Real-time telemetry tracking intercepted gaming phishing campaigns, session hijacks, and tournament scams across active regions.',
+    ? 'Интерактивная 3D-телеметрия перехваченных фишинговых волн, атак на Steam API и краж игровых сессий по странам в реальном времени.'
+    : 'Real-time 3D interactive telemetry tracking intercepted gaming phishing campaigns, session hijacks, and tournament scams across active regions.',
   stat1: isRu ? 'Атак отражено за сутки' : 'Attacks Blocked (24h)',
   stat2: isRu ? 'Активных векторов' : 'Active Scam Vectors',
   stat3: isRu ? 'Эффективность защиты' : 'Defense Success Rate',
@@ -27,25 +27,55 @@ const labels = {
 
 // Preset attack hubs with realistic coordinates on 1000x500 SVG world map
 const attackNodes = [
-  { id: 'ru', name: isRu ? 'Восточная Европа / СНГ' : 'Eastern Europe / CIS', x: 620, y: 155, flag: '🇷🇺', level: 'CRITICAL', scam: 'Steam BitB & API Phishing', game: 'CS2 / Steam', count: '4,890 / 24ч' },
-  { id: 'us-e', name: isRu ? 'США (Восточное побережье)' : 'USA (East Coast)', x: 260, y: 180, flag: '🇺🇸', level: 'HIGH', scam: 'Roblox .HAR Cookie Stealer', game: 'Roblox', count: '3,410 / 24ч' },
-  { id: 'us-w', name: isRu ? 'США (Западное побережье)' : 'USA (West Coast)', x: 175, y: 175, flag: '🇺🇸', level: 'HIGH', scam: 'Discord Nitro OAuth Token Grab', game: 'Discord', count: '2,940 / 24ч' },
-  { id: 'br', name: isRu ? 'Бразилия (Сан-Паулу)' : 'Brazil (São Paulo)', x: 330, y: 340, flag: '🇧🇷', level: 'ELEVATED', scam: 'Fake Skin Roulette & APK', game: 'Brawl Stars', count: '1,820 / 24ч' },
-  { id: 'de', name: isRu ? 'Западная Европа (Германия)' : 'Western Europe (Germany)', x: 515, y: 160, flag: '🇩🇪', level: 'HIGH', scam: 'Fake FaceIT Tournament Phish', game: 'CS2', count: '2,150 / 24ч' },
-  { id: 'sea', name: isRu ? 'Юго-Восточная Азия' : 'Southeast Asia (PH/ID)', x: 790, y: 285, flag: '🇵🇭', level: 'CRITICAL', scam: 'Fake Gem Generators & Mod APK', game: 'Brawl Stars / Roblox', count: '3,880 / 24ч' },
-  { id: 'tr', name: isRu ? 'Турция / Ближний Восток' : 'Turkey / Middle East', x: 575, y: 195, flag: '🇹🇷', level: 'ELEVATED', scam: 'Discount Currency & Gift Fraud', game: 'PUBG / Steam', count: '1,450 / 24ч' },
-  { id: 'ea', name: isRu ? 'Восточная Азия' : 'East Asia (KR/JP)', x: 840, y: 190, flag: '🇯🇵', level: 'MODERATE', scam: 'Credential Stuffing Botnets', game: 'Minecraft / Steam', count: '980 / 24ч' },
+  { id: 'ru', name: isRu ? 'Восточная Европа / СНГ' : 'Eastern Europe / CIS', x: 620, y: 130, flag: '🇷🇺', level: 'CRITICAL', scam: 'Steam BitB & API Phishing', game: 'CS2 / Steam', count: '4,890 / 24ч' },
+  { id: 'us-e', name: isRu ? 'США (Восточное побережье)' : 'USA (East Coast)', x: 270, y: 165, flag: '🇺🇸', level: 'HIGH', scam: 'Roblox .HAR Cookie Stealer', game: 'Roblox', count: '3,410 / 24ч' },
+  { id: 'us-w', name: isRu ? 'США (Западное побережье)' : 'USA (West Coast)', x: 140, y: 175, flag: '🇺🇸', level: 'HIGH', scam: 'Discord Nitro OAuth Token Grab', game: 'Discord', count: '2,940 / 24ч' },
+  { id: 'br', name: isRu ? 'Бразилия (Сан-Паулу)' : 'Brazil (São Paulo)', x: 310, y: 375, flag: '🇧🇷', level: 'ELEVATED', scam: 'Fake Skin Roulette & APK', game: 'Brawl Stars', count: '1,820 / 24ч' },
+  { id: 'de', name: isRu ? 'Западная Европа (Германия)' : 'Western Europe (Germany)', x: 505, y: 145, flag: '🇩🇪', level: 'HIGH', scam: 'Fake FaceIT Tournament Phish', game: 'CS2', count: '2,150 / 24ч' },
+  { id: 'sea', name: isRu ? 'Юго-Восточная Азия' : 'Southeast Asia (PH/ID)', x: 805, y: 300, flag: '🇵🇭', level: 'CRITICAL', scam: 'Fake Gem Generators & Mod APK', game: 'Brawl Stars / Roblox', count: '3,880 / 24ч' },
+  { id: 'tr', name: isRu ? 'Турция / Ближний Восток' : 'Turkey / Middle East', x: 585, y: 195, flag: '🇹🇷', level: 'ELEVATED', scam: 'Discount Currency & Gift Fraud', game: 'PUBG / Steam', count: '1,450 / 24ч' },
+  { id: 'ea', name: isRu ? 'Восточная Азия' : 'East Asia (KR/JP)', x: 875, y: 170, flag: '🇯🇵', level: 'MODERATE', scam: 'Credential Stuffing Botnets', game: 'Minecraft / Steam', count: '980 / 24ч' },
 ];
 
 // Arcs between attacker hubs and target gamer clusters
 const trajectories = [
-  { from: [620, 155], to: [515, 160], color: '#6C8CFF' }, // RU -> DE
-  { from: [620, 155], to: [260, 180], color: '#48D6E8' }, // RU -> US
-  { from: [790, 285], to: [840, 190], color: '#A78BFA' }, // SEA -> EA
-  { from: [175, 175], to: [260, 180], color: '#48D6E8' }, // US-W -> US-E
-  { from: [330, 340], to: [260, 180], color: '#F87171' }, // BR -> US
-  { from: [575, 195], to: [515, 160], color: '#FBBF24' }, // TR -> DE
-  { from: [790, 285], to: [620, 155], color: '#4ADE80' }, // SEA -> CIS
+  { from: [620, 130], to: [505, 145], color: '#6C8CFF' }, // RU -> DE
+  { from: [620, 130], to: [270, 165], color: '#48D6E8' }, // RU -> US-E
+  { from: [805, 300], to: [875, 170], color: '#A78BFA' }, // SEA -> EA
+  { from: [140, 175], to: [270, 165], color: '#48D6E8' }, // US-W -> US-E
+  { from: [310, 375], to: [270, 165], color: '#F87171' }, // BR -> US-E
+  { from: [585, 195], to: [505, 145], color: '#FBBF24' }, // TR -> DE
+  { from: [805, 300], to: [620, 130], color: '#4ADE80' }, // SEA -> CIS
+];
+
+// Realistic World Continents High-Detail Geometry
+const continentPaths = [
+  // North America
+  "M 80,65 L 110,50 L 160,45 L 205,52 L 245,45 L 275,55 L 285,80 L 260,95 L 280,115 L 295,100 L 315,115 L 300,140 L 265,145 L 255,160 L 270,175 L 290,170 L 305,185 L 285,195 L 275,225 L 255,220 L 245,240 L 225,245 L 205,275 L 195,295 L 180,280 L 190,250 L 165,230 L 155,200 L 135,185 L 130,150 L 105,140 L 85,110 L 70,85 Z",
+  // Greenland
+  "M 335,35 L 385,30 L 415,55 L 395,85 L 360,95 L 340,75 Z",
+  // South America
+  "M 215,295 L 245,290 L 285,305 L 325,310 L 360,335 L 350,375 L 320,410 L 305,450 L 285,480 L 275,475 L 280,440 L 270,390 L 245,350 L 230,320 Z",
+  // Europe
+  "M 465,95 L 490,80 L 530,75 L 565,85 L 560,115 L 535,130 L 550,150 L 535,175 L 505,180 L 485,195 L 465,185 L 455,160 L 475,145 L 450,135 L 455,110 Z",
+  // UK & Ireland
+  "M 445,100 L 460,95 L 455,120 L 440,125 Z M 430,110 L 440,105 L 435,120 L 428,118 Z",
+  // Scandinavia
+  "M 495,45 L 525,40 L 545,60 L 530,95 L 510,105 L 500,80 Z",
+  // Africa
+  "M 460,200 L 505,190 L 555,200 L 595,230 L 600,270 L 575,310 L 550,355 L 535,405 L 505,420 L 485,390 L 480,340 L 450,295 L 440,250 L 445,215 Z",
+  // Madagascar
+  "M 605,370 L 618,365 L 615,405 L 600,410 Z",
+  // Asia & Russia
+  "M 565,85 L 620,70 L 690,60 L 760,55 L 835,65 L 890,75 L 935,90 L 910,125 L 870,135 L 880,165 L 850,190 L 825,180 L 810,215 L 775,230 L 735,260 L 700,245 L 690,210 L 650,205 L 615,225 L 585,215 L 565,180 L 575,135 Z",
+  // Japan
+  "M 885,150 L 905,145 L 900,180 L 880,195 L 875,175 Z M 895,125 L 915,120 L 910,140 L 895,142 Z",
+  // Southeast Asia Islands
+  "M 745,260 L 780,265 L 795,295 L 775,315 L 755,290 Z M 785,320 L 830,325 L 820,345 L 780,340 Z M 835,280 L 855,275 L 850,310 L 830,305 Z",
+  // Australia
+  "M 790,360 L 840,345 L 885,365 L 895,405 L 865,440 L 825,445 L 785,415 L 780,380 Z",
+  // New Zealand
+  "M 920,430 L 935,425 L 925,460 L 915,455 Z",
 ];
 ---
 
@@ -72,7 +102,7 @@ const trajectories = [
     </div>
 
     <!-- Live Game Filter Pills -->
-    <div class="flex flex-wrap items-center gap-1.5 self-start lg:self-center bg-black/20 dark:bg-black/40 p-1.5 rounded-2xl border border-white/5">
+    <div class="flex flex-wrap items-center gap-1.5 self-start lg:self-center bg-black/10 dark:bg-black/40 p-1.5 rounded-2xl border border-ds-border">
       <button class="map-filter-btn active px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-ds-accent text-white" data-filter="all">
         {labels.filterAll}
       </button>
@@ -104,14 +134,14 @@ const trajectories = [
       <span class="text-[11px] sm:text-xs text-ds-text2 font-medium">{labels.stat2}</span>
       <div class="flex items-baseline gap-2 mt-1">
         <span class="font-heading font-black text-xl sm:text-2xl text-amber-400">18</span>
-        <span class="text-[10px] text-ds-text2">активных</span>
+        <span class="text-[10px] text-ds-text2">{isRu ? 'активных' : 'active'}</span>
       </div>
     </div>
     <div class="p-3.5 sm:p-4 rounded-2xl bg-ds-surface2/60 border border-ds-border flex flex-col">
       <span class="text-[11px] sm:text-xs text-ds-text2 font-medium">{labels.stat3}</span>
       <div class="flex items-baseline gap-2 mt-1">
         <span class="font-heading font-black text-xl sm:text-2xl text-emerald-400">99.6%</span>
-        <span class="text-[10px] text-emerald-400 font-bold">Отражено</span>
+        <span class="text-[10px] text-emerald-400 font-bold">{isRu ? 'Отражено' : 'Mitigated'}</span>
       </div>
     </div>
     <div class="p-3.5 sm:p-4 rounded-2xl bg-ds-surface2/60 border border-ds-border flex flex-col">
@@ -123,165 +153,191 @@ const trajectories = [
     </div>
   </div>
 
-  <!-- Interactive Map Stage -->
-  <div class="relative w-full rounded-2xl border border-ds-border bg-gradient-to-b from-[#0B1229] to-[#080C1D] p-2 sm:p-4 overflow-hidden mb-6">
-    <!-- Grid pattern background inside map -->
-    <div class="absolute inset-0 bg-[radial-gradient(#6C8CFF_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none"></div>
+  <!-- Interactive 3D Holographic Map Stage -->
+  <div class="map-3d-stage relative w-full mb-6">
+    <div
+      id="map-3d-viewport"
+      class="map-3d-viewport relative w-full rounded-3xl cyber-map-canvas p-2 sm:p-5 overflow-hidden transition-all duration-300"
+    >
+      <!-- Grid pattern background inside map -->
+      <div class="absolute inset-0 bg-[radial-gradient(#6C8CFF_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none"></div>
 
-    <!-- Interactive SVG Map -->
-    <div class="relative w-full aspect-[2/1] min-h-[300px] sm:min-h-[420px]">
-      <svg
-        viewBox="0 0 1000 500"
-        class="w-full h-full select-none"
-        xmlns="http://www.w3.org/2000/svg"
-        id="world-map-svg"
-      >
-        <defs>
-          <!-- Attack Trajectory Gradient -->
-          <linearGradient id="attackGradCyan" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#48D6E8" stop-opacity="0.9"/>
-            <stop offset="100%" stop-color="#6C8CFF" stop-opacity="0.2"/>
-          </linearGradient>
-          <linearGradient id="attackGradRed" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#F87171" stop-opacity="0.9"/>
-            <stop offset="100%" stop-color="#FBBF24" stop-opacity="0.2"/>
-          </linearGradient>
-          <!-- Glow Filter -->
-          <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
-        </defs>
+      <!-- Interactive SVG Map -->
+      <div class="relative w-full aspect-[2/1] min-h-[320px] sm:min-h-[440px]">
+        <svg
+          viewBox="0 0 1000 500"
+          class="w-full h-full select-none"
+          xmlns="http://www.w3.org/2000/svg"
+          id="world-map-svg"
+        >
+          <defs>
+            <!-- Attack Trajectory Gradient -->
+            <linearGradient id="attackGradCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#48D6E8" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#6C8CFF" stop-opacity="0.2"/>
+            </linearGradient>
+            <linearGradient id="attackGradRed" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#F87171" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#FBBF24" stop-opacity="0.2"/>
+            </linearGradient>
+            
+            <!-- Radar sweep gradients -->
+            <linearGradient id="radarSweepGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#48D6E8" stop-opacity="0.8"/>
+              <stop offset="100%" stop-color="#48D6E8" stop-opacity="0"/>
+            </linearGradient>
+            <radialGradient id="radarConeGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#48D6E8" stop-opacity="0.18"/>
+              <stop offset="100%" stop-color="#48D6E8" stop-opacity="0"/>
+            </radialGradient>
 
-        <!-- World Continents Simplified Landmasses -->
-        <g class="world-landmasses" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-opacity="0.25" stroke-width="1" class="text-ds-accent">
-          <!-- North America -->
-          <path d="M 120 70 Q 180 50 260 70 Q 310 110 280 180 Q 230 220 180 250 Q 150 200 120 140 Z M 160 80 Q 220 75 240 120 Q 200 160 150 120 Z" />
-          <!-- Greenland -->
-          <path d="M 330 45 Q 370 40 380 70 Q 350 95 320 80 Z" />
-          <!-- South America -->
-          <path d="M 270 260 Q 340 270 360 330 Q 340 420 300 460 Q 260 410 260 330 Z" />
-          <!-- Europe -->
-          <path d="M 470 100 Q 550 85 580 125 Q 560 175 490 190 Q 450 170 460 120 Z" />
-          <!-- Africa -->
-          <path d="M 480 200 Q 560 210 580 280 Q 560 380 520 410 Q 460 350 460 270 Z" />
-          <!-- Asia & Russia -->
-          <path d="M 580 80 Q 750 60 880 90 Q 920 160 840 240 Q 750 260 670 200 Q 600 190 580 130 Z" />
-          <!-- Southeast Asia Islands -->
-          <path d="M 760 270 Q 810 270 820 310 Q 770 330 750 300 Z M 800 320 Q 840 330 830 350 Q 790 350 800 320 Z" />
-          <!-- Australia -->
-          <path d="M 790 350 Q 870 340 890 390 Q 850 440 780 420 Q 770 370 790 350 Z" />
-        </g>
+            <!-- Glow Filter -->
+            <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
 
-        <!-- Coordinate Grid Lines -->
-        <g stroke="currentColor" stroke-opacity="0.05" stroke-dasharray="3,3" class="text-ds-cyber">
-          <line x1="50" y1="125" x2="950" y2="125" />
-          <line x1="50" y1="250" x2="950" y2="250" />
-          <line x1="50" y1="375" x2="950" y2="375" />
-          <line x1="250" y1="50" x2="250" y2="450" />
-          <line x1="500" y1="50" x2="500" y2="450" />
-          <line x1="750" y1="50" x2="750" y2="450" />
-        </g>
+          <!-- Coordinate Grid Lines & Radar Range Rings -->
+          <g class="map-grid-lines">
+            <circle cx="500" cy="250" r="140" fill="none" class="map-grid-line" stroke-dasharray="3,4" />
+            <circle cx="500" cy="250" r="280" fill="none" class="map-grid-line" stroke-dasharray="4,6" />
+            <circle cx="500" cy="250" r="420" fill="none" class="map-grid-line" stroke-dasharray="4,8" />
+            <line x1="50" y1="125" x2="950" y2="125" class="map-grid-line" stroke-dasharray="2,4" />
+            <line x1="50" y1="250" x2="950" y2="250" class="map-grid-line" stroke-dasharray="2,4" />
+            <line x1="50" y1="375" x2="950" y2="375" class="map-grid-line" stroke-dasharray="2,4" />
+            <line x1="250" y1="50" x2="250" y2="450" class="map-grid-line" stroke-dasharray="2,4" />
+            <line x1="500" y1="50" x2="500" y2="450" class="map-grid-line" stroke-dasharray="2,4" />
+            <line x1="750" y1="50" x2="750" y2="450" class="map-grid-line" stroke-dasharray="2,4" />
+          </g>
 
-        <!-- Animated Attack Arcs -->
-        <g id="attack-trajectories">
-          {trajectories.map((traj, idx) => {
-            const mx = (traj.from[0] + traj.to[0]) / 2;
-            const my = Math.min(traj.from[1], traj.to[1]) - 40 - (idx * 6);
-            const pathD = `M ${traj.from[0]} ${traj.from[1]} Q ${mx} ${my} ${traj.to[0]} ${traj.to[1]}`;
-            return (
-              <g class="attack-arc-group">
-                <path
-                  d={pathD}
-                  fill="none"
-                  stroke={traj.color}
-                  stroke-width="1.8"
-                  stroke-opacity="0.4"
-                  stroke-dasharray="6,6"
-                  class="attack-path"
-                />
-                <!-- Animated energy dot along path -->
-                <circle r="3.5" fill={traj.color} filter="url(#glowFilter)">
-                  <animateMotion
-                    path={pathD}
-                    dur={`${2.2 + (idx % 3) * 0.8}s`}
-                    repeatCount="indefinite"
+          <!-- Rotating Radar Sweep Beam -->
+          <g class="radar-sweep-beam pointer-events-none opacity-25 dark:opacity-35">
+            <line x1="500" y1="250" x2="940" y2="250" stroke="url(#radarSweepGrad)" stroke-width="2" />
+            <path d="M 500 250 L 920 250 A 420 420 0 0 0 790 30 Z" fill="url(#radarConeGrad)" />
+          </g>
+
+          <!-- ── LAYER 1: 3D Depth Extrusion Shadow Layer ── -->
+          <g class="continents-3d-shadow" transform="translate(0, 6)">
+            {continentPaths.map(d => (
+              <path d={d} />
+            ))}
+          </g>
+
+          <!-- ── LAYER 2: Elevated Continent Landmass Surfaces ── -->
+          <g class="continents-surface">
+            {continentPaths.map(d => (
+              <path d={d} />
+            ))}
+          </g>
+
+          <!-- ── LAYER 3: Razor-Sharp Coastline Outlines ── -->
+          <g class="continents-coastline">
+            {continentPaths.map(d => (
+              <path d={d} />
+            ))}
+          </g>
+
+          <!-- Animated Parabolic Attack Arcs -->
+          <g id="attack-trajectories">
+            {trajectories.map((traj, idx) => {
+              const mx = (traj.from[0] + traj.to[0]) / 2;
+              const my = Math.min(traj.from[1], traj.to[1]) - 40 - (idx * 6);
+              const pathD = `M ${traj.from[0]} ${traj.from[1]} Q ${mx} ${my} ${traj.to[0]} ${traj.to[1]}`;
+              return (
+                <g class="attack-arc-group">
+                  <path
+                    d={pathD}
+                    fill="none"
+                    stroke={traj.color}
+                    stroke-width="1.8"
+                    stroke-opacity="0.45"
+                    stroke-dasharray="6,6"
+                    class="attack-path"
                   />
-                </circle>
-              </g>
-            );
-          })}
-        </g>
+                  <!-- Animated energy missile dot along path -->
+                  <circle r="4" fill={traj.color} filter="url(#glowFilter)">
+                    <animateMotion
+                      path={pathD}
+                      dur={`${2.2 + (idx % 3) * 0.8}s`}
+                      repeatCount="indefinite"
+                    />
+                  </circle>
+                </g>
+              );
+            })}
+          </g>
 
-        <!-- Threat Node Beacons -->
-        <g id="attack-nodes">
-          {attackNodes.map(node => (
-            <g
-              class="map-node-target cursor-pointer group"
-              data-node-id={node.id}
-              data-game={node.game}
-              transform={`translate(${node.x}, ${node.y})`}
-            >
-              <!-- Outer pulse circle -->
-              <circle
-                r="16"
-                fill="none"
-                stroke={node.level === 'CRITICAL' ? '#F87171' : node.level === 'HIGH' ? '#FBBF24' : '#48D6E8'}
-                stroke-opacity="0.3"
-                class="animate-ping origin-center"
-                style="animation-duration: 2.5s;"
-              />
-              <!-- Mid beacon ring -->
-              <circle
-                r="8"
-                fill={node.level === 'CRITICAL' ? 'rgba(239,68,68,0.2)' : 'rgba(72,214,232,0.2)'}
-                stroke={node.level === 'CRITICAL' ? '#F87171' : '#48D6E8'}
-                stroke-width="1.5"
-              />
-              <!-- Center solid dot -->
-              <circle
-                r="3.5"
-                fill={node.level === 'CRITICAL' ? '#EF4444' : '#48D6E8'}
-              />
-
-              <!-- Hover Tooltip Pin -->
-              <g class="node-tooltip opacity-80 group-hover:opacity-100 transition-opacity">
-                <rect
-                  x="-65"
-                  y="-42"
-                  width="130"
-                  height="32"
-                  rx="6"
-                  fill="#111936"
-                  stroke={node.level === 'CRITICAL' ? '#EF4444' : '#6C8CFF'}
-                  stroke-width="1"
-                  filter="url(#glowFilter)"
+          <!-- Threat Node Beacons -->
+          <g id="attack-nodes">
+            {attackNodes.map(node => (
+              <g
+                class="map-node-target cursor-pointer group"
+                data-node-id={node.id}
+                data-game={node.game}
+                transform={`translate(${node.x}, ${node.y})`}
+              >
+                <!-- Outer pulse circle -->
+                <circle
+                  r="16"
+                  fill="none"
+                  stroke={node.level === 'CRITICAL' ? '#EF4444' : node.level === 'HIGH' ? '#F59E0B' : '#0284C7'}
+                  stroke-opacity="0.4"
+                  class="animate-ping origin-center"
+                  style="animation-duration: 2.5s;"
                 />
-                <text x="0" y="-28" text-anchor="middle" fill="#FFFFFF" font-size="10" font-weight="bold" font-family="sans-serif">
-                  {node.flag} {node.id.toUpperCase()} • {node.game}
-                </text>
-                <text x="0" y="-16" text-anchor="middle" fill="#48D6E8" font-size="8.5" font-family="sans-serif">
-                  {node.scam.slice(0, 22)}
-                </text>
-              </g>
-            </g>
-          ))}
-        </g>
-      </svg>
-    </div>
+                <!-- Mid beacon ring -->
+                <circle
+                  r="8"
+                  fill={node.level === 'CRITICAL' ? 'rgba(239,68,68,0.25)' : 'rgba(2,132,199,0.25)'}
+                  stroke={node.level === 'CRITICAL' ? '#EF4444' : '#0284C7'}
+                  stroke-width="1.8"
+                />
+                <!-- Center solid dot -->
+                <circle
+                  r="3.5"
+                  fill={node.level === 'CRITICAL' ? '#EF4444' : '#0284C7'}
+                />
 
-    <!-- Active Hotspot Detail Bar (Updates on Hover / Tap) -->
-    <div id="hotspot-detail-bar" class="mt-3 p-3 rounded-xl bg-ds-surface border border-ds-border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-      <div class="flex items-center gap-2.5">
-        <span class="text-lg" id="detail-flag">🇷🇺</span>
-        <div>
-          <span class="font-bold text-ds-text text-sm" id="detail-title">Восточная Европа / СНГ</span>
-          <span class="text-ds-text2 ml-2" id="detail-scam">Steam BitB & API Phishing</span>
-        </div>
+                <!-- Hover Tooltip Pin -->
+                <g class="node-tooltip opacity-90 group-hover:opacity-100 transition-opacity">
+                  <rect
+                    x="-65"
+                    y="-42"
+                    width="130"
+                    height="32"
+                    rx="8"
+                    class="tooltip-box"
+                    stroke={node.level === 'CRITICAL' ? '#EF4444' : '#3B82F6'}
+                    stroke-width="1"
+                    filter="url(#glowFilter)"
+                  />
+                  <text x="0" y="-28" text-anchor="middle" class="tooltip-text-main" font-size="10" font-weight="bold" font-family="sans-serif">
+                    {node.flag} {node.id.toUpperCase()} • {node.game}
+                  </text>
+                  <text x="0" y="-16" text-anchor="middle" class="tooltip-text-sub" font-size="8.5" font-family="sans-serif">
+                    {node.scam.slice(0, 22)}
+                  </text>
+                </g>
+              </g>
+            ))}
+          </g>
+        </svg>
       </div>
-      <div class="flex items-center gap-3">
-        <span class="px-2 py-0.5 rounded-md bg-red-500/20 text-red-400 font-bold border border-red-500/30 uppercase text-[10px]" id="detail-level">CRITICAL</span>
-        <span class="text-ds-text font-bold" id="detail-count">4,890 атак / 24ч</span>
+
+      <!-- Active Hotspot Detail Bar (Updates on Hover / Tap) -->
+      <div id="hotspot-detail-bar" class="mt-3 p-3.5 rounded-2xl bg-ds-surface border border-ds-border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-md">
+        <div class="flex items-center gap-2.5">
+          <span class="text-xl" id="detail-flag">🇷🇺</span>
+          <div>
+            <span class="font-bold text-ds-text text-sm" id="detail-title">Восточная Европа / СНГ</span>
+            <span class="text-ds-text2 ml-2" id="detail-scam">Steam BitB & API Phishing</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="px-2.5 py-1 rounded-lg bg-red-500/20 text-red-500 font-bold border border-red-500/30 uppercase text-[10px]" id="detail-level">CRITICAL</span>
+          <span class="text-ds-text font-bold" id="detail-count">4,890 атак / 24ч</span>
+        </div>
       </div>
     </div>
   </div>
@@ -300,7 +356,7 @@ const trajectories = [
 
       <div class="space-y-2 overflow-hidden" id="live-feed-ticker" style="max-height: 220px;">
         <!-- Feed items dynamically pushed here -->
-        <div class="feed-item p-2.5 rounded-xl bg-ds-surface/80 border border-white/5 flex items-center justify-between gap-3 text-xs animate-fadeIn">
+        <div class="feed-item p-2.5 rounded-xl bg-ds-surface/80 border border-ds-border flex items-center justify-between gap-3 text-xs animate-fadeIn">
           <div class="flex items-center gap-2 min-w-0">
             <span class="text-base flex-shrink-0">🇷🇺 ➔ 🇩🇪</span>
             <span class="font-bold text-ds-text truncate">cs2-faceit-championship.net</span>
@@ -308,11 +364,11 @@ const trajectories = [
           </div>
           <div class="text-right flex-shrink-0">
             <span class="text-emerald-400 font-bold font-mono">+$850 SAVED</span>
-            <span class="text-[10px] text-ds-text2 block">1 сек назад</span>
+            <span class="text-[10px] text-ds-text2 block">{isRu ? '1 сек назад' : '1s ago'}</span>
           </div>
         </div>
 
-        <div class="feed-item p-2.5 rounded-xl bg-ds-surface/80 border border-white/5 flex items-center justify-between gap-3 text-xs">
+        <div class="feed-item p-2.5 rounded-xl bg-ds-surface/80 border border-ds-border flex items-center justify-between gap-3 text-xs">
           <div class="flex items-center gap-2 min-w-0">
             <span class="text-base flex-shrink-0">🇺🇸 ➔ 🇺🇸</span>
             <span class="font-bold text-ds-text truncate">roblox-cookie-auth.cc</span>
@@ -320,11 +376,11 @@ const trajectories = [
           </div>
           <div class="text-right flex-shrink-0">
             <span class="text-emerald-400 font-bold font-mono">+$320 SAVED</span>
-            <span class="text-[10px] text-ds-text2 block">3 сек назад</span>
+            <span class="text-[10px] text-ds-text2 block">{isRu ? '3 сек назад' : '3s ago'}</span>
           </div>
         </div>
 
-        <div class="feed-item p-2.5 rounded-xl bg-ds-surface/80 border border-white/5 flex items-center justify-between gap-3 text-xs">
+        <div class="feed-item p-2.5 rounded-xl bg-ds-surface/80 border border-ds-border flex items-center justify-between gap-3 text-xs">
           <div class="flex items-center gap-2 min-w-0">
             <span class="text-base flex-shrink-0">🇵🇭 ➔ 🇧🇷</span>
             <span class="font-bold text-ds-text truncate">free-brawl-gems2026.app</span>
@@ -332,11 +388,11 @@ const trajectories = [
           </div>
           <div class="text-right flex-shrink-0">
             <span class="text-emerald-400 font-bold font-mono">BLOCKED</span>
-            <span class="text-[10px] text-ds-text2 block">6 сек назад</span>
+            <span class="text-[10px] text-ds-text2 block">{isRu ? '6 сек назад' : '6s ago'}</span>
           </div>
         </div>
 
-        <div class="feed-item p-2.5 rounded-xl bg-ds-surface/80 border border-white/5 flex items-center justify-between gap-3 text-xs">
+        <div class="feed-item p-2.5 rounded-xl bg-ds-surface/80 border border-ds-border flex items-center justify-between gap-3 text-xs">
           <div class="flex items-center gap-2 min-w-0">
             <span class="text-base flex-shrink-0">🇺🇸 ➔ 🇬🇧</span>
             <span class="font-bold text-ds-text truncate">discord-nitro-gift-claim.xyz</span>
@@ -344,7 +400,7 @@ const trajectories = [
           </div>
           <div class="text-right flex-shrink-0">
             <span class="text-emerald-400 font-bold font-mono">BLOCKED</span>
-            <span class="text-[10px] text-ds-text2 block">9 сек назад</span>
+            <span class="text-[10px] text-ds-text2 block">{isRu ? '9 сек назад' : '9s ago'}</span>
           </div>
         </div>
       </div>
@@ -359,9 +415,9 @@ const trajectories = [
             <span class="flex items-center gap-2 text-ds-text">
               <span>🇷🇺</span> <span>CIS / Steam Trade</span>
             </span>
-            <span class="font-bold text-red-400">4,890 / день</span>
+            <span class="font-bold text-red-400">4,890 / {isRu ? 'день' : 'day'}</span>
           </div>
-          <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+          <div class="w-full h-1.5 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
             <div class="h-full bg-red-400 rounded-full" style="width: 78%"></div>
           </div>
 
@@ -369,9 +425,9 @@ const trajectories = [
             <span class="flex items-center gap-2 text-ds-text">
               <span>🇺🇸</span> <span>USA / Roblox & Discord</span>
             </span>
-            <span class="font-bold text-amber-400">3,410 / день</span>
+            <span class="font-bold text-amber-400">3,410 / {isRu ? 'день' : 'day'}</span>
           </div>
-          <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+          <div class="w-full h-1.5 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
             <div class="h-full bg-amber-400 rounded-full" style="width: 62%"></div>
           </div>
 
@@ -379,9 +435,9 @@ const trajectories = [
             <span class="flex items-center gap-2 text-ds-text">
               <span>🇵🇭</span> <span>SEA / Mobile Gems</span>
             </span>
-            <span class="font-bold text-ds-cyber">3,880 / день</span>
+            <span class="font-bold text-ds-cyber">3,880 / {isRu ? 'день' : 'day'}</span>
           </div>
-          <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+          <div class="w-full h-1.5 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
             <div class="h-full bg-ds-cyber rounded-full" style="width: 68%"></div>
           </div>
 
@@ -389,15 +445,15 @@ const trajectories = [
             <span class="flex items-center gap-2 text-ds-text">
               <span>🇩🇪</span> <span>EU / CS2 Fake Cups</span>
             </span>
-            <span class="font-bold text-emerald-400">2,150 / день</span>
+            <span class="font-bold text-emerald-400">2,150 / {isRu ? 'день' : 'day'}</span>
           </div>
-          <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+          <div class="w-full h-1.5 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
             <div class="h-full bg-emerald-400 rounded-full" style="width: 44%"></div>
           </div>
         </div>
       </div>
 
-      <div class="pt-3 border-t border-white/5 mt-3">
+      <div class="pt-3 border-t border-ds-border mt-3">
         <a
           href={`/${currentLang}/radar/`}
           class="w-full py-2 px-3 rounded-xl bg-ds-accent/15 hover:bg-ds-accent/25 border border-ds-accent/30 text-ds-accent hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
@@ -439,10 +495,10 @@ const trajectories = [
         if (detailScam) detailScam.textContent = d.scam;
         if (detailLevel) {
           detailLevel.textContent = d.level;
-          detailLevel.className = `px-2 py-0.5 rounded-md font-bold border uppercase text-[10px] ${
-            d.level === 'CRITICAL' ? 'bg-red-500/20 text-red-400 border-red-500/30' :
-            d.level === 'HIGH' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' :
-            'bg-cyan-500/20 text-cyan-400 border-cyan-500/30'
+          detailLevel.className = `px-2.5 py-1 rounded-lg font-bold border uppercase text-[10px] ${
+            d.level === 'CRITICAL' ? 'bg-red-500/20 text-red-500 border-red-500/30' :
+            d.level === 'HIGH' ? 'bg-amber-500/20 text-amber-500 border-amber-500/30' :
+            'bg-cyan-500/20 text-cyan-500 border-cyan-500/30'
           }`;
         }
         if (detailCount) detailCount.textContent = d.count;
@@ -474,7 +530,7 @@ const trajectories = [
     if (counterEl) counterEl.textContent = attackCount.toLocaleString();
 
     const item = document.createElement('div');
-    item.className = 'feed-item p-2.5 rounded-xl bg-ds-surface/80 border border-white/5 flex items-center justify-between gap-3 text-xs transition-all duration-300';
+    item.className = 'feed-item p-2.5 rounded-xl bg-ds-surface/80 border border-ds-border flex items-center justify-between gap-3 text-xs transition-all duration-300';
     item.innerHTML = `
       <div class="flex items-center gap-2 min-w-0">
         <span class="text-base flex-shrink-0">${inc.from}</span>
@@ -493,7 +549,6 @@ const trajectories = [
     }
   }
 
-  // Interval for live stream
   setInterval(pushLiveIncident, 3500);
 
   // UTC clock ticker
@@ -514,7 +569,6 @@ const trajectories = [
       });
       btn.classList.add('active', 'bg-ds-accent', 'text-white');
       btn.classList.remove('text-ds-text2');
-      // Highlight matching nodes on SVG
       const filter = btn.dataset.filter;
       document.querySelectorAll<SVGElement>('.map-node-target').forEach(node => {
         const game = (node.dataset.game || '').toLowerCase();
@@ -526,6 +580,21 @@ const trajectories = [
       });
     });
   });
+
+  // ── 3D Parallax Tilt Effect on Map Stage ──
+  const viewport = document.getElementById('map-3d-viewport');
+  const stage = viewport?.closest<HTMLElement>('.map-3d-stage');
+  if (stage && viewport && !('ontouchstart' in window)) {
+    stage.addEventListener('mousemove', (e: MouseEvent) => {
+      const rect = stage.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      viewport.style.transform = `rotateX(${7 - y * 8}deg) rotateY(${x * 8}deg) translateZ(4px)`;
+    });
+    stage.addEventListener('mouseleave', () => {
+      viewport.style.transform = 'rotateX(7deg) rotateY(0deg) translateZ(0)';
+    });
+  }
 </script>
 
 <style>
@@ -535,5 +604,110 @@ const trajectories = [
   }
   .animate-fadeIn {
     animation: fadeIn 0.3s ease-out forwards;
+  }
+
+  /* 3D Map Perspective */
+  .map-3d-stage {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+  }
+
+  .map-3d-viewport {
+    transform: rotateX(7deg);
+    transform-style: preserve-3d;
+    box-shadow: 0 20px 50px -10px rgba(0,0,0,0.45);
+  }
+
+  /* Radar Sweep Animation */
+  @keyframes radarSweep {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .radar-sweep-beam {
+    transform-origin: 500px 250px;
+    animation: radarSweep 9s linear infinite;
+  }
+
+  /* Canvas Ocean styling in Dark vs Light */
+  .cyber-map-canvas {
+    background: linear-gradient(180deg, #0A1128 0%, #060A1A 100%);
+    border: 1px solid rgba(108, 140, 255, 0.25);
+  }
+  :global(html.light) .cyber-map-canvas,
+  :global(html:not(.dark)) .cyber-map-canvas {
+    background: linear-gradient(180deg, #EEF4FA 0%, #E2E8F0 100%);
+    border: 1px solid #CBD5E1;
+    box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+
+  /* Grid Lines */
+  .map-grid-line {
+    stroke: rgba(72, 214, 232, 0.12);
+  }
+  :global(html.light) .map-grid-line,
+  :global(html:not(.dark)) .map-grid-line {
+    stroke: rgba(15, 23, 42, 0.15);
+  }
+
+  /* Continents 3D Elevation & Lighting */
+  .continents-3d-shadow path {
+    fill: #050814;
+    opacity: 0.9;
+  }
+  :global(html.light) .continents-3d-shadow path,
+  :global(html:not(.dark)) .continents-3d-shadow path {
+    fill: #94A3B8;
+    opacity: 0.85;
+  }
+
+  .continents-surface path {
+    fill: #111A3E;
+    stroke: rgba(108, 140, 255, 0.4);
+    stroke-width: 0.8;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+  }
+  :global(html.light) .continents-surface path,
+  :global(html:not(.dark)) .continents-surface path {
+    fill: #FFFFFF;
+    stroke: #334155;
+    stroke-width: 1.2;
+  }
+
+  .continents-coastline path {
+    fill: none;
+    stroke: #48D6E8;
+    stroke-width: 1.2;
+    transition: stroke 0.3s ease;
+  }
+  :global(html.light) .continents-coastline path,
+  :global(html:not(.dark)) .continents-coastline path {
+    stroke: #1E293B;
+    stroke-width: 1.5;
+  }
+
+  /* Tooltip Box & Text */
+  .tooltip-box {
+    fill: #111936;
+  }
+  :global(html.light) .tooltip-box,
+  :global(html:not(.dark)) .tooltip-box {
+    fill: #FFFFFF;
+  }
+
+  .tooltip-text-main {
+    fill: #FFFFFF;
+  }
+  :global(html.light) .tooltip-text-main,
+  :global(html:not(.dark)) .tooltip-text-main {
+    fill: #090E1E;
+  }
+
+  .tooltip-text-sub {
+    fill: #48D6E8;
+  }
+  :global(html.light) .tooltip-text-sub,
+  :global(html:not(.dark)) .tooltip-text-sub {
+    fill: #0284C7;
   }
 </style>

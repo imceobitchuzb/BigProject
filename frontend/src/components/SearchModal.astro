@@ -49,7 +49,7 @@ const searchItems = [
 <!-- ════════════════════ COMMAND PALETTE SEARCH MODAL ════════════════════ -->
 <div
   id="search-command-modal"
-  class="fixed inset-0 z-[110] flex items-start justify-center pt-16 sm:pt-24 px-4 pb-4 opacity-0 pointer-events-none transition-all duration-200"
+  class="hidden fixed inset-0 z-[110] flex items-start justify-center pt-16 sm:pt-24 px-4 pb-4 opacity-0 pointer-events-none transition-all duration-200"
   role="dialog"
   aria-modal="true"
   aria-label="Search"
@@ -115,14 +115,17 @@ const searchItems = [
 
   function openSearch() {
     if (!modal) return;
-    modal.classList.remove('opacity-0', 'pointer-events-none');
-    const dialog = modal.querySelector('.relative.w-full');
-    dialog?.classList.remove('scale-95');
-    dialog?.classList.add('scale-100');
+    modal.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      const dialog = modal.querySelector('.relative.w-full');
+      dialog?.classList.remove('scale-95');
+      dialog?.classList.add('scale-100');
+    });
     document.body.style.overflow = 'hidden';
     if (input) {
       input.value = '';
-      setTimeout(() => input.focus(), 50);
+      setTimeout(() => input.focus(), 80);
     }
     filterResults('');
   }
@@ -133,6 +136,9 @@ const searchItems = [
     const dialog = modal.querySelector('.relative.w-full');
     dialog?.classList.remove('scale-100');
     dialog?.classList.add('scale-95');
+    setTimeout(() => {
+      modal.classList.add('hidden');
+    }, 200);
     document.body.style.overflow = '';
   }
 

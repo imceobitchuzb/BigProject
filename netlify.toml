@@ -1,0 +1,45 @@
+# Netlify Configuration for SafeInGame
+# Gaming Cybersecurity Platform
+
+[build]
+  base = "frontend"
+  publish = "dist"
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--prefer-offline --no-audit"
+
+# Redirect root path to Russian localized home by default
+[[redirects]]
+  from = "/"
+  to = "/ru/"
+  status = 302
+  force = false
+
+# 404 Fallback
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
+
+# Security and Performance Headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+
+# Long-term Cache for immutable static assets
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"

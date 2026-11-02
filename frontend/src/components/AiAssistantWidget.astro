@@ -27,12 +27,12 @@ const labels = {
 ---
 
 <!-- ════════════════════ AI ASSISTANT WIDGET ════════════════════ -->
-<div id="ai-assistant-widget" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[90] flex flex-col items-end select-none">
+<div id="ai-assistant-widget" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[90] flex flex-col items-end select-none pointer-events-none">
 
   <!-- ── 1. Pop-Up Notification Toast Bubble (Appears on load) ── -->
   <div
     id="ai-notification-toast"
-    class="mb-3 max-w-sm rounded-2xl border border-ds-cyber/40 bg-ds-surface/95 backdrop-blur-xl p-3.5 shadow-2xl shadow-ds-cyber/15 transform translate-y-3 opacity-0 pointer-events-none transition-all duration-400 flex items-start gap-3"
+    class="hidden mb-3 max-w-sm rounded-2xl border border-ds-cyber/40 bg-ds-surface/95 backdrop-blur-xl p-3.5 shadow-2xl shadow-ds-cyber/15 transform translate-y-3 opacity-0 pointer-events-auto transition-all duration-400 flex items-start gap-3"
   >
     <div class="relative w-10 h-10 rounded-xl bg-gradient-to-br from-ds-accent to-ds-cyber p-0.5 flex-shrink-0 shadow-glow-cyber">
       <div class="w-full h-full rounded-[10px] bg-ds-surface flex items-center justify-center text-xl">
@@ -70,7 +70,7 @@ const labels = {
   <!-- ── 2. Full Interactive Chat Window ── -->
   <div
     id="ai-chat-window"
-    class="mb-3 w-[calc(100vw-32px)] sm:w-96 rounded-3xl border border-ds-border bg-ds-surface/95 backdrop-blur-2xl shadow-2xl overflow-hidden flex flex-col h-[480px] max-h-[75vh] transform scale-95 opacity-0 pointer-events-none transition-all duration-300"
+    class="hidden mb-3 w-[calc(100vw-32px)] sm:w-96 rounded-3xl border border-ds-border bg-ds-surface/95 backdrop-blur-2xl shadow-2xl overflow-hidden flex flex-col h-[480px] max-h-[75vh] transform scale-95 opacity-0 pointer-events-auto transition-all duration-300"
   >
     <!-- Header -->
     <div class="flex items-center justify-between px-4 py-3 border-b border-ds-border bg-ds-surface2/60">
@@ -142,7 +142,7 @@ const labels = {
   <!-- ── 3. Persistent Floating Trigger Button ── -->
   <button
     id="ai-floating-trigger-btn"
-    class="relative group w-14 h-14 rounded-2xl bg-gradient-to-tr from-ds-accent via-ds-cyber to-ds-accent2 p-0.5 shadow-xl shadow-ds-cyber/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+    class="relative group w-14 h-14 rounded-2xl bg-gradient-to-tr from-ds-accent via-ds-cyber to-ds-accent2 p-0.5 shadow-xl shadow-ds-cyber/20 hover:scale-105 active:scale-95 transition-all cursor-pointer pointer-events-auto"
     aria-label="Open AI Security Detective"
     title={labels.aiTitle}
   >
@@ -188,34 +188,51 @@ const labels = {
   updateUserName();
   window.addEventListener('auth-changed', updateUserName);
 
-  // Show Toast automatically after 2 seconds if not dismissed
+  // Show Toast automatically after 2.5 seconds if not dismissed
   setTimeout(() => {
-    if (toast && !sessionStorage.getItem('sig_ai_toast_dismissed')) {
-      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
+    if (toast && !sessionStorage.getItem('sig_ai_toast_dismissed') && chatWindow?.classList.contains('hidden')) {
+      toast.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        toast.classList.remove('opacity-0', 'translate-y-3');
+      });
+      // Auto-dismiss after 9 seconds so it doesn't stay on mobile screen
+      setTimeout(() => {
+        if (!toast.classList.contains('hidden')) {
+          toast.classList.add('opacity-0', 'translate-y-3');
+          setTimeout(() => toast.classList.add('hidden'), 400);
+        }
+      }, 9000);
     }
-  }, 1800);
+  }, 2500);
 
   function openChat() {
-    toast?.classList.add('opacity-0', 'pointer-events-none');
-    chatWindow?.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
-    chatWindow?.classList.add('scale-100');
+    toast?.classList.add('hidden', 'opacity-0');
+    chatWindow?.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      chatWindow?.classList.remove('opacity-0', 'scale-95');
+      chatWindow?.classList.add('scale-100');
+    });
     setTimeout(() => chatInput?.focus(), 100);
   }
 
   function closeChat() {
-    chatWindow?.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+    chatWindow?.classList.add('opacity-0', 'scale-95');
     chatWindow?.classList.remove('scale-100');
+    setTimeout(() => {
+      chatWindow?.classList.add('hidden');
+    }, 300);
   }
 
   triggerBtn?.addEventListener('click', () => {
-    const isOpen = !chatWindow?.classList.contains('opacity-0');
-    isOpen ? closeChat() : openChat();
+    const isClosed = chatWindow?.classList.contains('hidden');
+    isClosed ? openChat() : closeChat();
   });
 
   openChatBtn?.addEventListener('click', openChat);
   minimizeChatBtn?.addEventListener('click', closeChat);
   dismissToastBtn?.addEventListener('click', () => {
-    toast?.classList.add('opacity-0', 'pointer-events-none');
+    toast?.classList.add('opacity-0', 'translate-y-3');
+    setTimeout(() => toast?.classList.add('hidden'), 400);
     sessionStorage.setItem('sig_ai_toast_dismissed', 'true');
   });
 

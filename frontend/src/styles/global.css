@@ -654,11 +654,13 @@ html:not(.dark) .premium-input {
   -webkit-backdrop-filter: blur(4px);
   z-index: 55;
   opacity: 0;
+  display: none;
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
 
 .sidebar-overlay.visible {
+  display: block;
   opacity: 1;
   pointer-events: all;
 }
