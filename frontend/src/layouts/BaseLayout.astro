@@ -2,6 +2,7 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ScrollToTop from '../components/ScrollToTop.astro';
+import AuthCabinetModal from '../components/AuthCabinetModal.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -22,6 +23,8 @@ const {
   publishedTime,
 } = Astro.props;
 
+const isRu = currentLang === 'ru';
+
 const canonicalUrl = new URL(`/${currentLang}/${canonicalSlug}`, Astro.site || 'https://safeingame.org').href;
 const enAltUrl    = new URL(`/en/${canonicalSlug}`, Astro.site || 'https://safeingame.org').href;
 const ruAltUrl    = new URL(`/ru/${canonicalSlug}`, Astro.site || 'https://safeingame.org').href;
@@ -30,21 +33,41 @@ const ogImage     = new URL('/images/logo.png', Astro.site || 'https://safeingam
 const pathname = Astro.url.pathname;
 
 const navItems = [
-  { href: `/${currentLang}/`,             label: 'Overview',        icon: 'home',    section: 'main' },
-  { href: `/${currentLang}/scanner/`,     label: 'Link Scanner',    icon: 'scanner', section: 'main' },
-  { href: `/${currentLang}/detective/`,   label: 'AI Detective',    icon: 'ai',      section: 'main', badge: 'AI' },
-  { href: `/${currentLang}/simulator/`,   label: 'Scam Simulator',  icon: 'sim',     section: 'main' },
-  { href: `/${currentLang}/radar/`,       label: 'Threat Radar',    icon: 'radar',   section: 'main' },
-  { href: `/${currentLang}/games/`,       label: 'Game Centers',    icon: 'game',    section: 'learn' },
-  { href: `/${currentLang}/academy/`,     label: 'Academy',         icon: 'academy', section: 'learn' },
-  { href: `/${currentLang}/threats/`,     label: 'Threat Library',  icon: 'threats', section: 'learn' },
-  { href: `/${currentLang}/parents/`,     label: 'Parent Mode',     icon: 'family',  section: 'family', badge: 'FAMILY' },
-  { href: `/${currentLang}/recovery/`,    label: 'Account Rescue',  icon: 'rescue',  section: 'family', badge: 'SOS', isSos: true },
-  { href: `/${currentLang}/score/`,       label: 'Security Score',  icon: 'score',   section: 'community' },
-  { href: `/${currentLang}/report/`,      label: 'Community Report',icon: 'report',  section: 'community' },
-  { href: `/${currentLang}/about/`,       label: 'About',           icon: 'about',   section: 'meta' },
-  { href: `/${currentLang}/contact/`,     label: 'Contact',         icon: 'contact', section: 'meta' },
+  { href: `/${currentLang}/`,             label: isRu ? 'Обзор' : 'Overview',               icon: 'home',    section: 'main' },
+  { href: `/${currentLang}/scanner/`,     label: isRu ? 'Сканер ссылок' : 'Link Scanner',    icon: 'scanner', section: 'main' },
+  { href: `/${currentLang}/detective/`,   label: isRu ? 'ИИ-детектив' : 'AI Detective',      icon: 'ai',      section: 'main', badge: 'AI' },
+  { href: `/${currentLang}/simulator/`,   label: isRu ? 'Симулятор скама' : 'Scam Simulator',icon: 'sim',     section: 'main' },
+  { href: `/${currentLang}/radar/`,       label: isRu ? 'Радар угроз' : 'Threat Radar',      icon: 'radar',   section: 'main' },
+  { href: `/${currentLang}/games/`,       label: isRu ? 'Игровые центры' : 'Game Centers',  icon: 'game',    section: 'learn' },
+  { href: `/${currentLang}/academy/`,     label: isRu ? 'Академия' : 'Academy',             icon: 'academy', section: 'learn' },
+  { href: `/${currentLang}/threats/`,     label: isRu ? 'База угроз' : 'Threat Library',    icon: 'threats', section: 'learn' },
+  { href: `/${currentLang}/parents/`,     label: isRu ? 'Родителям' : 'Parent Mode',        icon: 'family',  section: 'family', badge: isRu ? 'ДЕТЯМ' : 'FAMILY' },
+  { href: `/${currentLang}/recovery/`,    label: isRu ? 'Спасение аккаунта' : 'Account Rescue', icon: 'rescue', section: 'family', badge: 'SOS', isSos: true },
+  { href: `/${currentLang}/score/`,       label: isRu ? 'Рейтинг защиты' : 'Security Score',icon: 'score',   section: 'community' },
+  { href: `/${currentLang}/report/`,      label: isRu ? 'Сообщить об угрозе' : 'Community Report', icon: 'report', section: 'community' },
+  { href: `/${currentLang}/about/`,       label: isRu ? 'О проекте' : 'About',             icon: 'about',   section: 'meta' },
+  { href: `/${currentLang}/contact/`,     label: isRu ? 'Контакты' : 'Contact',             icon: 'contact', section: 'meta' },
 ];
+
+const sectionLabels = {
+  main: isRu ? 'Главное' : 'Main',
+  learn: isRu ? 'База знаний' : 'Learn',
+  family: isRu ? 'Безопасность' : 'Safety',
+  community: isRu ? 'Сообщество' : 'Community',
+};
+
+const uiText = {
+  subtitle: isRu ? 'Игровая кибербезопасность' : 'Gaming Cybersecurity',
+  cyberDefender: isRu ? 'Кибер-защитник' : 'Cyber Defender',
+  defenseHygiene: isRu ? 'Уровень защиты' : 'Defense Hygiene',
+  scanUrl: isRu ? 'Проверить' : 'Scan URL',
+  searchPlaceholder: isRu ? 'Поиск по функциям, играм, угрозам...' : 'Search features, games, threats...',
+  protected: isRu ? 'Защищено' : 'Protected',
+  expandSidebar: isRu ? 'Развернуть меню' : 'Expand sidebar',
+  collapseSidebar: isRu ? 'Свернуть меню' : 'Collapse sidebar',
+  openCabinet: isRu ? 'Личный кабинет игрока' : 'Gamer Security Profile',
+  shieldLv: isRu ? 'Щит Ур. 12' : 'Shield Lv.12',
+};
 
 function isActive(href: string): boolean {
   if (href === `/${currentLang}/`) return pathname === href || pathname === `/${currentLang}`;
@@ -56,7 +79,7 @@ function isActive(href: string): boolean {
 <html lang={currentLang} class="scroll-smooth dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
@@ -139,6 +162,18 @@ function isActive(href: string): boolean {
       <!-- Mobile Overlay -->
       <div id="sidebar-overlay" class="sidebar-overlay" aria-hidden="true"></div>
 
+      <!-- Mobile Floating Pull-Tab Button (Swipe or Tap indicator) -->
+      <button
+        id="mobile-floating-open-btn"
+        class="lg:hidden fixed left-0 top-1/2 -translate-y-1/2 z-40 w-6 h-14 rounded-r-xl bg-ds-accent/90 hover:bg-ds-accent text-white flex items-center justify-center shadow-lg shadow-ds-accent/30 transition-transform active:scale-95 cursor-pointer"
+        aria-label="Open sidebar menu"
+        title={uiText.expandSidebar}
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+
       <!-- ════════════════════ LEFT SIDEBAR ════════════════════ -->
       <aside id="dashboard-sidebar" class="dashboard-sidebar" aria-label="Main navigation">
 
@@ -159,16 +194,16 @@ function isActive(href: string): boolean {
               <span class="font-heading font-extrabold text-base tracking-tight text-ds-text whitespace-nowrap">
                 Safe<span class="text-ds-cyber">In</span>Game
               </span>
-              <span class="text-[10px] text-ds-text2 font-medium tracking-wide whitespace-nowrap">Gaming Cybersecurity</span>
+              <span class="text-[10px] text-ds-text2 font-medium tracking-wide whitespace-nowrap">{uiText.subtitle}</span>
             </div>
           </a>
 
           <!-- Desktop collapse toggle -->
           <button
             id="sidebar-collapse-btn"
-            class="hidden lg:flex ml-auto flex-shrink-0 w-7 h-7 items-center justify-center rounded-lg text-ds-text2 hover:text-ds-text hover:bg-white/5 transition-all"
+            class="hidden lg:flex ml-auto flex-shrink-0 w-7 h-7 items-center justify-center rounded-lg text-ds-text2 hover:text-ds-text hover:bg-white/5 transition-all cursor-pointer"
             aria-label="Toggle sidebar"
-            title="Collapse sidebar"
+            title={uiText.collapseSidebar}
           >
             <svg id="collapse-icon" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
@@ -176,29 +211,48 @@ function isActive(href: string): boolean {
           </button>
         </div>
 
+        <!-- Desktop Expand Button on Collapsed Rail -->
+        <button
+          id="sidebar-expand-rail-btn"
+          class="hidden w-10 h-10 mx-auto my-2 rounded-xl bg-ds-accent/15 border border-ds-accent/30 text-ds-accent hover:bg-ds-accent/25 hover:text-white items-center justify-center transition-all cursor-pointer flex-shrink-0"
+          aria-label="Expand sidebar"
+          title={uiText.expandSidebar}
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/>
+          </svg>
+        </button>
+
         <!-- Sidebar Navigation -->
         <nav class="flex-1 overflow-y-auto overflow-x-hidden py-3 space-y-0.5" aria-label="Sidebar navigation">
 
-          <!-- User Defense Mini-Card (Reference Image top-left) -->
-          <div class="sidebar-label-group px-4 py-3 mx-2 mb-2 rounded-2xl bg-white/5 border border-white/10 flex-shrink-0">
+          <!-- User Defense Mini-Card (Click opens Auth Cabinet) -->
+          <div
+            id="sidebar-profile-card"
+            class="sidebar-label-group px-4 py-3 mx-2 mb-2 rounded-2xl bg-white/5 border border-white/10 hover:border-ds-cyber/40 hover:bg-white/10 transition-all flex-shrink-0 cursor-pointer group"
+            data-open-auth-cabinet="true"
+            role="button"
+            tabindex="0"
+            title={uiText.openCabinet}
+          >
             <div class="flex items-center gap-2.5 mb-2.5">
-              <div class="relative w-8 h-8 rounded-xl bg-ds-surface3 border border-ds-cyber/40 flex items-center justify-center flex-shrink-0 text-xs font-bold text-ds-cyber">
+              <div class="relative w-8 h-8 rounded-xl bg-ds-surface3 border border-ds-cyber/40 flex items-center justify-center flex-shrink-0 text-xs font-bold text-ds-cyber" id="sidebar-user-avatar">
                 🛡️
                 <span class="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 border border-ds-bg"></span>
               </div>
               <div class="min-w-0 flex-1">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-ds-text truncate">Guardian_01</span>
+                  <span class="text-xs font-bold text-ds-text truncate group-hover:text-ds-cyber transition-colors" id="sidebar-user-tag">Guardian_01</span>
                   <span class="text-[9px] text-ds-cyber font-bold">LVL 12</span>
                 </div>
-                <div class="text-[10px] text-ds-text2">Cyber Defender</div>
+                <div class="text-[10px] text-ds-text2">{uiText.cyberDefender}</div>
               </div>
             </div>
 
             <!-- Progress bar -->
             <div class="mb-2">
               <div class="flex justify-between text-[9px] text-ds-text2 mb-1">
-                <span>Defense Hygiene</span>
+                <span>{uiText.defenseHygiene}</span>
                 <span class="text-emerald-400 font-bold">88%</span>
               </div>
               <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
@@ -208,27 +262,26 @@ function isActive(href: string): boolean {
 
             <!-- Quick Actions -->
             <div class="flex gap-1.5 pt-1">
-              <a
-                href={`/${currentLang}/scanner/`}
-                class="flex-1 py-1 rounded-lg bg-ds-cyber/15 hover:bg-ds-cyber/25 border border-ds-cyber/30 text-ds-cyber font-bold text-[10px] text-center transition-all"
+              <button
+                type="button"
+                class="flex-1 py-1 rounded-lg bg-ds-cyber/15 hover:bg-ds-cyber/25 border border-ds-cyber/30 text-ds-cyber font-bold text-[10px] text-center transition-all cursor-pointer"
               >
-                Scan URL
-              </a>
-              <a
-                href={`/${currentLang}/score/`}
+                {uiText.scanUrl}
+              </button>
+              <div
                 class="p-1 rounded-lg bg-white/5 hover:bg-white/10 text-ds-text2 hover:text-ds-text transition-all"
-                title="Settings & Score"
+                title={uiText.openCabinet}
               >
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                 </svg>
-              </a>
+              </div>
             </div>
           </div>
 
           <!-- MAIN section -->
-          <div class="sidebar-section-label sidebar-label-group">Main</div>
+          <div class="sidebar-section-label sidebar-label-group">{sectionLabels.main}</div>
           {navItems.filter(i => i.section === 'main').map(item => (
             <a
               href={item.href}
@@ -274,7 +327,7 @@ function isActive(href: string): boolean {
           ))}
 
           <!-- LEARN section -->
-          <div class="sidebar-section-label sidebar-label-group mt-2">Learn</div>
+          <div class="sidebar-section-label sidebar-label-group mt-2">{sectionLabels.learn}</div>
           {navItems.filter(i => i.section === 'learn').map(item => (
             <a
               href={item.href}
@@ -303,8 +356,8 @@ function isActive(href: string): boolean {
             </a>
           ))}
 
-          <!-- FAMILY section -->
-          <div class="sidebar-section-label sidebar-label-group mt-2">Safety</div>
+          <!-- SAFETY section -->
+          <div class="sidebar-section-label sidebar-label-group mt-2">{sectionLabels.family}</div>
           {navItems.filter(i => i.section === 'family').map(item => (
             <a
               href={item.href}
@@ -331,7 +384,7 @@ function isActive(href: string): boolean {
           ))}
 
           <!-- COMMUNITY section -->
-          <div class="sidebar-section-label sidebar-label-group mt-2">Community</div>
+          <div class="sidebar-section-label sidebar-label-group mt-2">{sectionLabels.community}</div>
           {navItems.filter(i => i.section === 'community').map(item => (
             <a
               href={item.href}
@@ -392,12 +445,12 @@ function isActive(href: string): boolean {
       </aside>
 
       <!-- ════════════════════ TOP BAR ════════════════════ -->
-      <header id="dashboard-topbar" class="dashboard-topbar px-4 sm:px-6 gap-3">
+      <header id="dashboard-topbar" class="dashboard-topbar px-3 sm:px-6 gap-2 sm:gap-3">
 
-        <!-- Mobile menu button -->
+        <!-- Mobile menu hamburger button -->
         <button
           id="mobile-menu-btn"
-          class="lg:hidden flex items-center justify-center w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-ds-text2 hover:text-ds-text transition-all flex-shrink-0"
+          class="lg:hidden flex items-center justify-center w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-ds-text2 hover:text-ds-text transition-all flex-shrink-0 cursor-pointer"
           aria-label="Open navigation"
           aria-expanded="false"
           aria-controls="dashboard-sidebar"
@@ -410,9 +463,23 @@ function isActive(href: string): boolean {
           </svg>
         </button>
 
+        <!-- Desktop Sidebar Toggle in Topbar -->
+        <button
+          id="desktop-topbar-sidebar-toggle"
+          class="hidden lg:flex items-center justify-center w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-ds-text2 hover:text-ds-text transition-all flex-shrink-0 cursor-pointer"
+          aria-label="Toggle sidebar"
+          title={uiText.collapseSidebar}
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h14"/>
+          </svg>
+        </button>
+
         <!-- Page title (mobile) -->
         <div class="lg:hidden flex-1 min-w-0">
-          <span class="font-heading font-bold text-sm text-ds-text truncate">SafeInGame</span>
+          <a href={`/${currentLang}/`} class="font-heading font-extrabold text-sm text-ds-text truncate block">
+            Safe<span class="text-ds-cyber">In</span>Game
+          </a>
         </div>
 
         <!-- Search bar (desktop) -->
@@ -424,24 +491,24 @@ function isActive(href: string): boolean {
           </div>
           <input
             type="text"
-            placeholder="Search features, games, threats..."
+            placeholder={uiText.searchPlaceholder}
             class="w-full pl-9 pr-4 py-2 text-sm bg-white/5 border border-white/10 rounded-xl text-ds-text placeholder-ds-text2 focus:outline-none focus:border-ds-cyber/50 focus:bg-white/8 transition-all"
             aria-label="Search"
           />
           <kbd class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-ds-text2 bg-white/5 px-1.5 py-0.5 rounded border border-white/10 hidden sm:inline-flex items-center">⌘K</kbd>
         </div>
 
-        <div class="flex items-center gap-2 ml-auto">
+        <div class="flex items-center gap-1.5 sm:gap-2 ml-auto">
           <!-- Security Status Badge -->
           <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Protected</span>
+            <span>{uiText.protected}</span>
           </div>
 
-          <!-- Theme Toggle -->
+          <!-- Theme Toggle (ID MUST REMAIN theme-toggle-btn for build tests) -->
           <button
             id="theme-toggle-btn"
-            class="flex items-center justify-center w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-ds-text2 hover:text-ds-text transition-all"
+            class="flex items-center justify-center w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-ds-text2 hover:text-ds-text transition-all cursor-pointer"
             aria-label="Toggle theme"
             title="Toggle light/dark mode"
           >
@@ -453,22 +520,11 @@ function isActive(href: string): boolean {
             </svg>
           </button>
 
-          <!-- Notifications -->
-          <button
-            class="relative flex items-center justify-center w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-ds-text2 hover:text-ds-text transition-all"
-            aria-label="Notifications"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-            </svg>
-            <!-- Notification dot -->
-            <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-ds-accent border-2 border-ds-bg"></span>
-          </button>
-
           <!-- SOS Button -->
           <a
             href={`/${currentLang}/recovery/`}
-            class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-500/15 border border-red-500/25 text-red-400 text-xs font-bold hover:bg-red-500/25 hover:border-red-500/40 transition-all"
+            class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-red-500/15 border border-red-500/25 text-red-400 text-xs font-bold hover:bg-red-500/25 hover:border-red-500/40 transition-all"
+            title={isRu ? 'Экстренное восстановление аккаунта' : 'Account Recovery SOS'}
           >
             <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span>
             <span>SOS</span>
@@ -480,21 +536,23 @@ function isActive(href: string): boolean {
             <a href={`/ru${pathname.replace(/^\/(en|ru)/, '')}`} class={`text-xs px-2.5 py-1 rounded-lg font-semibold transition-all ${currentLang === 'ru' ? 'bg-ds-accent/20 text-ds-accent' : 'text-ds-text2 hover:text-ds-text'}`}>RU</a>
           </div>
 
-          <!-- User Profile (Reference image: William_Prime avatar + rank) -->
-          <a
-            href={`/${currentLang}/score/`}
-            class="hidden md:flex items-center gap-2 pl-2 pr-3 py-1 rounded-xl bg-white/5 border border-white/10 hover:border-ds-cyber/40 transition-all group"
-            title="Gamer Security Profile & Score"
+          <!-- User Profile Button (Opens Auth & Cabinet Modal) -->
+          <button
+            type="button"
+            id="topbar-profile-btn"
+            class="flex items-center gap-2 pl-2 pr-2.5 sm:pr-3 py-1 rounded-xl bg-white/5 border border-white/10 hover:border-ds-cyber/40 transition-all group cursor-pointer"
+            title={uiText.openCabinet}
+            data-open-auth-cabinet="true"
           >
-            <div class="relative w-7 h-7 rounded-lg overflow-hidden border border-ds-cyber/40 flex-shrink-0 bg-ds-surface3 flex items-center justify-center text-xs">
-              <span class="font-heading font-black text-ds-cyber">SG</span>
+            <div class="relative w-7 h-7 rounded-lg overflow-hidden border border-ds-cyber/40 flex-shrink-0 bg-ds-surface3 flex items-center justify-center text-xs" id="topbar-user-avatar">
+              🛡️
               <span class="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-400 border border-ds-bg"></span>
             </div>
-            <div class="flex flex-col text-left">
-              <span class="text-xs font-bold text-ds-text leading-tight group-hover:text-ds-cyber transition-colors">Guardian_01</span>
-              <span class="text-[9px] text-emerald-400 font-semibold leading-tight">Shield Lv.12</span>
+            <div class="hidden sm:flex flex-col text-left">
+              <span class="text-xs font-bold text-ds-text leading-tight group-hover:text-ds-cyber transition-colors" id="topbar-user-tag">Guardian_01</span>
+              <span class="text-[9px] text-emerald-400 font-semibold leading-tight">{uiText.shieldLv}</span>
             </div>
-          </a>
+          </button>
         </div>
       </header>
 
@@ -511,20 +569,23 @@ function isActive(href: string): boolean {
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div class="flex items-center gap-2">
             <span class="font-heading font-bold text-sm text-ds-text">Safe<span class="text-ds-cyber">In</span>Game</span>
-            <span class="text-ds-text2 text-xs">— Independent gaming cybersecurity platform.</span>
+            <span class="text-ds-text2 text-xs">{isRu ? '— Независимая платформа игровой кибербезопасности.' : '— Independent gaming cybersecurity platform.'}</span>
           </div>
           <div class="flex items-center gap-4 text-xs text-ds-text2">
-            <a href={`/${currentLang}/privacy/`} class="hover:text-ds-text transition-colors">Privacy</a>
-            <a href={`/${currentLang}/terms/`} class="hover:text-ds-text transition-colors">Terms</a>
-            <a href={`/${currentLang}/contact/`} class="hover:text-ds-text transition-colors">Contact</a>
+            <a href={`/${currentLang}/privacy/`} class="hover:text-ds-text transition-colors">{isRu ? 'Конфиденциальность' : 'Privacy'}</a>
+            <a href={`/${currentLang}/terms/`} class="hover:text-ds-text transition-colors">{isRu ? 'Условия' : 'Terms'}</a>
+            <a href={`/${currentLang}/contact/`} class="hover:text-ds-text transition-colors">{isRu ? 'Контакты' : 'Contact'}</a>
             <a href="https://t.me/SafeInGame" target="_blank" rel="noopener" class="hover:text-ds-cyber transition-colors">Telegram</a>
           </div>
         </div>
         <p class="text-center text-[11px] text-ds-text2/50 mt-4">
-          © 2024–2026 SafeInGame. Educational platform for gaming cybersecurity awareness. All rights reserved.
+          © 2024–2026 SafeInGame. {isRu ? 'Образовательная платформа по кибербезопасности в играх. Все права защищены.' : 'Educational platform for gaming cybersecurity awareness. All rights reserved.'}
         </p>
       </div>
     </footer>
+
+    <!-- Personal Cabinet & Auth Modal -->
+    <AuthCabinetModal currentLang={currentLang} />
 
     <ScrollToTop currentLang={currentLang} />
 
@@ -541,6 +602,8 @@ function isActive(href: string): boolean {
   const main       = document.getElementById('dashboard-main');
   const footer     = document.getElementById('dashboard-footer');
   const collapseBtn = document.getElementById('sidebar-collapse-btn');
+  const expandRailBtn = document.getElementById('sidebar-expand-rail-btn');
+  const topbarToggleBtn = document.getElementById('desktop-topbar-sidebar-toggle');
   const collapseIcon = document.getElementById('collapse-icon');
   const labelGroups = document.querySelectorAll<HTMLElement>('.sidebar-label-group');
 
@@ -553,7 +616,14 @@ function isActive(href: string): boolean {
     });
     if (sidebar) sidebar.classList.toggle('collapsed', isCollapsed);
     if (collapseIcon) collapseIcon.style.transform = isCollapsed ? 'rotate(180deg)' : '';
-    // Hide text labels when collapsed
+
+    // Toggle Rail Expand button vs normal collapse
+    if (expandRailBtn) {
+      expandRailBtn.classList.toggle('hidden', !isCollapsed);
+      expandRailBtn.classList.toggle('flex', isCollapsed);
+    }
+
+    // Hide or show text labels when collapsed on desktop
     labelGroups.forEach(el => {
       el.style.opacity = isCollapsed ? '0' : '1';
       el.style.width   = isCollapsed ? '0' : '';
@@ -565,22 +635,35 @@ function isActive(href: string): boolean {
     try { localStorage.setItem('sig_sidebar_collapsed', String(isCollapsed)); } catch {}
   }
 
-  // Restore state
-  try {
-    isCollapsed = localStorage.getItem('sig_sidebar_collapsed') === 'true';
-    syncCollapsed();
-  } catch {}
+  // Restore state for desktop only
+  if (window.innerWidth >= 1024) {
+    try {
+      isCollapsed = localStorage.getItem('sig_sidebar_collapsed') === 'true';
+      syncCollapsed();
+    } catch {}
+  }
 
   collapseBtn?.addEventListener('click', () => {
     isCollapsed = !isCollapsed;
     syncCollapsed();
   });
 
-  // ── Mobile sidebar ──
-  const mobileBtn  = document.getElementById('mobile-menu-btn');
-  const overlay    = document.getElementById('sidebar-overlay');
-  const hamburger  = document.getElementById('hamburger-icon');
-  const closeIcon  = document.getElementById('close-icon');
+  expandRailBtn?.addEventListener('click', () => {
+    isCollapsed = false;
+    syncCollapsed();
+  });
+
+  topbarToggleBtn?.addEventListener('click', () => {
+    isCollapsed = !isCollapsed;
+    syncCollapsed();
+  });
+
+  // ── Mobile sidebar & Drawer ──
+  const mobileBtn    = document.getElementById('mobile-menu-btn');
+  const floatingBtn  = document.getElementById('mobile-floating-open-btn');
+  const overlay      = document.getElementById('sidebar-overlay');
+  const hamburger    = document.getElementById('hamburger-icon');
+  const closeIcon    = document.getElementById('close-icon');
 
   function openMobileSidebar() {
     sidebar?.classList.add('mobile-open');
@@ -588,6 +671,7 @@ function isActive(href: string): boolean {
     hamburger?.classList.add('hidden');
     closeIcon?.classList.remove('hidden');
     mobileBtn?.setAttribute('aria-expanded', 'true');
+    floatingBtn?.classList.add('hidden');
     document.body.style.overflow = 'hidden';
   }
 
@@ -597,6 +681,7 @@ function isActive(href: string): boolean {
     hamburger?.classList.remove('hidden');
     closeIcon?.classList.add('hidden');
     mobileBtn?.setAttribute('aria-expanded', 'false');
+    floatingBtn?.classList.remove('hidden');
     document.body.style.overflow = '';
   }
 
@@ -605,6 +690,7 @@ function isActive(href: string): boolean {
     isOpen ? closeMobileSidebar() : openMobileSidebar();
   });
 
+  floatingBtn?.addEventListener('click', openMobileSidebar);
   overlay?.addEventListener('click', closeMobileSidebar);
 
   // Close mobile sidebar on nav item click
@@ -613,6 +699,34 @@ function isActive(href: string): boolean {
       if (window.innerWidth < 1024) closeMobileSidebar();
     });
   });
+
+  // ── Touch Swipe Gestures for Mobile (Swipe right to open, swipe left to close) ──
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  window.addEventListener('touchstart', (e: TouchEvent) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  window.addEventListener('touchend', (e: TouchEvent) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+
+    // Must be predominantly horizontal gesture (> 45px)
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 45) {
+      // Swiping right from left screen boundary (< 50px) opens sidebar
+      if (diffX > 0 && touchStartX < 50 && !sidebar?.classList.contains('mobile-open')) {
+        openMobileSidebar();
+      }
+      // Swiping left anywhere on the open sidebar or screen closes it
+      else if (diffX < 0 && sidebar?.classList.contains('mobile-open')) {
+        closeMobileSidebar();
+      }
+    }
+  }, { passive: true });
 
   // ── Theme Toggle ──
   const themeToggle = document.getElementById('theme-toggle-btn');
@@ -657,7 +771,6 @@ function isActive(href: string): boolean {
     const container = card.closest<HTMLElement>('.tilt-card-container');
     if (!container) return;
 
-    // Skip on touch devices
     if ('ontouchstart' in window) return;
 
     container.addEventListener('mousemove', (e: MouseEvent) => {

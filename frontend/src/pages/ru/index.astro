@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ScamPatterns from '../../components/ScamPatterns.astro';
 import ScamQuiz from '../../components/ScamQuiz.astro';
 import DashboardTelemetry from '../../components/DashboardTelemetry.astro';
+import CyberAttackMap from '../../components/CyberAttackMap.astro';
 import { getAllGames } from '../../data/games';
 import { getCollection } from 'astro:content';
 import { useTranslations } from '../../i18n/ui';
@@ -186,6 +187,13 @@ const featureColorMap: Record<string, { border: string; bg: string; text: string
     <section class="px-4 sm:px-6 lg:px-8 pb-4">
       <div class="max-w-7xl mx-auto">
         <DashboardTelemetry currentLang={currentLang} />
+      </div>
+    </section>
+
+    <!-- Интерактивная Карта Кибератак -->
+    <section class="px-4 sm:px-6 lg:px-8 pb-4">
+      <div class="max-w-7xl mx-auto">
+        <CyberAttackMap currentLang={currentLang} />
       </div>
     </section>
 

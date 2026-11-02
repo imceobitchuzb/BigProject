@@ -1,0 +1,539 @@
+---
+interface Props {
+  currentLang?: 'en' | 'ru';
+}
+
+const { currentLang = 'en' } = Astro.props;
+const isRu = currentLang === 'ru';
+
+const labels = {
+  badge: isRu ? 'Глобальный мониторинг угроз' : 'Global Threat Radar Live',
+  title: isRu ? 'Карта кибератак на геймеров' : 'Global Gamer Cyber Attack Map',
+  subtitle: isRu 
+    ? 'Интерактивная карта перехваченных фишинговых атак, краж игровых сессий и фейковых турниров по странам в реальном времени.'
+    : 'Real-time telemetry tracking intercepted gaming phishing campaigns, session hijacks, and tournament scams across active regions.',
+  stat1: isRu ? 'Атак отражено за сутки' : 'Attacks Blocked (24h)',
+  stat2: isRu ? 'Активных векторов' : 'Active Scam Vectors',
+  stat3: isRu ? 'Эффективность защиты' : 'Defense Success Rate',
+  stat4: isRu ? 'Среднее время нейтрализации' : 'Avg Intercept Time',
+  filterAll: isRu ? 'Все угрозы' : 'All Threats',
+  liveFeedTitle: isRu ? 'Лента перехватов в реальном времени' : 'Live Attack Interceptions Feed',
+  hotspotsTitle: isRu ? 'Активные очаги атак' : 'Active Attack Hotspots',
+  country: isRu ? 'Страна' : 'Region',
+  threatVector: isRu ? 'Вектор атаки' : 'Threat Vector',
+  intensity: isRu ? 'Интенсивность' : 'Intensity',
+  statusLive: isRu ? 'В РЕАЛЬНОМ ВРЕМЕНИ' : 'LIVE STREAM',
+};
+
+// Preset attack hubs with realistic coordinates on 1000x500 SVG world map
+const attackNodes = [
+  { id: 'ru', name: isRu ? 'Восточная Европа / СНГ' : 'Eastern Europe / CIS', x: 620, y: 155, flag: '🇷🇺', level: 'CRITICAL', scam: 'Steam BitB & API Phishing', game: 'CS2 / Steam', count: '4,890 / 24ч' },
+  { id: 'us-e', name: isRu ? 'США (Восточное побережье)' : 'USA (East Coast)', x: 260, y: 180, flag: '🇺🇸', level: 'HIGH', scam: 'Roblox .HAR Cookie Stealer', game: 'Roblox', count: '3,410 / 24ч' },
+  { id: 'us-w', name: isRu ? 'США (Западное побережье)' : 'USA (West Coast)', x: 175, y: 175, flag: '🇺🇸', level: 'HIGH', scam: 'Discord Nitro OAuth Token Grab', game: 'Discord', count: '2,940 / 24ч' },
+  { id: 'br', name: isRu ? 'Бразилия (Сан-Паулу)' : 'Brazil (São Paulo)', x: 330, y: 340, flag: '🇧🇷', level: 'ELEVATED', scam: 'Fake Skin Roulette & APK', game: 'Brawl Stars', count: '1,820 / 24ч' },
+  { id: 'de', name: isRu ? 'Западная Европа (Германия)' : 'Western Europe (Germany)', x: 515, y: 160, flag: '🇩🇪', level: 'HIGH', scam: 'Fake FaceIT Tournament Phish', game: 'CS2', count: '2,150 / 24ч' },
+  { id: 'sea', name: isRu ? 'Юго-Восточная Азия' : 'Southeast Asia (PH/ID)', x: 790, y: 285, flag: '🇵🇭', level: 'CRITICAL', scam: 'Fake Gem Generators & Mod APK', game: 'Brawl Stars / Roblox', count: '3,880 / 24ч' },
+  { id: 'tr', name: isRu ? 'Турция / Ближний Восток' : 'Turkey / Middle East', x: 575, y: 195, flag: '🇹🇷', level: 'ELEVATED', scam: 'Discount Currency & Gift Fraud', game: 'PUBG / Steam', count: '1,450 / 24ч' },
+  { id: 'ea', name: isRu ? 'Восточная Азия' : 'East Asia (KR/JP)', x: 840, y: 190, flag: '🇯🇵', level: 'MODERATE', scam: 'Credential Stuffing Botnets', game: 'Minecraft / Steam', count: '980 / 24ч' },
+];
+
+// Arcs between attacker hubs and target gamer clusters
+const trajectories = [
+  { from: [620, 155], to: [515, 160], color: '#6C8CFF' }, // RU -> DE
+  { from: [620, 155], to: [260, 180], color: '#48D6E8' }, // RU -> US
+  { from: [790, 285], to: [840, 190], color: '#A78BFA' }, // SEA -> EA
+  { from: [175, 175], to: [260, 180], color: '#48D6E8' }, // US-W -> US-E
+  { from: [330, 340], to: [260, 180], color: '#F87171' }, // BR -> US
+  { from: [575, 195], to: [515, 160], color: '#FBBF24' }, // TR -> DE
+  { from: [790, 285], to: [620, 155], color: '#4ADE80' }, // SEA -> CIS
+];
+---
+
+<div class="cyber-attack-map-container rounded-3xl border border-ds-border bg-ds-surface/90 backdrop-blur-xl p-5 sm:p-7 shadow-premium relative overflow-hidden my-8">
+  <!-- Ambient background glow -->
+  <div class="absolute -top-32 -left-32 w-80 h-80 bg-ds-accent/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-32 -right-32 w-80 h-80 bg-ds-cyber/10 rounded-full blur-3xl pointer-events-none"></div>
+
+  <!-- Header -->
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 relative z-10">
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/25 text-red-400 text-xs font-bold uppercase tracking-wider mb-2">
+        <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+        <span>{labels.badge}</span>
+        <span class="text-ds-text2 font-normal">|</span>
+        <span class="text-emerald-400 font-semibold">{labels.statusLive}</span>
+      </div>
+      <h2 class="font-heading font-extrabold text-2xl sm:text-3xl text-ds-text tracking-tight">
+        {labels.title}
+      </h2>
+      <p class="text-sm text-ds-text2 max-w-2xl mt-1">
+        {labels.subtitle}
+      </p>
+    </div>
+
+    <!-- Live Game Filter Pills -->
+    <div class="flex flex-wrap items-center gap-1.5 self-start lg:self-center bg-black/20 dark:bg-black/40 p-1.5 rounded-2xl border border-white/5">
+      <button class="map-filter-btn active px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-ds-accent text-white" data-filter="all">
+        {labels.filterAll}
+      </button>
+      <button class="map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold text-ds-text2 hover:text-ds-text hover:bg-white/5 transition-all" data-filter="steam">
+        CS2 / Steam
+      </button>
+      <button class="map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold text-ds-text2 hover:text-ds-text hover:bg-white/5 transition-all" data-filter="roblox">
+        Roblox
+      </button>
+      <button class="map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold text-ds-text2 hover:text-ds-text hover:bg-white/5 transition-all" data-filter="brawl">
+        Brawl Stars
+      </button>
+      <button class="map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold text-ds-text2 hover:text-ds-text hover:bg-white/5 transition-all" data-filter="discord">
+        Discord
+      </button>
+    </div>
+  </div>
+
+  <!-- Key Metrics Row -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6 relative z-10">
+    <div class="p-3.5 sm:p-4 rounded-2xl bg-ds-surface2/60 border border-ds-border flex flex-col">
+      <span class="text-[11px] sm:text-xs text-ds-text2 font-medium">{labels.stat1}</span>
+      <div class="flex items-baseline gap-2 mt-1">
+        <span class="font-heading font-black text-xl sm:text-2xl text-ds-text" id="attacks-counter">14,892</span>
+        <span class="text-[10px] text-emerald-400 font-bold">+12%</span>
+      </div>
+    </div>
+    <div class="p-3.5 sm:p-4 rounded-2xl bg-ds-surface2/60 border border-ds-border flex flex-col">
+      <span class="text-[11px] sm:text-xs text-ds-text2 font-medium">{labels.stat2}</span>
+      <div class="flex items-baseline gap-2 mt-1">
+        <span class="font-heading font-black text-xl sm:text-2xl text-amber-400">18</span>
+        <span class="text-[10px] text-ds-text2">активных</span>
+      </div>
+    </div>
+    <div class="p-3.5 sm:p-4 rounded-2xl bg-ds-surface2/60 border border-ds-border flex flex-col">
+      <span class="text-[11px] sm:text-xs text-ds-text2 font-medium">{labels.stat3}</span>
+      <div class="flex items-baseline gap-2 mt-1">
+        <span class="font-heading font-black text-xl sm:text-2xl text-emerald-400">99.6%</span>
+        <span class="text-[10px] text-emerald-400 font-bold">Отражено</span>
+      </div>
+    </div>
+    <div class="p-3.5 sm:p-4 rounded-2xl bg-ds-surface2/60 border border-ds-border flex flex-col">
+      <span class="text-[11px] sm:text-xs text-ds-text2 font-medium">{labels.stat4}</span>
+      <div class="flex items-baseline gap-2 mt-1">
+        <span class="font-heading font-black text-xl sm:text-2xl text-ds-cyber">1.2 сек</span>
+        <span class="text-[10px] text-ds-cyber">AI Detect</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Map Stage -->
+  <div class="relative w-full rounded-2xl border border-ds-border bg-gradient-to-b from-[#0B1229] to-[#080C1D] p-2 sm:p-4 overflow-hidden mb-6">
+    <!-- Grid pattern background inside map -->
+    <div class="absolute inset-0 bg-[radial-gradient(#6C8CFF_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none"></div>
+
+    <!-- Interactive SVG Map -->
+    <div class="relative w-full aspect-[2/1] min-h-[300px] sm:min-h-[420px]">
+      <svg
+        viewBox="0 0 1000 500"
+        class="w-full h-full select-none"
+        xmlns="http://www.w3.org/2000/svg"
+        id="world-map-svg"
+      >
+        <defs>
+          <!-- Attack Trajectory Gradient -->
+          <linearGradient id="attackGradCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#48D6E8" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#6C8CFF" stop-opacity="0.2"/>
+          </linearGradient>
+          <linearGradient id="attackGradRed" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#F87171" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#FBBF24" stop-opacity="0.2"/>
+          </linearGradient>
+          <!-- Glow Filter -->
+          <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
+
+        <!-- World Continents Simplified Landmasses -->
+        <g class="world-landmasses" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-opacity="0.25" stroke-width="1" class="text-ds-accent">
+          <!-- North America -->
+          <path d="M 120 70 Q 180 50 260 70 Q 310 110 280 180 Q 230 220 180 250 Q 150 200 120 140 Z M 160 80 Q 220 75 240 120 Q 200 160 150 120 Z" />
+          <!-- Greenland -->
+          <path d="M 330 45 Q 370 40 380 70 Q 350 95 320 80 Z" />
+          <!-- South America -->
+          <path d="M 270 260 Q 340 270 360 330 Q 340 420 300 460 Q 260 410 260 330 Z" />
+          <!-- Europe -->
+          <path d="M 470 100 Q 550 85 580 125 Q 560 175 490 190 Q 450 170 460 120 Z" />
+          <!-- Africa -->
+          <path d="M 480 200 Q 560 210 580 280 Q 560 380 520 410 Q 460 350 460 270 Z" />
+          <!-- Asia & Russia -->
+          <path d="M 580 80 Q 750 60 880 90 Q 920 160 840 240 Q 750 260 670 200 Q 600 190 580 130 Z" />
+          <!-- Southeast Asia Islands -->
+          <path d="M 760 270 Q 810 270 820 310 Q 770 330 750 300 Z M 800 320 Q 840 330 830 350 Q 790 350 800 320 Z" />
+          <!-- Australia -->
+          <path d="M 790 350 Q 870 340 890 390 Q 850 440 780 420 Q 770 370 790 350 Z" />
+        </g>
+
+        <!-- Coordinate Grid Lines -->
+        <g stroke="currentColor" stroke-opacity="0.05" stroke-dasharray="3,3" class="text-ds-cyber">
+          <line x1="50" y1="125" x2="950" y2="125" />
+          <line x1="50" y1="250" x2="950" y2="250" />
+          <line x1="50" y1="375" x2="950" y2="375" />
+          <line x1="250" y1="50" x2="250" y2="450" />
+          <line x1="500" y1="50" x2="500" y2="450" />
+          <line x1="750" y1="50" x2="750" y2="450" />
+        </g>
+
+        <!-- Animated Attack Arcs -->
+        <g id="attack-trajectories">
+          {trajectories.map((traj, idx) => {
+            const mx = (traj.from[0] + traj.to[0]) / 2;
+            const my = Math.min(traj.from[1], traj.to[1]) - 40 - (idx * 6);
+            const pathD = `M ${traj.from[0]} ${traj.from[1]} Q ${mx} ${my} ${traj.to[0]} ${traj.to[1]}`;
+            return (
+              <g class="attack-arc-group">
+                <path
+                  d={pathD}
+                  fill="none"
+                  stroke={traj.color}
+                  stroke-width="1.8"
+                  stroke-opacity="0.4"
+                  stroke-dasharray="6,6"
+                  class="attack-path"
+                />
+                <!-- Animated energy dot along path -->
+                <circle r="3.5" fill={traj.color} filter="url(#glowFilter)">
+                  <animateMotion
+                    path={pathD}
+                    dur={`${2.2 + (idx % 3) * 0.8}s`}
+                    repeatCount="indefinite"
+                  />
+                </circle>
+              </g>
+            );
+          })}
+        </g>
+
+        <!-- Threat Node Beacons -->
+        <g id="attack-nodes">
+          {attackNodes.map(node => (
+            <g
+              class="map-node-target cursor-pointer group"
+              data-node-id={node.id}
+              data-game={node.game}
+              transform={`translate(${node.x}, ${node.y})`}
+            >
+              <!-- Outer pulse circle -->
+              <circle
+                r="16"
+                fill="none"
+                stroke={node.level === 'CRITICAL' ? '#F87171' : node.level === 'HIGH' ? '#FBBF24' : '#48D6E8'}
+                stroke-opacity="0.3"
+                class="animate-ping origin-center"
+                style="animation-duration: 2.5s;"
+              />
+              <!-- Mid beacon ring -->
+              <circle
+                r="8"
+                fill={node.level === 'CRITICAL' ? 'rgba(239,68,68,0.2)' : 'rgba(72,214,232,0.2)'}
+                stroke={node.level === 'CRITICAL' ? '#F87171' : '#48D6E8'}
+                stroke-width="1.5"
+              />
+              <!-- Center solid dot -->
+              <circle
+                r="3.5"
+                fill={node.level === 'CRITICAL' ? '#EF4444' : '#48D6E8'}
+              />
+
+              <!-- Hover Tooltip Pin -->
+              <g class="node-tooltip opacity-80 group-hover:opacity-100 transition-opacity">
+                <rect
+                  x="-65"
+                  y="-42"
+                  width="130"
+                  height="32"
+                  rx="6"
+                  fill="#111936"
+                  stroke={node.level === 'CRITICAL' ? '#EF4444' : '#6C8CFF'}
+                  stroke-width="1"
+                  filter="url(#glowFilter)"
+                />
+                <text x="0" y="-28" text-anchor="middle" fill="#FFFFFF" font-size="10" font-weight="bold" font-family="sans-serif">
+                  {node.flag} {node.id.toUpperCase()} • {node.game}
+                </text>
+                <text x="0" y="-16" text-anchor="middle" fill="#48D6E8" font-size="8.5" font-family="sans-serif">
+                  {node.scam.slice(0, 22)}
+                </text>
+              </g>
+            </g>
+          ))}
+        </g>
+      </svg>
+    </div>
+
+    <!-- Active Hotspot Detail Bar (Updates on Hover / Tap) -->
+    <div id="hotspot-detail-bar" class="mt-3 p-3 rounded-xl bg-ds-surface border border-ds-border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-2.5">
+        <span class="text-lg" id="detail-flag">🇷🇺</span>
+        <div>
+          <span class="font-bold text-ds-text text-sm" id="detail-title">Восточная Европа / СНГ</span>
+          <span class="text-ds-text2 ml-2" id="detail-scam">Steam BitB & API Phishing</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="px-2 py-0.5 rounded-md bg-red-500/20 text-red-400 font-bold border border-red-500/30 uppercase text-[10px]" id="detail-level">CRITICAL</span>
+        <span class="text-ds-text font-bold" id="detail-count">4,890 атак / 24ч</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Panel: Live Attack Intercept Feed & Top Scam Vectors -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 relative z-10">
+    <!-- Live Stream Feed (2 columns) -->
+    <div class="lg:col-span-2 rounded-2xl bg-ds-surface2/40 border border-ds-border p-4">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <h3 class="font-heading font-bold text-sm text-ds-text">{labels.liveFeedTitle}</h3>
+        </div>
+        <span class="text-[11px] text-ds-text2 font-mono" id="live-time-ticker">14:52:10 UTC</span>
+      </div>
+
+      <div class="space-y-2 overflow-hidden" id="live-feed-ticker" style="max-height: 220px;">
+        <!-- Feed items dynamically pushed here -->
+        <div class="feed-item p-2.5 rounded-xl bg-ds-surface/80 border border-white/5 flex items-center justify-between gap-3 text-xs animate-fadeIn">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="text-base flex-shrink-0">🇷🇺 ➔ 🇩🇪</span>
+            <span class="font-bold text-ds-text truncate">cs2-faceit-championship.net</span>
+            <span class="px-1.5 py-0.5 rounded text-[10px] bg-red-500/20 text-red-400 font-mono flex-shrink-0">BitB Phish</span>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <span class="text-emerald-400 font-bold font-mono">+$850 SAVED</span>
+            <span class="text-[10px] text-ds-text2 block">1 сек назад</span>
+          </div>
+        </div>
+
+        <div class="feed-item p-2.5 rounded-xl bg-ds-surface/80 border border-white/5 flex items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="text-base flex-shrink-0">🇺🇸 ➔ 🇺🇸</span>
+            <span class="font-bold text-ds-text truncate">roblox-cookie-auth.cc</span>
+            <span class="px-1.5 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-400 font-mono flex-shrink-0">.HAR Grabber</span>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <span class="text-emerald-400 font-bold font-mono">+$320 SAVED</span>
+            <span class="text-[10px] text-ds-text2 block">3 сек назад</span>
+          </div>
+        </div>
+
+        <div class="feed-item p-2.5 rounded-xl bg-ds-surface/80 border border-white/5 flex items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="text-base flex-shrink-0">🇵🇭 ➔ 🇧🇷</span>
+            <span class="font-bold text-ds-text truncate">free-brawl-gems2026.app</span>
+            <span class="px-1.5 py-0.5 rounded text-[10px] bg-purple-500/20 text-purple-400 font-mono flex-shrink-0">Fake APK</span>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <span class="text-emerald-400 font-bold font-mono">BLOCKED</span>
+            <span class="text-[10px] text-ds-text2 block">6 сек назад</span>
+          </div>
+        </div>
+
+        <div class="feed-item p-2.5 rounded-xl bg-ds-surface/80 border border-white/5 flex items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="text-base flex-shrink-0">🇺🇸 ➔ 🇬🇧</span>
+            <span class="font-bold text-ds-text truncate">discord-nitro-gift-claim.xyz</span>
+            <span class="px-1.5 py-0.5 rounded text-[10px] bg-ds-accent/20 text-ds-accent font-mono flex-shrink-0">OAuth Stealer</span>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <span class="text-emerald-400 font-bold font-mono">BLOCKED</span>
+            <span class="text-[10px] text-ds-text2 block">9 сек назад</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hotspots Summary Column (1 column) -->
+    <div class="rounded-2xl bg-ds-surface2/40 border border-ds-border p-4 flex flex-col justify-between">
+      <div>
+        <h3 class="font-heading font-bold text-sm text-ds-text mb-3">{labels.hotspotsTitle}</h3>
+        <div class="space-y-2.5 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-2 text-ds-text">
+              <span>🇷🇺</span> <span>CIS / Steam Trade</span>
+            </span>
+            <span class="font-bold text-red-400">4,890 / день</span>
+          </div>
+          <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+            <div class="h-full bg-red-400 rounded-full" style="width: 78%"></div>
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <span class="flex items-center gap-2 text-ds-text">
+              <span>🇺🇸</span> <span>USA / Roblox & Discord</span>
+            </span>
+            <span class="font-bold text-amber-400">3,410 / день</span>
+          </div>
+          <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+            <div class="h-full bg-amber-400 rounded-full" style="width: 62%"></div>
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <span class="flex items-center gap-2 text-ds-text">
+              <span>🇵🇭</span> <span>SEA / Mobile Gems</span>
+            </span>
+            <span class="font-bold text-ds-cyber">3,880 / день</span>
+          </div>
+          <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+            <div class="h-full bg-ds-cyber rounded-full" style="width: 68%"></div>
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <span class="flex items-center gap-2 text-ds-text">
+              <span>🇩🇪</span> <span>EU / CS2 Fake Cups</span>
+            </span>
+            <span class="font-bold text-emerald-400">2,150 / день</span>
+          </div>
+          <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+            <div class="h-full bg-emerald-400 rounded-full" style="width: 44%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-white/5 mt-3">
+        <a
+          href={`/${currentLang}/radar/`}
+          class="w-full py-2 px-3 rounded-xl bg-ds-accent/15 hover:bg-ds-accent/25 border border-ds-accent/30 text-ds-accent hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
+        >
+          <span>{isRu ? 'Открыть полный Радар угроз' : 'Open Full Threat Radar'}</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Node Data for Detail Bar updates ──
+  const nodeDetails: Record<string, { flag: string; title: string; scam: string; level: string; count: string }> = {
+    'ru': { flag: '🇷🇺', title: 'Восточная Европа / СНГ', scam: 'Steam BitB & API Phishing', level: 'CRITICAL', count: '4,890 атак / 24ч' },
+    'us-e': { flag: '🇺🇸', title: 'США (Восток)', scam: 'Roblox .HAR Cookie Grabber', level: 'HIGH', count: '3,410 атак / 24ч' },
+    'us-w': { flag: '🇺🇸', title: 'США (Запад)', scam: 'Discord Nitro OAuth Token Grab', level: 'HIGH', count: '2,940 атак / 24ч' },
+    'br': { flag: '🇧🇷', title: 'Бразилия (Сан-Паулу)', scam: 'Fake Skin Roulette & APK', level: 'ELEVATED', count: '1,820 атак / 24ч' },
+    'de': { flag: '🇩🇪', title: 'Германия / Западная Европа', scam: 'Fake FaceIT Tournament Phish', level: 'HIGH', count: '2,150 атак / 24ч' },
+    'sea': { flag: '🇵🇭', title: 'Юго-Восточная Азия', scam: 'Fake Gem Generators & Mod APK', level: 'CRITICAL', count: '3,880 атак / 24ч' },
+    'tr': { flag: '🇹🇷', title: 'Турция / Ближний Восток', scam: 'Discount Currency & Gift Fraud', level: 'ELEVATED', count: '1,450 атак / 24ч' },
+    'ea': { flag: '🇯🇵', title: 'Восточная Азия (JP/KR)', scam: 'Credential Stuffing Botnets', level: 'MODERATE', count: '980 атак / 24ч' },
+  };
+
+  const detailFlag = document.getElementById('detail-flag');
+  const detailTitle = document.getElementById('detail-title');
+  const detailScam = document.getElementById('detail-scam');
+  const detailLevel = document.getElementById('detail-level');
+  const detailCount = document.getElementById('detail-count');
+
+  document.querySelectorAll<SVGElement>('.map-node-target').forEach(nodeEl => {
+    nodeEl.addEventListener('mouseenter', () => {
+      const id = nodeEl.getAttribute('data-node-id');
+      if (id && nodeDetails[id]) {
+        const d = nodeDetails[id];
+        if (detailFlag) detailFlag.textContent = d.flag;
+        if (detailTitle) detailTitle.textContent = d.title;
+        if (detailScam) detailScam.textContent = d.scam;
+        if (detailLevel) {
+          detailLevel.textContent = d.level;
+          detailLevel.className = `px-2 py-0.5 rounded-md font-bold border uppercase text-[10px] ${
+            d.level === 'CRITICAL' ? 'bg-red-500/20 text-red-400 border-red-500/30' :
+            d.level === 'HIGH' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' :
+            'bg-cyan-500/20 text-cyan-400 border-cyan-500/30'
+          }`;
+        }
+        if (detailCount) detailCount.textContent = d.count;
+      }
+    });
+  });
+
+  // ── Dynamic Live Feed Streaming ──
+  const feedContainer = document.getElementById('live-feed-ticker');
+  const counterEl = document.getElementById('attacks-counter');
+  let attackCount = 14892;
+
+  const mockIncidents = [
+    { from: '🇷🇺 ➔ 🇸🇪', domain: 'steamcommunity-trade-offer.link', scam: 'BitB API Phish', saved: '+$420 SAVED', color: 'red' },
+    { from: '🇺🇸 ➔ 🇨🇦', domain: 'roblox-avatar-catalog-free.net', scam: '.HAR Stealer', saved: '+$1,100 SAVED', color: 'amber' },
+    { from: '🇵🇭 ➔ 🇲🇾', domain: 'brawl-unlimited-gems-app.site', scam: 'Trojan APK', saved: 'BLOCKED', color: 'purple' },
+    { from: '🇩🇪 ➔ 🇫🇷', domain: 'esl-major-cs2-qualifier.org', scam: 'Fake FaceIT', saved: '+$1,450 SAVED', color: 'red' },
+    { from: '🇹🇷 ➔ 🇷🇺', domain: 'pubg-uc-instant-discount.top', scam: 'Carding Fraud', saved: '+$180 SAVED', color: 'amber' },
+    { from: '🇺🇸 ➔ 🇩🇪', domain: 'discord-free-nitro-summer.gift', scam: 'OAuth Hijack', saved: 'BLOCKED', color: 'cyan' },
+  ];
+
+  let incidentIndex = 0;
+
+  function pushLiveIncident() {
+    if (!feedContainer) return;
+    const inc = mockIncidents[incidentIndex % mockIncidents.length];
+    incidentIndex++;
+    attackCount++;
+    if (counterEl) counterEl.textContent = attackCount.toLocaleString();
+
+    const item = document.createElement('div');
+    item.className = 'feed-item p-2.5 rounded-xl bg-ds-surface/80 border border-white/5 flex items-center justify-between gap-3 text-xs transition-all duration-300';
+    item.innerHTML = `
+      <div class="flex items-center gap-2 min-w-0">
+        <span class="text-base flex-shrink-0">${inc.from}</span>
+        <span class="font-bold text-ds-text truncate">${inc.domain}</span>
+        <span class="px-1.5 py-0.5 rounded text-[10px] bg-${inc.color}-500/20 text-${inc.color}-400 font-mono flex-shrink-0">${inc.scam}</span>
+      </div>
+      <div class="text-right flex-shrink-0">
+        <span class="text-emerald-400 font-bold font-mono">${inc.saved}</span>
+        <span class="text-[10px] text-ds-text2 block">только что</span>
+      </div>
+    `;
+
+    feedContainer.prepend(item);
+    if (feedContainer.children.length > 5) {
+      feedContainer.removeChild(feedContainer.lastElementChild!);
+    }
+  }
+
+  // Interval for live stream
+  setInterval(pushLiveIncident, 3500);
+
+  // UTC clock ticker
+  const clockTicker = document.getElementById('live-time-ticker');
+  setInterval(() => {
+    if (clockTicker) {
+      const now = new Date();
+      clockTicker.textContent = now.toTimeString().split(' ')[0] + ' UTC';
+    }
+  }, 1000);
+
+  // Filter Buttons
+  document.querySelectorAll<HTMLButtonElement>('.map-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.map-filter-btn').forEach(b => {
+        b.classList.remove('active', 'bg-ds-accent', 'text-white');
+        b.classList.add('text-ds-text2');
+      });
+      btn.classList.add('active', 'bg-ds-accent', 'text-white');
+      btn.classList.remove('text-ds-text2');
+      // Highlight matching nodes on SVG
+      const filter = btn.dataset.filter;
+      document.querySelectorAll<SVGElement>('.map-node-target').forEach(node => {
+        const game = (node.dataset.game || '').toLowerCase();
+        if (filter === 'all' || game.includes(filter!)) {
+          node.style.opacity = '1';
+        } else {
+          node.style.opacity = '0.25';
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+</style>

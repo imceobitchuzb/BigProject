@@ -1,0 +1,626 @@
+---
+interface Props {
+  currentLang?: 'en' | 'ru';
+}
+
+const { currentLang = 'en' } = Astro.props;
+const isRu = currentLang === 'ru';
+
+const t = {
+  cabinetTitle: isRu ? 'Личный кабинет геймера' : 'Gamer Security Cabinet',
+  cabinetSubtitle: isRu ? 'Управление безопасностью игровых аккаунтов и инвентаря' : 'Manage your gaming account defense and virtual assets',
+  tabSignIn: isRu ? 'Вход' : 'Sign In',
+  tabSignUp: isRu ? 'Регистрация' : 'Register',
+  tabCabinet: isRu ? 'Мой Профиль' : 'My Profile',
+  tagOrEmail: isRu ? 'Никнейм или Email' : 'GamerTag or Email',
+  password: isRu ? 'Пароль' : 'Password',
+  rememberMe: isRu ? 'Запомнить меня на этом устройстве' : 'Remember me on this device',
+  signInBtn: isRu ? 'Войти в профиль' : 'Sign In to Profile',
+  gamerTag: isRu ? 'Игровой никнейм (GamerTag)' : 'GamerTag / Nickname',
+  email: isRu ? 'Электронная почта' : 'Email Address',
+  favGame: isRu ? 'Основная игра для защиты' : 'Primary Game to Protect',
+  chooseAvatar: isRu ? 'Выберите боевую аватарку' : 'Choose Battle Avatar',
+  createAccountBtn: isRu ? 'Создать аккаунт' : 'Create Free Profile',
+  savedAccounts: isRu ? 'Сохраненные аккаунты на устройстве' : 'Saved Accounts on Device',
+  oneClickLogin: isRu ? 'Войти' : 'Login',
+  securityLevel: isRu ? 'Ранг кибер-защиты' : 'Defense Rank',
+  defenseIndex: isRu ? 'Индекс гигиены защиты' : 'Defense Hygiene Index',
+  linksScanned: isRu ? 'Проверок ссылок' : 'URLs Scanned',
+  simCompleted: isRu ? 'Симуляций пройдено' : 'Simulations Won',
+  quickActions: isRu ? 'Быстрые действия' : 'Quick Actions',
+  btnCalcScore: isRu ? 'Пройти аудит безопасности' : 'Take Security Audit',
+  btnScanner: isRu ? 'Сканировать подозрительную ссылку' : 'Scan Suspicious URL',
+  btnSimulator: isRu ? 'Тренировка против скамеров' : 'Scam Simulator Lab',
+  switchAccount: isRu ? 'Сменить аккаунт' : 'Switch Account',
+  signOut: isRu ? 'Выйти' : 'Sign Out',
+  accountCreated: isRu ? 'Аккаунт успешно создан!' : 'Profile created successfully!',
+  welcomeBack: isRu ? 'С возвращением в систему!' : 'Welcome back, Guardian!',
+};
+---
+
+<!-- ════════════════════ AUTH & PERSONAL CABINET MODAL ════════════════════ -->
+<div
+  id="auth-cabinet-modal"
+  class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-all duration-300"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-headline"
+>
+  <!-- Backdrop -->
+  <div id="auth-modal-backdrop" class="absolute inset-0 bg-black/75 backdrop-blur-md transition-opacity"></div>
+
+  <!-- Modal Dialog Container -->
+  <div class="relative w-full max-w-lg rounded-3xl border border-ds-border bg-ds-surface shadow-2xl p-6 sm:p-8 z-10 max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300">
+    <!-- Close Button -->
+    <button
+      id="close-auth-modal-btn"
+      class="absolute top-5 right-5 w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-ds-text2 hover:text-ds-text flex items-center justify-center transition-all"
+      aria-label="Close modal"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- ══════════════ VIEW 1: AUTHENTICATED CABINET ══════════════ -->
+    <div id="cabinet-authenticated-view" class="space-y-6">
+      <!-- Profile Header -->
+      <div class="flex items-center gap-4 border-b border-white/10 pb-5">
+        <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-ds-accent/30 to-ds-cyber/20 border-2 border-ds-cyber flex items-center justify-center text-3xl flex-shrink-0 shadow-lg shadow-ds-cyber/20" id="cabinet-user-avatar">
+          🛡️
+          <span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-ds-surface"></span>
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-2">
+            <h3 class="font-heading font-black text-xl text-ds-text truncate" id="cabinet-user-name">Guardian_01</h3>
+            <span class="px-2 py-0.5 rounded-md bg-ds-cyber/15 text-ds-cyber font-bold text-[10px] border border-ds-cyber/30 uppercase" id="cabinet-user-id">#SG-1284</span>
+          </div>
+          <p class="text-xs text-ds-text2 mt-0.5" id="cabinet-user-email">guardian@safeingame.org</p>
+          <div class="flex items-center gap-2 mt-1.5">
+            <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 text-[10px] font-bold border border-emerald-500/25" id="cabinet-user-rank">Кибер-Страж (Ур. 12)</span>
+            <span class="text-[11px] text-ds-text2 font-semibold" id="cabinet-user-game">CS2 / Steam</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Defense Score Card -->
+      <div class="p-4 rounded-2xl bg-ds-surface2/70 border border-ds-border">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs text-ds-text2 font-semibold">{t.defenseIndex}</span>
+          <span class="font-heading font-black text-sm text-emerald-400" id="cabinet-user-score">88%</span>
+        </div>
+        <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden mb-2">
+          <div id="cabinet-score-bar" class="h-full rounded-full bg-gradient-to-r from-ds-accent to-ds-cyber transition-all duration-700" style="width: 88%;"></div>
+        </div>
+        <p class="text-[11px] text-ds-text2">
+          {isRu ? 'Высокий уровень защиты. Рекомендуем обновить Steam Web API ключ раз в 30 дней.' : 'Solid security posture. Rotate Steam Web API keys every 30 days.'}
+        </p>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-2 gap-3">
+        <div class="p-3 rounded-xl bg-ds-surface2/50 border border-white/5">
+          <span class="text-[10px] text-ds-text2 uppercase tracking-wide block">{t.linksScanned}</span>
+          <span class="font-heading font-black text-xl text-ds-cyber mt-1 block" id="cabinet-stat-scans">14</span>
+        </div>
+        <div class="p-3 rounded-xl bg-ds-surface2/50 border border-white/5">
+          <span class="text-[10px] text-ds-text2 uppercase tracking-wide block">{t.simCompleted}</span>
+          <span class="font-heading font-black text-xl text-purple-400 mt-1 block" id="cabinet-stat-sims">8</span>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="space-y-2">
+        <span class="text-xs font-bold text-ds-text2 uppercase tracking-wide block">{t.quickActions}</span>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <a
+            href={`/${currentLang}/score/`}
+            class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-center transition-all group"
+          >
+            <span class="text-lg block mb-1">🎯</span>
+            <span class="text-xs font-bold text-ds-text block group-hover:text-ds-cyber">{t.btnCalcScore}</span>
+          </a>
+          <a
+            href={`/${currentLang}/scanner/`}
+            class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-center transition-all group"
+          >
+            <span class="text-lg block mb-1">🔍</span>
+            <span class="text-xs font-bold text-ds-text block group-hover:text-ds-cyber">{t.btnScanner}</span>
+          </a>
+          <a
+            href={`/${currentLang}/simulator/`}
+            class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-center transition-all group"
+          >
+            <span class="text-lg block mb-1">🎮</span>
+            <span class="text-xs font-bold text-ds-text block group-hover:text-ds-cyber">{t.btnSimulator}</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Switch / Sign Out Actions -->
+      <div class="pt-4 border-t border-white/10 flex items-center justify-between gap-3">
+        <button
+          id="btn-switch-account"
+          class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-ds-text text-xs font-semibold transition-all border border-white/10"
+        >
+          {t.switchAccount}
+        </button>
+        <button
+          id="btn-sign-out"
+          class="px-4 py-2 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-400 text-xs font-bold transition-all border border-red-500/30"
+        >
+          {t.signOut}
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════ VIEW 2: LOGIN / REGISTER FORMS ══════════════ -->
+    <div id="cabinet-unauthenticated-view" class="space-y-6 hidden">
+      <!-- Title -->
+      <div>
+        <h3 class="font-heading font-black text-2xl text-ds-text" id="modal-headline">
+          {t.cabinetTitle}
+        </h3>
+        <p class="text-xs text-ds-text2 mt-1">
+          {t.cabinetSubtitle}
+        </p>
+      </div>
+
+      <!-- Tabs Switcher -->
+      <div class="flex rounded-xl bg-black/20 p-1 border border-white/10">
+        <button
+          id="tab-btn-signin"
+          class="flex-1 py-2 rounded-lg text-xs font-bold transition-all bg-ds-accent text-white"
+        >
+          {t.tabSignIn}
+        </button>
+        <button
+          id="tab-btn-signup"
+          class="flex-1 py-2 rounded-lg text-xs font-bold transition-all text-ds-text2 hover:text-ds-text"
+        >
+          {t.tabSignUp}
+        </button>
+      </div>
+
+      <!-- SIGN IN FORM -->
+      <form id="auth-signin-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-ds-text2 mb-1.5">{t.tagOrEmail}</label>
+          <input
+            type="text"
+            id="signin-identifier"
+            required
+            placeholder="Guardian_01 / gamer@gmail.com"
+            class="premium-input text-sm"
+          />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-ds-text2 mb-1.5">{t.password}</label>
+          <input
+            type="password"
+            id="signin-password"
+            required
+            placeholder="••••••••"
+            class="premium-input text-sm"
+          />
+        </div>
+        <div class="flex items-center justify-between text-xs">
+          <label class="flex items-center gap-2 cursor-pointer text-ds-text2">
+            <input type="checkbox" id="signin-remember" checked class="rounded text-ds-accent focus:ring-0" />
+            <span>{t.rememberMe}</span>
+          </label>
+        </div>
+        <button
+          type="submit"
+          class="w-full py-3 rounded-xl bg-gradient-to-r from-ds-accent to-ds-cyber text-slate-950 font-heading font-bold text-sm hover:opacity-95 shadow-lg shadow-ds-accent/25 transition-all cursor-pointer"
+        >
+          {t.signInBtn}
+        </button>
+      </form>
+
+      <!-- SIGN UP FORM -->
+      <form id="auth-signup-form" class="space-y-4 hidden">
+        <div>
+          <label class="block text-xs font-semibold text-ds-text2 mb-1.5">{t.gamerTag}</label>
+          <input
+            type="text"
+            id="signup-gamertag"
+            required
+            placeholder="e.g. CyberFox, ShadowSniper"
+            class="premium-input text-sm"
+          />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-ds-text2 mb-1.5">{t.email}</label>
+          <input
+            type="email"
+            id="signup-email"
+            required
+            placeholder="gamer@example.com"
+            class="premium-input text-sm"
+          />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-ds-text2 mb-1.5">{t.password}</label>
+          <input
+            type="password"
+            id="signup-password"
+            required
+            placeholder="••••••••"
+            class="premium-input text-sm"
+          />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-ds-text2 mb-1.5">{t.favGame}</label>
+          <select id="signup-game" class="premium-input text-sm bg-ds-surface2 text-ds-text">
+            <option value="Counter-Strike 2 / Steam">Counter-Strike 2 / Steam</option>
+            <option value="Roblox">Roblox</option>
+            <option value="Brawl Stars / Supercell">Brawl Stars</option>
+            <option value="Minecraft">Minecraft</option>
+            <option value="PUBG Mobile">PUBG Mobile</option>
+            <option value="Discord & Social">Discord & Others</option>
+          </select>
+        </div>
+
+        <!-- Avatar Choice -->
+        <div>
+          <label class="block text-xs font-semibold text-ds-text2 mb-2">{t.chooseAvatar}</label>
+          <div class="flex items-center gap-2 justify-between" id="avatar-picker">
+            <button type="button" class="avatar-option w-10 h-10 rounded-xl bg-white/5 border-2 border-ds-cyber flex items-center justify-center text-xl hover:scale-110 transition-transform" data-avatar="🛡️">🛡️</button>
+            <button type="button" class="avatar-option w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-xl hover:scale-110 transition-transform" data-avatar="🤖">🤖</button>
+            <button type="button" class="avatar-option w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-xl hover:scale-110 transition-transform" data-avatar="🎮">🎮</button>
+            <button type="button" class="avatar-option w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-xl hover:scale-110 transition-transform" data-avatar="⚡">⚡</button>
+            <button type="button" class="avatar-option w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-xl hover:scale-110 transition-transform" data-avatar="🐉">🐉</button>
+            <button type="button" class="avatar-option w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-xl hover:scale-110 transition-transform" data-avatar="💎">💎</button>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-3 rounded-xl bg-gradient-to-r from-ds-accent to-ds-cyber text-slate-950 font-heading font-bold text-sm hover:opacity-95 shadow-lg shadow-ds-accent/25 transition-all cursor-pointer"
+        >
+          {t.createAccountBtn}
+        </button>
+      </form>
+
+      <!-- Saved Accounts Device Quick-Switcher -->
+      <div id="saved-accounts-section" class="pt-4 border-t border-white/10 space-y-2 hidden">
+        <span class="text-xs font-bold text-ds-text2 uppercase tracking-wide block">{t.savedAccounts}</span>
+        <div id="saved-accounts-list" class="space-y-1.5 max-h-36 overflow-y-auto">
+          <!-- Dynamically inserted -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  interface UserProfile {
+    gamerTag: string;
+    email: string;
+    password?: string;
+    avatar: string;
+    game: string;
+    id: string;
+    score: number;
+    scansCount: number;
+    simsCount: number;
+    rank: string;
+  }
+
+  // Pre-seeded default user
+  const DEFAULT_USER: UserProfile = {
+    gamerTag: 'Guardian_01',
+    email: 'guardian@safeingame.org',
+    password: 'password123',
+    avatar: '🛡️',
+    game: 'Counter-Strike 2 / Steam',
+    id: '#SG-1284',
+    score: 88,
+    scansCount: 14,
+    simsCount: 8,
+    rank: 'Кибер-Страж (Ур. 12)'
+  };
+
+  function getStoredUsers(): UserProfile[] {
+    try {
+      const data = localStorage.getItem('safeingame_users');
+      if (data) return JSON.parse(data);
+    } catch {}
+    return [DEFAULT_USER];
+  }
+
+  function saveStoredUsers(users: UserProfile[]) {
+    try {
+      localStorage.setItem('safeingame_users', JSON.stringify(users));
+    } catch {}
+  }
+
+  function getCurrentUser(): UserProfile {
+    try {
+      const data = localStorage.getItem('safeingame_current_user');
+      if (data) return JSON.parse(data);
+    } catch {}
+    return DEFAULT_USER;
+  }
+
+  function setCurrentUser(user: UserProfile | null) {
+    try {
+      if (user) {
+        localStorage.setItem('safeingame_current_user', JSON.stringify(user));
+      } else {
+        localStorage.removeItem('safeingame_current_user');
+      }
+    } catch {}
+    // Dispatch event so topbar and sidebar immediately react!
+    window.dispatchEvent(new CustomEvent('auth-changed', { detail: user }));
+  }
+
+  // Ensure default storage initialized
+  if (!localStorage.getItem('safeingame_users')) {
+    saveStoredUsers([DEFAULT_USER]);
+  }
+  if (!localStorage.getItem('safeingame_current_user')) {
+    localStorage.setItem('safeingame_current_user', JSON.stringify(DEFAULT_USER));
+  }
+
+  // DOM Elements
+  const modal = document.getElementById('auth-cabinet-modal');
+  const backdrop = document.getElementById('auth-modal-backdrop');
+  const closeBtn = document.getElementById('close-auth-modal-btn');
+  const authView = document.getElementById('cabinet-authenticated-view');
+  const unauthView = document.getElementById('cabinet-unauthenticated-view');
+
+  const tabBtnSignIn = document.getElementById('tab-btn-signin');
+  const tabBtnSignUp = document.getElementById('tab-btn-signup');
+  const signInForm = document.getElementById('auth-signin-form');
+  const signUpForm = document.getElementById('auth-signup-form');
+
+  const btnSwitchAccount = document.getElementById('btn-switch-account');
+  const btnSignOut = document.getElementById('btn-sign-out');
+
+  let selectedAvatar = '🛡️';
+
+  // Open & Close
+  function openModal() {
+    renderViews();
+    modal?.classList.remove('opacity-0', 'pointer-events-none');
+    const dialog = modal?.querySelector('.relative.w-full');
+    dialog?.classList.remove('scale-95');
+    dialog?.classList.add('scale-100');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal?.classList.add('opacity-0', 'pointer-events-none');
+    const dialog = modal?.querySelector('.relative.w-full');
+    dialog?.classList.remove('scale-100');
+    dialog?.classList.add('scale-95');
+    document.body.style.overflow = '';
+  }
+
+  // Hook all profile trigger elements on page
+  function attachModalTriggers() {
+    document.querySelectorAll('[data-open-auth-cabinet], #sidebar-profile-card, #topbar-profile-btn').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal();
+      });
+    });
+  }
+
+  closeBtn?.addEventListener('click', closeModal);
+  backdrop?.addEventListener('click', closeModal);
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // Render Views according to currentUser
+  function renderViews() {
+    const user = getCurrentUser();
+    if (user) {
+      authView?.classList.remove('hidden');
+      unauthView?.classList.add('hidden');
+
+      // Populate cabinet
+      const avatarEl = document.getElementById('cabinet-user-avatar');
+      if (avatarEl) avatarEl.innerHTML = `${user.avatar}<span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-ds-surface"></span>`;
+      const nameEl = document.getElementById('cabinet-user-name');
+      if (nameEl) nameEl.textContent = user.gamerTag;
+      const idEl = document.getElementById('cabinet-user-id');
+      if (idEl) idEl.textContent = user.id || '#SG-1001';
+      const emailEl = document.getElementById('cabinet-user-email');
+      if (emailEl) emailEl.textContent = user.email;
+      const rankEl = document.getElementById('cabinet-user-rank');
+      if (rankEl) rankEl.textContent = user.rank || 'Кибер-Страж';
+      const gameEl = document.getElementById('cabinet-user-game');
+      if (gameEl) gameEl.textContent = user.game;
+      const scoreEl = document.getElementById('cabinet-user-score');
+      if (scoreEl) scoreEl.textContent = `${user.score}%`;
+      const barEl = document.getElementById('cabinet-score-bar');
+      if (barEl) barEl.style.width = `${user.score}%`;
+      const scansEl = document.getElementById('cabinet-stat-scans');
+      if (scansEl) scansEl.textContent = String(user.scansCount || 1);
+      const simsEl = document.getElementById('cabinet-stat-sims');
+      if (simsEl) simsEl.textContent = String(user.simsCount || 0);
+    } else {
+      authView?.classList.add('hidden');
+      unauthView?.classList.remove('hidden');
+      renderSavedAccounts();
+    }
+  }
+
+  // Switch between Sign In / Sign Up tabs
+  tabBtnSignIn?.addEventListener('click', () => {
+    tabBtnSignIn.classList.add('bg-ds-accent', 'text-white');
+    tabBtnSignIn.classList.remove('text-ds-text2');
+    tabBtnSignUp?.classList.remove('bg-ds-accent', 'text-white');
+    tabBtnSignUp?.classList.add('text-ds-text2');
+    signInForm?.classList.remove('hidden');
+    signUpForm?.classList.add('hidden');
+  });
+
+  tabBtnSignUp?.addEventListener('click', () => {
+    tabBtnSignUp.classList.add('bg-ds-accent', 'text-white');
+    tabBtnSignUp.classList.remove('text-ds-text2');
+    tabBtnSignIn?.classList.remove('bg-ds-accent', 'text-white');
+    tabBtnSignIn?.classList.add('text-ds-text2');
+    signUpForm?.classList.remove('hidden');
+    signInForm?.classList.add('hidden');
+  });
+
+  // Avatar picker selection
+  document.querySelectorAll<HTMLButtonElement>('.avatar-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.avatar-option').forEach(b => {
+        b.classList.remove('border-2', 'border-ds-cyber');
+        b.classList.add('border-white/10');
+      });
+      btn.classList.add('border-2', 'border-ds-cyber');
+      btn.classList.remove('border-white/10');
+      selectedAvatar = btn.dataset.avatar || '🛡️';
+    });
+  });
+
+  // Handle Sign In Submit
+  signInForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const identInput = (document.getElementById('signin-identifier') as HTMLInputElement).value.trim();
+    const passInput = (document.getElementById('signin-password') as HTMLInputElement).value;
+
+    const users = getStoredUsers();
+    const found = users.find(u => u.gamerTag.toLowerCase() === identInput.toLowerCase() || u.email.toLowerCase() === identInput.toLowerCase());
+
+    if (found) {
+      setCurrentUser(found);
+      renderViews();
+    } else {
+      // Auto-create if not found or log in as new gamer
+      const newUser: UserProfile = {
+        gamerTag: identInput.includes('@') ? identInput.split('@')[0] : identInput,
+        email: identInput.includes('@') ? identInput : `${identInput.toLowerCase()}@safeingame.org`,
+        password: passInput,
+        avatar: '🛡️',
+        game: 'Counter-Strike 2 / Steam',
+        id: `#SG-${Math.floor(1000 + Math.random() * 9000)}`,
+        score: 75,
+        scansCount: 3,
+        simsCount: 1,
+        rank: 'Кибер-Защитник'
+      };
+      users.push(newUser);
+      saveStoredUsers(users);
+      setCurrentUser(newUser);
+      renderViews();
+    }
+  });
+
+  // Handle Sign Up Submit
+  signUpForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const tag = (document.getElementById('signup-gamertag') as HTMLInputElement).value.trim();
+    const email = (document.getElementById('signup-email') as HTMLInputElement).value.trim();
+    const password = (document.getElementById('signup-password') as HTMLInputElement).value;
+    const game = (document.getElementById('signup-game') as HTMLSelectElement).value;
+
+    const users = getStoredUsers();
+    const newUser: UserProfile = {
+      gamerTag: tag,
+      email: email,
+      password: password,
+      avatar: selectedAvatar,
+      game: game,
+      id: `#SG-${Math.floor(1000 + Math.random() * 9000)}`,
+      score: 82,
+      scansCount: 0,
+      simsCount: 0,
+      rank: 'Новобранец (Ур. 1)'
+    };
+
+    users.push(newUser);
+    saveStoredUsers(users);
+    setCurrentUser(newUser);
+    renderViews();
+  });
+
+  // Saved accounts list
+  function renderSavedAccounts() {
+    const list = document.getElementById('saved-accounts-list');
+    const container = document.getElementById('saved-accounts-section');
+    const users = getStoredUsers();
+
+    if (!list || !container) return;
+
+    if (users.length > 0) {
+      container.classList.remove('hidden');
+      list.innerHTML = users.map(u => `
+        <div class="flex items-center justify-between p-2 rounded-xl bg-white/5 border border-white/5 hover:border-ds-cyber/40 transition-all">
+          <div class="flex items-center gap-2.5">
+            <span class="text-xl">${u.avatar}</span>
+            <div>
+              <span class="text-xs font-bold text-ds-text block">${u.gamerTag}</span>
+              <span class="text-[10px] text-ds-text2 block">${u.game}</span>
+            </div>
+          </div>
+          <button
+            class="btn-quick-login px-3 py-1 rounded-lg bg-ds-cyber/20 hover:bg-ds-cyber/30 text-ds-cyber font-bold text-xs transition-all"
+            data-gamertag="${u.gamerTag}"
+          >
+            Войти
+          </button>
+        </div>
+      `).join('');
+
+      list.querySelectorAll<HTMLButtonElement>('.btn-quick-login').forEach(b => {
+        b.addEventListener('click', () => {
+          const tag = b.dataset.gamertag;
+          const user = users.find(u => u.gamerTag === tag);
+          if (user) {
+            setCurrentUser(user);
+            renderViews();
+          }
+        });
+      });
+    } else {
+      container.classList.add('hidden');
+    }
+  }
+
+  // Switch Account
+  btnSwitchAccount?.addEventListener('click', () => {
+    authView?.classList.add('hidden');
+    unauthView?.classList.remove('hidden');
+    renderSavedAccounts();
+  });
+
+  // Sign Out
+  btnSignOut?.addEventListener('click', () => {
+    setCurrentUser(null);
+    renderViews();
+  });
+
+  // Sync profile badges on sidebar & topbar whenever auth changes
+  function syncGlobalUserUI(user: UserProfile | null) {
+    const fallbackUser = user || { gamerTag: 'Guardian_01', avatar: '🛡️', rank: 'Кибер-Страж (Ур. 12)' };
+
+    // Update sidebar profile card
+    const sidebarTag = document.getElementById('sidebar-user-tag');
+    if (sidebarTag) sidebarTag.textContent = fallbackUser.gamerTag;
+    const sidebarAvatar = document.getElementById('sidebar-user-avatar');
+    if (sidebarAvatar) sidebarAvatar.textContent = fallbackUser.avatar;
+
+    // Update topbar profile button
+    const topbarTag = document.getElementById('topbar-user-tag');
+    if (topbarTag) topbarTag.textContent = fallbackUser.gamerTag;
+    const topbarAvatar = document.getElementById('topbar-user-avatar');
+    if (topbarAvatar) topbarAvatar.textContent = fallbackUser.avatar;
+  }
+
+  window.addEventListener('auth-changed', ((e: CustomEvent) => {
+    syncGlobalUserUI(e.detail);
+  }) as EventListener);
+
+  // Initial Sync
+  syncGlobalUserUI(getCurrentUser());
+  attachModalTriggers();
+</script>
