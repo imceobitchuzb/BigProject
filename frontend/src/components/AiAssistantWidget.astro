@@ -1,0 +1,340 @@
+---
+interface Props {
+  currentLang?: 'en' | 'ru';
+}
+
+const { currentLang = 'en' } = Astro.props;
+const isRu = currentLang === 'ru';
+
+const labels = {
+  aiTitle: isRu ? 'SAFI • ИИ-детектив' : 'SAFI • AI Security Detective',
+  aiStatus: isRu ? 'Онлайн • Защита активна' : 'Online • Defense Active',
+  defaultName: isRu ? 'Страж' : 'Guardian',
+  welcomePart1: isRu ? 'Привет, ' : 'Hey, ',
+  welcomePart2: isRu 
+    ? '! 🛡️ Я твой личный ИИ-помощник SafeInGame. Получил подозрительное сообщение, странный трейд или ссылку на "турнир"? Напиши мне — я разберу угрозу за пару секунд!'
+    : '! 🛡️ I am your SafeInGame AI guardian. Received a suspicious link, Discord DM, or tournament invite? Ask me and I will analyze it in seconds!',
+  quick1: isRu ? '🔍 Проверить ссылку' : '🔍 Check a link',
+  quick2: isRu ? '🎮 Защита Steam API' : '🎮 Steam API defense',
+  quick3: isRu ? '🍪 Roblox .HAR кража' : '🍪 Roblox cookie theft',
+  quick4: isRu ? '💎 Фейк гемы Brawl Stars' : '💎 Fake Brawl gems',
+  inputPlaceholder: isRu ? 'Вставьте ссылку или текст сообщения...' : 'Paste URL or suspicious message...',
+  send: isRu ? 'Отправить' : 'Send',
+  notificationBadge: isRu ? '1 новое сообщение' : '1 new message',
+  openChat: isRu ? 'Открыть' : 'Open',
+  thinking: isRu ? 'Анализирую угрозу...' : 'Analyzing threat...',
+};
+---
+
+<!-- ════════════════════ AI ASSISTANT WIDGET ════════════════════ -->
+<div id="ai-assistant-widget" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[90] flex flex-col items-end select-none">
+
+  <!-- ── 1. Pop-Up Notification Toast Bubble (Appears on load) ── -->
+  <div
+    id="ai-notification-toast"
+    class="mb-3 max-w-sm rounded-2xl border border-ds-cyber/40 bg-ds-surface/95 backdrop-blur-xl p-3.5 shadow-2xl shadow-ds-cyber/15 transform translate-y-3 opacity-0 pointer-events-none transition-all duration-400 flex items-start gap-3"
+  >
+    <div class="relative w-10 h-10 rounded-xl bg-gradient-to-br from-ds-accent to-ds-cyber p-0.5 flex-shrink-0 shadow-glow-cyber">
+      <div class="w-full h-full rounded-[10px] bg-ds-surface flex items-center justify-center text-xl">
+        🤖
+      </div>
+      <span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 border-2 border-ds-surface animate-pulse"></span>
+    </div>
+
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center justify-between gap-1 mb-1">
+        <span class="font-heading font-bold text-xs text-ds-text truncate">SAFI AI Guard</span>
+        <span class="text-[9px] px-1.5 py-0.2 rounded-full bg-ds-cyber/20 text-ds-cyber font-bold uppercase">{labels.notificationBadge}</span>
+      </div>
+      <p class="text-xs text-ds-text2 leading-relaxed">
+        {labels.welcomePart1}<strong class="text-ds-cyber" id="ai-toast-user-name">{labels.defaultName}</strong>{labels.welcomePart2}
+      </p>
+
+      <div class="flex items-center gap-2 mt-2.5">
+        <button
+          id="btn-open-ai-chat"
+          class="px-3 py-1 rounded-lg bg-ds-cyber/20 hover:bg-ds-cyber/30 border border-ds-cyber/40 text-ds-cyber font-bold text-xs transition-all cursor-pointer"
+        >
+          {labels.openChat}
+        </button>
+        <button
+          id="btn-dismiss-ai-toast"
+          class="text-xs text-ds-text2 hover:text-ds-text px-2 py-1 transition-colors cursor-pointer"
+        >
+          ✕
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 2. Full Interactive Chat Window ── -->
+  <div
+    id="ai-chat-window"
+    class="mb-3 w-[calc(100vw-32px)] sm:w-96 rounded-3xl border border-ds-border bg-ds-surface/95 backdrop-blur-2xl shadow-2xl overflow-hidden flex flex-col h-[480px] max-h-[75vh] transform scale-95 opacity-0 pointer-events-none transition-all duration-300"
+  >
+    <!-- Header -->
+    <div class="flex items-center justify-between px-4 py-3 border-b border-ds-border bg-ds-surface2/60">
+      <div class="flex items-center gap-2.5">
+        <div class="relative w-8 h-8 rounded-xl bg-ds-surface3 border border-ds-cyber/40 flex items-center justify-center text-lg">
+          🤖
+          <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-ds-surface"></span>
+        </div>
+        <div>
+          <h4 class="font-heading font-black text-xs text-ds-text leading-tight">{labels.aiTitle}</h4>
+          <span class="text-[10px] text-emerald-400 font-medium block">{labels.aiStatus}</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1">
+        <button id="btn-minimize-ai-chat" class="w-7 h-7 rounded-lg text-ds-text2 hover:text-ds-text hover:bg-white/5 flex items-center justify-center transition-all cursor-pointer" title="Minimize">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Messages Container -->
+    <div class="flex-1 p-4 overflow-y-auto space-y-3" id="ai-chat-messages">
+      <!-- Welcome Message -->
+      <div class="flex items-start gap-2.5">
+        <div class="w-6 h-6 rounded-lg bg-ds-cyber/20 text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
+          🤖
+        </div>
+        <div class="max-w-[85%] rounded-2xl rounded-tl-sm bg-ds-surface2 border border-ds-border p-3 text-xs text-ds-text leading-relaxed">
+          {labels.welcomePart1}<strong class="text-ds-cyber" id="ai-chat-user-name">{labels.defaultName}</strong>{labels.welcomePart2}
+        </div>
+      </div>
+
+      <!-- Quick prompts -->
+      <div class="pt-1 flex flex-wrap gap-1.5" id="ai-quick-prompts">
+        <button class="ai-prompt-chip text-[11px] px-2.5 py-1 rounded-xl bg-white/5 hover:bg-ds-accent/20 border border-white/10 hover:border-ds-accent/40 text-ds-text2 hover:text-ds-text transition-all cursor-pointer" data-prompt={labels.quick1}>
+          {labels.quick1}
+        </button>
+        <button class="ai-prompt-chip text-[11px] px-2.5 py-1 rounded-xl bg-white/5 hover:bg-ds-accent/20 border border-white/10 hover:border-ds-accent/40 text-ds-text2 hover:text-ds-text transition-all cursor-pointer" data-prompt={labels.quick2}>
+          {labels.quick2}
+        </button>
+        <button class="ai-prompt-chip text-[11px] px-2.5 py-1 rounded-xl bg-white/5 hover:bg-ds-accent/20 border border-white/10 hover:border-ds-accent/40 text-ds-text2 hover:text-ds-text transition-all cursor-pointer" data-prompt={labels.quick3}>
+          {labels.quick3}
+        </button>
+        <button class="ai-prompt-chip text-[11px] px-2.5 py-1 rounded-xl bg-white/5 hover:bg-ds-accent/20 border border-white/10 hover:border-ds-accent/40 text-ds-text2 hover:text-ds-text transition-all cursor-pointer" data-prompt={labels.quick4}>
+          {labels.quick4}
+        </button>
+      </div>
+    </div>
+
+    <!-- Input Box -->
+    <form id="ai-chat-form" class="p-3 border-t border-ds-border bg-ds-surface2/30 flex items-center gap-2">
+      <input
+        type="text"
+        id="ai-chat-input"
+        placeholder={labels.inputPlaceholder}
+        class="flex-1 bg-black/10 dark:bg-black/20 border border-ds-border rounded-xl px-3 py-2 text-xs text-ds-text placeholder-ds-text2 outline-none focus:border-ds-cyber transition-all"
+        autocomplete="off"
+      />
+      <button
+        type="submit"
+        class="px-3 py-2 rounded-xl bg-gradient-to-r from-ds-accent to-ds-cyber text-slate-950 font-bold text-xs shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer flex-shrink-0"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </button>
+    </form>
+  </div>
+
+  <!-- ── 3. Persistent Floating Trigger Button ── -->
+  <button
+    id="ai-floating-trigger-btn"
+    class="relative group w-14 h-14 rounded-2xl bg-gradient-to-tr from-ds-accent via-ds-cyber to-ds-accent2 p-0.5 shadow-xl shadow-ds-cyber/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+    aria-label="Open AI Security Detective"
+    title={labels.aiTitle}
+  >
+    <div class="w-full h-full rounded-[14px] bg-ds-surface flex items-center justify-center text-2xl group-hover:bg-ds-surface2 transition-colors">
+      🤖
+    </div>
+    <!-- Ping indicator -->
+    <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-ds-surface flex items-center justify-center">
+      <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+    </span>
+  </button>
+</div>
+
+<script>
+  // DOM Elements
+  const toast = document.getElementById('ai-notification-toast');
+  const chatWindow = document.getElementById('ai-chat-window');
+  const triggerBtn = document.getElementById('ai-floating-trigger-btn');
+  const openChatBtn = document.getElementById('btn-open-ai-chat');
+  const dismissToastBtn = document.getElementById('btn-dismiss-ai-toast');
+  const minimizeChatBtn = document.getElementById('btn-minimize-ai-chat');
+  const chatForm = document.getElementById('ai-chat-form');
+  const chatInput = document.getElementById('ai-chat-input') as HTMLInputElement | null;
+  const messagesList = document.getElementById('ai-chat-messages');
+
+  const toastUserName = document.getElementById('ai-toast-user-name');
+  const chatUserName = document.getElementById('ai-chat-user-name');
+
+  // Load and display current user name
+  function updateUserName() {
+    try {
+      const stored = localStorage.getItem('safeingame_current_user');
+      if (stored) {
+        const u = JSON.parse(stored);
+        if (u && u.gamerTag) {
+          if (toastUserName) toastUserName.textContent = u.gamerTag;
+          if (chatUserName) chatUserName.textContent = u.gamerTag;
+        }
+      }
+    } catch {}
+  }
+
+  updateUserName();
+  window.addEventListener('auth-changed', updateUserName);
+
+  // Show Toast automatically after 2 seconds if not dismissed
+  setTimeout(() => {
+    if (toast && !sessionStorage.getItem('sig_ai_toast_dismissed')) {
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
+    }
+  }, 1800);
+
+  function openChat() {
+    toast?.classList.add('opacity-0', 'pointer-events-none');
+    chatWindow?.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+    chatWindow?.classList.add('scale-100');
+    setTimeout(() => chatInput?.focus(), 100);
+  }
+
+  function closeChat() {
+    chatWindow?.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+    chatWindow?.classList.remove('scale-100');
+  }
+
+  triggerBtn?.addEventListener('click', () => {
+    const isOpen = !chatWindow?.classList.contains('opacity-0');
+    isOpen ? closeChat() : openChat();
+  });
+
+  openChatBtn?.addEventListener('click', openChat);
+  minimizeChatBtn?.addEventListener('click', closeChat);
+  dismissToastBtn?.addEventListener('click', () => {
+    toast?.classList.add('opacity-0', 'pointer-events-none');
+    sessionStorage.setItem('sig_ai_toast_dismissed', 'true');
+  });
+
+  // Handle Quick Prompts
+  document.querySelectorAll<HTMLButtonElement>('.ai-prompt-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const text = btn.dataset.prompt || btn.textContent?.trim() || '';
+      if (chatInput) {
+        chatInput.value = text;
+        submitUserMessage(text);
+      }
+    });
+  });
+
+  // Handle User Message Submission
+  chatForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!chatInput) return;
+    const text = chatInput.value.trim();
+    if (!text) return;
+    chatInput.value = '';
+    submitUserMessage(text);
+  });
+
+  async function submitUserMessage(userMsg: string) {
+    if (!messagesList) return;
+
+    // 1. Append User Message
+    const userBubble = document.createElement('div');
+    userBubble.className = 'flex items-start justify-end gap-2';
+    userBubble.innerHTML = `
+      <div class="max-w-[85%] rounded-2xl rounded-tr-sm bg-ds-accent text-white p-3 text-xs leading-relaxed font-medium">
+        ${escapeHtml(userMsg)}
+      </div>
+    `;
+    messagesList.appendChild(userBubble);
+    messagesList.scrollTop = messagesList.scrollHeight;
+
+    // 2. Append Thinking Indicator
+    const thinkingBubble = document.createElement('div');
+    thinkingBubble.className = 'flex items-start gap-2.5 ai-thinking';
+    thinkingBubble.innerHTML = `
+      <div class="w-6 h-6 rounded-lg bg-ds-cyber/20 text-xs flex items-center justify-center flex-shrink-0 mt-0.5">🤖</div>
+      <div class="rounded-2xl bg-ds-surface2 border border-ds-border p-3 text-xs text-ds-text2 italic flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-ds-cyber animate-ping"></span>
+        <span>Анализирую сообщение...</span>
+      </div>
+    `;
+    messagesList.appendChild(thinkingBubble);
+    messagesList.scrollTop = messagesList.scrollHeight;
+
+    // 3. Query Backend or Intelligent Heuristics Fallback
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/v1/detective', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: userMsg })
+      });
+
+      thinkingBubble.remove();
+
+      if (response.ok) {
+        const data = await response.json();
+        renderAiResponse(data.verdict || data.analysis || data.summary || JSON.stringify(data), data.risk_level || 'ANALYZED');
+      } else {
+        renderFallbackAiResponse(userMsg);
+      }
+    } catch {
+      thinkingBubble.remove();
+      renderFallbackAiResponse(userMsg);
+    }
+  }
+
+  function renderAiResponse(text: string, riskLevel: string) {
+    if (!messagesList) return;
+    const botBubble = document.createElement('div');
+    botBubble.className = 'flex items-start gap-2.5';
+    botBubble.innerHTML = `
+      <div class="w-6 h-6 rounded-lg bg-ds-cyber/20 text-xs flex items-center justify-center flex-shrink-0 mt-0.5">🤖</div>
+      <div class="max-w-[85%] rounded-2xl rounded-tl-sm bg-ds-surface2 border border-ds-cyber/30 p-3 text-xs text-ds-text leading-relaxed">
+        <div class="font-bold text-ds-cyber text-[10px] uppercase tracking-wide mb-1 flex items-center gap-1.5">
+          <span>● ВЕРДИКТ SAFI</span>
+          <span class="px-1.5 py-0.2 rounded bg-ds-cyber/20 text-[9px]">${riskLevel}</span>
+        </div>
+        ${escapeHtml(text)}
+      </div>
+    `;
+    messagesList.appendChild(botBubble);
+    messagesList.scrollTop = messagesList.scrollHeight;
+  }
+
+  function renderFallbackAiResponse(query: string) {
+    const q = query.toLowerCase();
+    let reply = 'Я изучил ваш запрос. Пожалуйста, никогда не переходите по неизвестным ссылкам и никому не передавайте свой пароль или коды из SMS/аутентификатора!';
+    let risk = 'SAFE ADVICE';
+
+    if (q.includes('steam') || q.includes('api') || q.includes('скин') || q.includes('трейд')) {
+      reply = '⚠️ Осторожно! В Steam мошенники часто подменяют трейды через украденный API-ключ. Срочно перейдите на steamcommunity.com/dev/apikey и удалите ключ, если вы его не создавали!';
+      risk = 'STEAM WARNING';
+    } else if (q.includes('roblox') || q.includes('cookie') || q.includes('har') || q.includes('робукс')) {
+      reply = '🚨 Критический риск! Никому и никогда не отправляйте .HAR файлы или текст из консоли F12 — в них находится .ROBLOSECURITY куки, позволяющий войти в ваш аккаунт без пароля и 2FA!';
+      risk = 'HIGH RISK';
+    } else if (q.includes('brawl') || q.includes('гем') || q.includes('gem') || q.includes('суперселл')) {
+      reply = '❌ Это 100% обман! Сайтов "генераторов бесплатных гемов" не существует. Любой сайт, требующий код от Supercell ID — это фишинг для угона аккаунта.';
+      risk = 'CRITICAL SCAM';
+    } else if (q.includes('discord') || q.includes('nitro') || q.includes('qr')) {
+      reply = '⚠️ Внимание: модераторы и боты не дарят Nitro через QR-коды. Если вы отсканируете QR-код в мобильном приложении Discord, мошенник мгновенно получит полный доступ к вашей учетной записи!';
+      risk = 'DISCORD PHISH';
+    } else if (q.includes('http') || q.includes('.net') || q.includes('.cc') || q.includes('.top') || q.includes('.vip')) {
+      reply = '🔍 Подозрительный URL! Рекомендую проверить этот адрес в нашем официальном "Сканере ссылок" (в меню слева). 92% подобных сайтов являются фишинговыми копиями Steam/FaceIT.';
+      risk = 'SUSPICIOUS URL';
+    }
+
+    renderAiResponse(reply, risk);
+  }
+
+  function escapeHtml(str: string): string {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+</script>

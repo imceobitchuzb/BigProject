@@ -214,6 +214,105 @@ const feedItems = [
       </div>
     </div>
 
+    <!-- ═══════════════════════════════════════════════════
+         GAME DEFENSE SHIELDS MATRIX (Fills void & balances layout)
+         ═══════════════════════════════════════════════════ -->
+    <div class="rounded-3xl border border-ds-border bg-gradient-to-br from-ds-surface to-ds-surface2 p-5 sm:p-6 shadow-premium reveal">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <div class="flex items-center gap-2 mb-0.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">{isRu ? 'Активные щиты платформ' : 'Active Platform Shields'}</span>
+          </div>
+          <h4 class="font-heading font-extrabold text-base text-ds-text">
+            {isRu ? 'Рубежи киберзащиты ваших игровых профилей' : 'Real-Time Game Account Defense Perimeters'}
+          </h4>
+        </div>
+        <a
+          href={`/${currentLang}/games/`}
+          class="text-xs text-ds-cyber hover:underline font-semibold flex items-center gap-1"
+        >
+          <span>{isRu ? 'Все центры' : 'All Centers'}</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <!-- 4 Game Security Nodes Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <!-- CS2 -->
+        <a
+          href={`/${currentLang}/games/cs2-steam/`}
+          class="p-3.5 rounded-2xl bg-ds-surface2/60 border border-white/5 hover:border-orange-500/40 hover:bg-ds-surface2 transition-all flex flex-col justify-between group"
+        >
+          <div class="flex items-center gap-2.5 mb-2">
+            <img src="/images/games/cs2-steam.jpg" alt="CS2" class="w-8 h-8 rounded-lg object-cover border border-white/10" />
+            <div class="min-w-0">
+              <span class="font-bold text-xs text-ds-text truncate block group-hover:text-orange transition-colors">CS2 / Steam</span>
+              <span class="text-[10px] text-emerald-400 font-semibold block">● API Key Guard</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-[10px] text-ds-text2 pt-2 border-t border-white/5">
+            <span>BitB Phish</span>
+            <span class="text-ds-text font-bold">{isRu ? 'Отражено' : 'Mitigated'}</span>
+          </div>
+        </a>
+
+        <!-- Roblox -->
+        <a
+          href={`/${currentLang}/games/roblox/`}
+          class="p-3.5 rounded-2xl bg-ds-surface2/60 border border-white/5 hover:border-blue-500/40 hover:bg-ds-surface2 transition-all flex flex-col justify-between group"
+        >
+          <div class="flex items-center gap-2.5 mb-2">
+            <img src="/images/games/roblox.webp" alt="Roblox" class="w-8 h-8 rounded-lg object-cover border border-white/10" />
+            <div class="min-w-0">
+              <span class="font-bold text-xs text-ds-text truncate block group-hover:text-ds-cyber transition-colors">Roblox</span>
+              <span class="text-[10px] text-emerald-400 font-semibold block">● .HAR Firewall</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-[10px] text-ds-text2 pt-2 border-t border-white/5">
+            <span>Cookie Steal</span>
+            <span class="text-ds-text font-bold">{isRu ? 'Защищено' : 'Protected'}</span>
+          </div>
+        </a>
+
+        <!-- Brawl Stars -->
+        <a
+          href={`/${currentLang}/games/brawl-stars/`}
+          class="p-3.5 rounded-2xl bg-ds-surface2/60 border border-white/5 hover:border-amber-500/40 hover:bg-ds-surface2 transition-all flex flex-col justify-between group"
+        >
+          <div class="flex items-center gap-2.5 mb-2">
+            <img src="/images/games/brawl-stars.jpg" alt="Brawl Stars" class="w-8 h-8 rounded-lg object-cover border border-white/10" />
+            <div class="min-w-0">
+              <span class="font-bold text-xs text-ds-text truncate block group-hover:text-amber-400 transition-colors">Brawl Stars</span>
+              <span class="text-[10px] text-emerald-400 font-semibold block">● Supercell 2FA</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-[10px] text-ds-text2 pt-2 border-t border-white/5">
+            <span>Fake Gems</span>
+            <span class="text-ds-text font-bold">{isRu ? 'Блокировано' : 'Blocked'}</span>
+          </div>
+        </a>
+
+        <!-- Minecraft -->
+        <a
+          href={`/${currentLang}/games/minecraft/`}
+          class="p-3.5 rounded-2xl bg-ds-surface2/60 border border-white/5 hover:border-emerald-500/40 hover:bg-ds-surface2 transition-all flex flex-col justify-between group"
+        >
+          <div class="flex items-center gap-2.5 mb-2">
+            <img src="/images/games/minecraft.webp" alt="Minecraft" class="w-8 h-8 rounded-lg object-cover border border-white/10" />
+            <div class="min-w-0">
+              <span class="font-bold text-xs text-ds-text truncate block group-hover:text-emerald-400 transition-colors">Minecraft</span>
+              <span class="text-[10px] text-emerald-400 font-semibold block">● Mod Integrity</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-[10px] text-ds-text2 pt-2 border-t border-white/5">
+            <span>Trojan Mods</span>
+            <span class="text-ds-text font-bold">{isRu ? 'Чисто' : 'Clean'}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
   </div>
 
   <!-- ═══════════════════════════════════════════════════

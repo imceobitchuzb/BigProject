@@ -12,6 +12,14 @@ const currentLang = 'en';
 // Games list
 const games = getAllGames(currentLang);
 
+const gameImageMap: Record<string, string> = {
+  'cs2-steam': '/images/games/cs2-steam.jpg',
+  'brawl-stars': '/images/games/brawl-stars.jpg',
+  'pubg': '/images/games/pubg.jpg',
+  'roblox': '/images/games/roblox.webp',
+  'minecraft': '/images/games/minecraft.webp',
+};
+
 // Get threat articles for English
 const allThreats = await getCollection('threats', ({ id }) => id.startsWith('en/'));
 const sortedThreats = allThreats.sort(
@@ -303,11 +311,16 @@ const featureColorMap: Record<string, { border: string; bg: string; text: string
           {games.slice(0, 5).map(game => (
             <a
               href={`/en/games/${game.slug}/`}
-              class="flex items-center gap-2 px-4 py-2 rounded-xl bg-ds-surface border border-ds-border text-ds-text2 text-sm font-medium hover:border-ds-accent/40 hover:text-ds-text hover:bg-ds-surface2 transition-all group"
+              class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-ds-surface border border-ds-border text-ds-text text-sm font-medium hover:border-ds-accent/40 hover:text-ds-cyber hover:bg-ds-surface2 transition-all group"
             >
-              <span class="w-2 h-2 rounded-full flex-shrink-0"
-                    style={"background: " + game.colorTheme.accent + ";"}></span>
-              {game.title.split(' ')[0]}
+              <img
+                src={gameImageMap[game.slug] || '/images/logo.png'}
+                alt={game.title}
+                class="w-4 h-4 rounded object-cover flex-shrink-0 border border-white/10 group-hover:scale-105 transition-transform"
+                width="16"
+                height="16"
+              />
+              <span>{game.title.split(' ')[0]}</span>
             </a>
           ))}
           <a
@@ -466,16 +479,18 @@ const featureColorMap: Record<string, { border: string; bg: string; text: string
                   class="tilt-card group block rounded-2xl border border-ds-border bg-ds-surface hover:border-ds-accent/30 overflow-hidden transition-all duration-300 hover:shadow-premium-hover"
                 >
                   <!-- Game card gradient header -->
-                  <div class="relative h-28 overflow-hidden flex items-center justify-center"
-                       style={`background: linear-gradient(135deg, ${game.colorTheme.bgGlow}, rgba(17,25,54,0.8));`}>
-                    <!-- Game logo placeholder — elegant SVG -->
-                    <div class="text-4xl opacity-30 group-hover:opacity-50 transition-opacity font-heading font-black text-ds-text select-none">
-                      {game.title.substring(0, 2).toUpperCase()}
-                    </div>
+                  <div class="relative h-28 overflow-hidden flex items-center justify-center bg-ds-surface3 group">
+                    <img
+                      src={gameImageMap[game.slug] || '/images/logo.png'}
+                      alt={game.title}
+                      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 filter brightness-90 group-hover:brightness-105"
+                      loading="lazy"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-ds-surface via-transparent to-black/25 pointer-events-none"></div>
                     <!-- Risk badge -->
                     <div class="absolute top-2 right-2">
-                      <span class="text-[9px] font-bold px-2 py-0.5 rounded-md border uppercase tracking-wide"
-                            style={`background: ${game.colorTheme.bgGlow}; color: ${game.colorTheme.accent}; border-color: ${game.colorTheme.accent}40;`}>
+                      <span class="text-[9px] font-bold px-2 py-0.5 rounded-md border uppercase tracking-wide backdrop-blur-md shadow-sm"
+                            style={`background: ${game.colorTheme.bgGlow}; color: ${game.colorTheme.accent}; border-color: ${game.colorTheme.accent}60;`}>
                         {game.riskBadge.split(' ')[0]}
                       </span>
                     </div>

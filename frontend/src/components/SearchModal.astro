@@ -1,0 +1,254 @@
+---
+interface Props {
+  currentLang?: 'en' | 'ru';
+}
+
+const { currentLang = 'en' } = Astro.props;
+const isRu = currentLang === 'ru';
+
+const labels = {
+  placeholder: isRu ? 'Поиск функций, игр, угроз, статей...' : 'Search features, games, threats, tools...',
+  quickJump: isRu ? 'Быстрый переход' : 'Quick Navigation',
+  games: isRu ? 'Игровые центры' : 'Game Centers',
+  tools: isRu ? 'Инструменты' : 'Security Tools',
+  threats: isRu ? 'База угроз' : 'Threat Intelligence',
+  noResults: isRu ? 'Ничего не найдено по запросу' : 'No results found for',
+  tryAnother: isRu ? 'Попробуйте изменить поисковый запрос (например: CS2, Steam, Discord, Фишинг, Сканер)' : 'Try searching for CS2, Roblox, Phishing, Scanner, API...',
+  navigate: isRu ? 'Навигация' : 'Navigate',
+  select: isRu ? 'Выбрать' : 'Select',
+  close: isRu ? 'Закрыть' : 'Close',
+};
+
+const searchItems = [
+  // Games
+  { title: isRu ? 'Counter-Strike 2 и Steam' : 'Counter-Strike 2 & Steam', category: 'games', icon: '🎮', url: `/${currentLang}/games/cs2-steam/`, tags: ['cs2', 'steam', 'skins', 'скины', 'трейд', 'faceit'] },
+  { title: isRu ? 'Roblox' : 'Roblox', category: 'games', icon: '🎮', url: `/${currentLang}/games/roblox/`, tags: ['roblox', 'роблокс', 'robux', 'робуксы', 'cookie', 'har'] },
+  { title: isRu ? 'Brawl Stars' : 'Brawl Stars', category: 'games', icon: '🎮', url: `/${currentLang}/games/brawl-stars/`, tags: ['brawl', 'stars', 'бравл', 'старс', 'gems', 'гемы', 'supercell'] },
+  { title: isRu ? 'PUBG & PUBG Mobile' : 'PUBG & PUBG Mobile', category: 'games', icon: '🎮', url: `/${currentLang}/games/pubg/`, tags: ['pubg', 'пабг', 'uc', 'юси', 'турнир'] },
+  { title: isRu ? 'Minecraft' : 'Minecraft', category: 'games', icon: '🎮', url: `/${currentLang}/games/minecraft/`, tags: ['minecraft', 'майнкрафт', 'mods', 'моды', 'curseforge'] },
+
+  // Tools
+  { title: isRu ? 'Сканер ссылок' : 'Link Security Scanner', category: 'tools', icon: '🔍', url: `/${currentLang}/scanner/`, tags: ['scanner', 'сканер', 'url', 'ссылка', 'домен', 'проверка'] },
+  { title: isRu ? 'ИИ-детектив мошенников' : 'AI Scam Detective', category: 'tools', icon: '🤖', url: `/${currentLang}/detective/`, tags: ['ai', 'ии', 'детектив', 'анализ', 'сообщение', 'скриншот'] },
+  { title: isRu ? 'Глобальный радар угроз' : 'Global Threat Radar', category: 'tools', icon: '📡', url: `/${currentLang}/radar/`, tags: ['radar', 'радар', 'угрозы', 'карта', 'атаки', 'статистика'] },
+  { title: isRu ? 'Симулятор скама' : 'Scam Simulator', category: 'tools', icon: '🕹️', url: `/${currentLang}/simulator/`, tags: ['simulator', 'симулятор', 'тренировка', 'тест', 'сценарии'] },
+  { title: isRu ? 'Рейтинг безопасности' : 'Gamer Security Score', category: 'tools', icon: '🛡️', url: `/${currentLang}/score/`, tags: ['score', 'рейтинг', 'оценка', 'тест', '2fa'] },
+  { title: isRu ? 'Спасение аккаунта (SOS)' : 'Account Rescue (SOS)', category: 'tools', icon: '🚨', url: `/${currentLang}/recovery/`, tags: ['recovery', 'sos', 'восстановление', 'взлом', 'украли'] },
+  { title: isRu ? 'Академия киберзащиты' : 'Security Academy', category: 'tools', icon: '📚', url: `/${currentLang}/academy/`, tags: ['academy', 'академия', 'уроки', 'обучение', 'сертификат'] },
+  { title: isRu ? 'Родительский режим' : 'Parent Mode', category: 'tools', icon: '👨‍👩‍👧', url: `/${currentLang}/parents/`, tags: ['parents', 'родителям', 'дети', 'контроль', 'безопасность'] },
+
+  // Threats
+  { title: isRu ? 'Перехват Steam Web API ключей' : 'Steam Web API Key Interception', category: 'threats', icon: '⚠️', url: `/${currentLang}/threats/safe-trading-in-game-items/`, tags: ['api', 'steam', 'trade', 'обмен', 'ключ'] },
+  { title: isRu ? 'Кража Roblox Cookie (.HAR файлы)' : 'Roblox Cookie Hijacking (.HAR files)', category: 'threats', icon: '⚠️', url: `/${currentLang}/threats/how-to-spot-gaming-phishing/`, tags: ['cookie', 'куки', 'har', 'roblox'] },
+  { title: isRu ? 'Фейковые турниры и голосования' : 'Fake Tournaments & Voting Phishing', category: 'threats', icon: '⚠️', url: `/${currentLang}/threats/gaming-account-recovery-scams/`, tags: ['tournament', 'турнир', 'голосование', 'faceit'] },
+  { title: isRu ? 'Discord Nitro скам и QR-коды' : 'Discord Nitro Scams & QR Traps', category: 'threats', icon: '⚠️', url: `/${currentLang}/threats/social-engineering-in-online-games/`, tags: ['discord', 'дискорд', 'nitro', 'нитро', 'qr'] },
+  { title: isRu ? 'Фейковые раздачи и бесплатная валюта' : 'Fake Currency Generators & Free UC/Gems', category: 'threats', icon: '⚠️', url: `/${currentLang}/threats/gaming-currency-and-payment-safety/`, tags: ['free', 'бесплатно', 'валюта', 'генератор'] },
+];
+---
+
+<!-- ════════════════════ COMMAND PALETTE SEARCH MODAL ════════════════════ -->
+<div
+  id="search-command-modal"
+  class="fixed inset-0 z-[110] flex items-start justify-center pt-16 sm:pt-24 px-4 pb-4 opacity-0 pointer-events-none transition-all duration-200"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Search"
+>
+  <!-- Backdrop -->
+  <div id="search-modal-backdrop" class="absolute inset-0 bg-black/75 backdrop-blur-md"></div>
+
+  <!-- Dialog Window -->
+  <div class="relative w-full max-w-2xl rounded-2xl border border-ds-border bg-ds-surface shadow-2xl overflow-hidden z-10 transform scale-95 transition-transform duration-200">
+    <!-- Search Bar Input Header -->
+    <div class="flex items-center px-4 py-3.5 border-b border-ds-border gap-3 bg-ds-surface2/50">
+      <svg class="w-5 h-5 text-ds-cyber flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <input
+        type="text"
+        id="search-palette-input"
+        placeholder={labels.placeholder}
+        class="w-full bg-transparent text-ds-text placeholder-ds-text2 text-base outline-none font-medium"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <kbd class="hidden sm:inline-block text-[10px] px-2 py-0.5 rounded bg-black/20 text-ds-text2 border border-ds-border font-mono">ESC</kbd>
+      <button id="search-palette-close" class="text-ds-text2 hover:text-ds-text p-1 sm:hidden" aria-label="Close">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Results Container -->
+    <div class="p-3 max-h-[60vh] overflow-y-auto space-y-1" id="search-results-list">
+      <!-- Injected by client script -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="search-empty-state" class="p-8 text-center hidden">
+      <div class="text-3xl mb-2">🔍</div>
+      <p class="font-heading font-bold text-ds-text text-sm mb-1" id="search-empty-text">{labels.noResults}</p>
+      <p class="text-xs text-ds-text2 max-w-md mx-auto">{labels.tryAnother}</p>
+    </div>
+
+    <!-- Footer keyboard navigation hints -->
+    <div class="px-4 py-2.5 border-t border-ds-border bg-ds-surface2/30 flex items-center justify-between text-[11px] text-ds-text2">
+      <div class="flex items-center gap-3">
+        <span><kbd class="px-1.5 py-0.5 rounded bg-black/20 border border-ds-border font-mono text-[10px]">↑</kbd> <kbd class="px-1.5 py-0.5 rounded bg-black/20 border border-ds-border font-mono text-[10px]">↓</kbd> {labels.navigate}</span>
+        <span><kbd class="px-1.5 py-0.5 rounded bg-black/20 border border-ds-border font-mono text-[10px]">↵</kbd> {labels.select}</span>
+      </div>
+      <span class="font-mono text-[10px]">SafeInGame Intel</span>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ searchItems, labels }}>
+  const modal = document.getElementById('search-command-modal');
+  const backdrop = document.getElementById('search-modal-backdrop');
+  const input = document.getElementById('search-palette-input');
+  const resultsList = document.getElementById('search-results-list');
+  const emptyState = document.getElementById('search-empty-state');
+  const emptyText = document.getElementById('search-empty-text');
+  const closeBtn = document.getElementById('search-palette-close');
+
+  let activeIndex = 0;
+  let currentResults = [...searchItems];
+
+  function openSearch() {
+    if (!modal) return;
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    const dialog = modal.querySelector('.relative.w-full');
+    dialog?.classList.remove('scale-95');
+    dialog?.classList.add('scale-100');
+    document.body.style.overflow = 'hidden';
+    if (input) {
+      input.value = '';
+      setTimeout(() => input.focus(), 50);
+    }
+    filterResults('');
+  }
+
+  function closeSearch() {
+    if (!modal) return;
+    modal.classList.add('opacity-0', 'pointer-events-none');
+    const dialog = modal.querySelector('.relative.w-full');
+    dialog?.classList.remove('scale-100');
+    dialog?.classList.add('scale-95');
+    document.body.style.overflow = '';
+  }
+
+  // Hook global hotkeys (Cmd+K / Ctrl+K / slash)
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      modal?.classList.contains('opacity-0') ? openSearch() : closeSearch();
+    }
+    if (e.key === 'Escape' && !modal?.classList.contains('opacity-0')) {
+      closeSearch();
+    }
+    if (!modal?.classList.contains('opacity-0')) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        activeIndex = (activeIndex + 1) % currentResults.length;
+        highlightActiveItem();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        activeIndex = (activeIndex - 1 + currentResults.length) % currentResults.length;
+        highlightActiveItem();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (currentResults[activeIndex]) {
+          window.location.href = currentResults[activeIndex].url;
+        }
+      }
+    }
+  });
+
+  // Attach click on any search inputs on the page
+  document.querySelectorAll('input[aria-label="Search"], [data-open-search], #topbar-search-trigger').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      openSearch();
+    });
+    el.addEventListener('focus', (e) => {
+      e.preventDefault();
+      openSearch();
+    });
+  });
+
+  backdrop?.addEventListener('click', closeSearch);
+  closeBtn?.addEventListener('click', closeSearch);
+
+  function filterResults(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) {
+      currentResults = searchItems;
+    } else {
+      currentResults = searchItems.filter(item => {
+        return (
+          item.title.toLowerCase().includes(q) ||
+          item.tags.some(t => t.toLowerCase().includes(q))
+        );
+      });
+    }
+
+    renderResults();
+  }
+
+  function renderResults() {
+    if (!resultsList || !emptyState) return;
+
+    if (currentResults.length === 0) {
+      resultsList.innerHTML = '';
+      emptyState.classList.remove('hidden');
+      if (emptyText) emptyText.textContent = `${labels.noResults} "${input?.value}"`;
+      return;
+    }
+
+    emptyState.classList.add('hidden');
+    activeIndex = 0;
+
+    resultsList.innerHTML = currentResults.map((item, idx) => `
+      <a
+        href="${item.url}"
+        class="search-result-item flex items-center justify-between p-3 rounded-xl transition-all ${idx === 0 ? 'bg-ds-accent/20 border border-ds-accent/40 text-ds-text' : 'hover:bg-white/5 text-ds-text2 hover:text-ds-text'}"
+        data-index="${idx}"
+      >
+        <div class="flex items-center gap-3 min-w-0">
+          <span class="text-xl flex-shrink-0">${item.icon}</span>
+          <div class="min-w-0">
+            <span class="font-heading font-bold text-sm text-ds-text truncate block">${item.title}</span>
+            <span class="text-[11px] text-ds-text2 truncate block">${item.url}</span>
+          </div>
+        </div>
+        <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-md border flex-shrink-0 ${
+          item.category === 'games' ? 'border-cyan-500/30 text-cyan-400 bg-cyan-500/10' :
+          item.category === 'threats' ? 'border-red-500/30 text-red-400 bg-red-500/10' :
+          'border-ds-accent/30 text-ds-accent bg-ds-accent/10'
+        }">${item.category}</span>
+      </a>
+    `).join('');
+
+    resultsList.querySelectorAll('.search-result-item').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        activeIndex = parseInt(el.getAttribute('data-index') || '0', 10);
+        highlightActiveItem();
+      });
+    });
+  }
+
+  function highlightActiveItem() {
+    const items = resultsList?.querySelectorAll('.search-result-item');
+    items?.forEach((el, idx) => {
+      if (idx === activeIndex) {
+        el.className = 'search-result-item flex items-center justify-between p-3 rounded-xl transition-all bg-ds-accent/20 border border-ds-accent/40 text-ds-text';
+        el.scrollIntoView({ block: 'nearest' });
+      } else {
+        el.className = 'search-result-item flex items-center justify-between p-3 rounded-xl transition-all hover:bg-white/5 text-ds-text2 hover:text-ds-text';
+      }
+    });
+  }
+
+  input?.addEventListener('input', (e) => {
+    filterResults(e.target.value);
+  });
+</script>

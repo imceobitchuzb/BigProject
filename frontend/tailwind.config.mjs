@@ -5,18 +5,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        /* ── Premium Dashboard Palette ── */
+        /* ── Premium Dashboard Palette (Adaptive via CSS Variables) ── */
         ds: {
-          bg:       '#090D1D',
-          surface:  '#111936',
-          surface2: '#182347',
-          surface3: '#202D55',
-          accent:   '#6C8CFF',
-          accent2:  '#A78BFA',
-          cyber:    '#48D6E8',
-          text:     '#F5F7FF',
-          text2:    '#9BA9CA',
-          border:   'rgba(108,140,255,0.15)',
+          bg:       'var(--ds-bg)',
+          surface:  'var(--ds-surface)',
+          surface2: 'var(--ds-surface-2)',
+          surface3: 'var(--ds-surface-3)',
+          accent:   'var(--ds-accent)',
+          accent2:  'var(--ds-accent-2)',
+          cyber:    'var(--ds-cyber)',
+          text:     'var(--ds-text)',
+          text2:    'var(--ds-text-2)',
+          border:   'var(--ds-border)',
         },
         /* ── Legacy Navy Palette (preserve all existing) ── */
         navy: {

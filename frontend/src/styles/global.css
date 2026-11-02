@@ -55,27 +55,27 @@ html:not(.dark) {
   --ds-surface:   #FFFFFF;
   --ds-surface-2: #F8FAFC;
   --ds-surface-3: #E2E8F0;
-  --ds-accent:    #3B82F6;
-  --ds-accent-2:  #8B5CF6;
+  --ds-accent:    #2563EB;
+  --ds-accent-2:  #7C3AED;
   --ds-cyber:     #0284C7;
-  --ds-text:      #0F172A;
-  --ds-text-2:    #475569;
-  --ds-border:    rgba(15, 23, 42, 0.10);
-  --ds-border-2:  rgba(2, 132, 199, 0.25);
+  --ds-text:      #090E1E;
+  --ds-text-2:    #334155;
+  --ds-border:    rgba(15, 23, 42, 0.12);
+  --ds-border-2:  rgba(2, 132, 199, 0.35);
 
   --bg-page:        #EEF2F6;
   --bg-page-subtle: #F1F5F9;
   --bg-card:        #FFFFFF;
   --bg-card-subtle: #F8FAFC;
   --bg-card-hover:  #F1F5F9;
-  --border-subtle:  #E2E8F0;
-  --border-strong:  #CBD5E1;
-  --text-main:      #0F172A;
-  --text-muted:     #475569;
-  --text-subtle:    #64748B;
+  --border-subtle:  #CBD5E1;
+  --border-strong:  #94A3B8;
+  --text-main:      #090E1E;
+  --text-muted:     #334155;
+  --text-subtle:    #475569;
   --accent-primary: #0284C7;
   --accent-hover:   #0369A1;
-  --shadow-card:    0 10px 30px -6px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04);
+  --shadow-card:    0 10px 30px -6px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.05);
 }
 
 html.dark {
@@ -312,6 +312,51 @@ html:not(.dark) .sidebar-item.active {
   white-space: nowrap;
   overflow: hidden;
   transition: opacity 0.2s ease;
+}
+
+html.light .sidebar-section-label,
+html:not(.dark) .sidebar-section-label {
+  color: #475569 !important;
+}
+
+html.light .border-white\/5,
+html:not(.dark) .border-white\/5 {
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+html.light .border-white\/10,
+html:not(.dark) .border-white\/10 {
+  border-color: rgba(15, 23, 42, 0.14) !important;
+}
+
+html.light .border-white\/20,
+html:not(.dark) .border-white\/20 {
+  border-color: rgba(15, 23, 42, 0.22) !important;
+}
+
+html.light .bg-white\/5,
+html:not(.dark) .bg-white\/5 {
+  background-color: rgba(15, 23, 42, 0.04) !important;
+}
+
+html.light .bg-white\/8,
+html:not(.dark) .bg-white\/8 {
+  background-color: rgba(15, 23, 42, 0.06) !important;
+}
+
+html.light .bg-white\/10,
+html:not(.dark) .bg-white\/10 {
+  background-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+html.light .text-ds-text,
+html:not(.dark) .text-ds-text {
+  color: #090E1E !important;
+}
+
+html.light .text-ds-text2,
+html:not(.dark) .text-ds-text2 {
+  color: #334155 !important;
 }
 
 /* ═══════════════════════════════════════════════════
