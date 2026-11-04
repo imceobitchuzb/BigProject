@@ -630,6 +630,20 @@ html:not(.dark) .premium-input {
     left: 0 !important;
     padding-left: 12px !important;
     padding-right: 12px !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(9, 13, 29, 0.96) !important;
+  }
+
+  html.light .dashboard-topbar,
+  html:not(.dark) .dashboard-topbar {
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .tilt-card {
+    transform: none !important;
   }
 
   .dashboard-main {
@@ -643,6 +657,18 @@ html:not(.dark) .premium-input {
   #dashboard-footer {
     margin-left: 0 !important;
   }
+}
+
+/* Fast tap response & touch optimization */
+button, a, input, select {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* High-performance offscreen rendering */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 400px;
 }
 
 /* Sidebar overlay for mobile */

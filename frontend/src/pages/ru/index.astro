@@ -51,16 +51,16 @@ const featureColorMap: Record<string, { border: string; bg: string; text: string
   description={t('hero.subtitle')}
   currentLang={currentLang}
 >
-  <!-- Animated background -->
-  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
-    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[500px] rounded-full opacity-25 dark:opacity-15"
-         style="background: radial-gradient(ellipse, rgba(108,140,255,0.3) 0%, transparent 70%); filter: blur(80px);"></div>
+  <!-- High-Performance GPU-Cached Background -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0" style="contain: strict; transform: translateZ(0);" aria-hidden="true">
+    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[500px] rounded-full opacity-20 dark:opacity-15"
+         style="background: radial-gradient(ellipse at center, rgba(108,140,255,0.28) 0%, rgba(108,140,255,0.08) 45%, transparent 70%);"></div>
     <div class="absolute top-1/3 right-0 w-[600px] h-[400px] rounded-full opacity-15"
-         style="background: radial-gradient(ellipse, rgba(167,139,250,0.25) 0%, transparent 70%); filter: blur(60px);"></div>
-    <div class="absolute inset-0 opacity-[0.03] dark:opacity-[0.06]"
+         style="background: radial-gradient(ellipse at center, rgba(167,139,250,0.22) 0%, rgba(167,139,250,0.06) 45%, transparent 70%);"></div>
+    <div class="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
          style="background-image: linear-gradient(rgba(108,140,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(108,140,255,1) 1px, transparent 1px); background-size: 60px 60px;"></div>
-    <div class="absolute inset-x-0 h-px animate-scanline opacity-15"
-         style="background: linear-gradient(90deg, transparent, rgba(72,214,232,0.5), transparent);"></div>
+    <div class="hidden sm:block absolute inset-x-0 h-px animate-scanline opacity-15"
+         style="background: linear-gradient(90deg, transparent, rgba(72,214,232,0.5), transparent); will-change: transform;"></div>
   </div>
 
   <div class="relative z-10">
@@ -299,14 +299,14 @@ const featureColorMap: Record<string, { border: string; bg: string; text: string
     </section>
 
     <!-- Шаблоны мошенничества -->
-    <div class="px-4 sm:px-6 lg:px-8 pb-12">
+    <div class="px-4 sm:px-6 lg:px-8 pb-12 content-visibility-auto">
       <div class="max-w-7xl mx-auto">
         <ScamPatterns currentLang={currentLang} />
       </div>
     </div>
 
     <!-- Интерактивный квиз -->
-    <div id="scam-quiz" class="px-4 sm:px-6 lg:px-8 pb-12">
+    <div id="scam-quiz" class="px-4 sm:px-6 lg:px-8 pb-12 content-visibility-auto">
       <div class="max-w-7xl mx-auto">
         <ScamQuiz currentLang={currentLang} />
       </div>

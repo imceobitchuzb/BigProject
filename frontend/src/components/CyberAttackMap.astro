@@ -256,7 +256,7 @@ const continentPaths = [
                     class="attack-path"
                   />
                   <!-- Animated energy missile dot along path -->
-                  <circle r="4" fill={traj.color} filter="url(#glowFilter)">
+                  <circle r="3.5" fill={traj.color} opacity="0.95">
                     <animateMotion
                       path={pathD}
                       dur={`${2.2 + (idx % 3) * 0.8}s`}
@@ -486,7 +486,7 @@ const continentPaths = [
   const detailCount = document.getElementById('detail-count');
 
   document.querySelectorAll<SVGElement>('.map-node-target').forEach(nodeEl => {
-    nodeEl.addEventListener('mouseenter', () => {
+    const onActivate = () => {
       const id = nodeEl.getAttribute('data-node-id');
       if (id && nodeDetails[id]) {
         const d = nodeDetails[id];
@@ -503,7 +503,9 @@ const continentPaths = [
         }
         if (detailCount) detailCount.textContent = d.count;
       }
-    });
+    };
+    nodeEl.addEventListener('mouseenter', onActivate);
+    nodeEl.addEventListener('click', onActivate);
   });
 
   // ── Dynamic Live Feed Streaming ──
@@ -549,16 +551,62 @@ const continentPaths = [
     }
   }
 
-  setInterval(pushLiveIncident, 3500);
-
   // UTC clock ticker
   const clockTicker = document.getElementById('live-time-ticker');
-  setInterval(() => {
-    if (clockTicker) {
+  function updateClock() {
+    if (clockTicker && !document.hidden) {
       const now = new Date();
       clockTicker.textContent = now.toTimeString().split(' ')[0] + ' UTC';
     }
-  }, 1000);
+  }
+
+  let incidentInterval = null;
+  let clockInterval = null;
+
+  function startTelemetry() {
+    if (!incidentInterval) {
+      incidentInterval = setInterval(pushLiveIncident, 4000);
+    }
+    if (!clockInterval) {
+      updateClock();
+      clockInterval = setInterval(updateClock, 1000);
+    }
+  }
+
+  function stopTelemetry() {
+    if (incidentInterval) {
+      clearInterval(incidentInterval);
+      incidentInterval = null;
+    }
+    if (clockInterval) {
+      clearInterval(clockInterval);
+      clockInterval = null;
+    }
+  }
+
+  const mapStageEl = document.querySelector('.cyber-attack-map-container');
+  if ('IntersectionObserver' in window && mapStageEl) {
+    const mapObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !document.hidden) {
+          startTelemetry();
+        } else {
+          stopTelemetry();
+        }
+      });
+    }, { threshold: 0.05 });
+    mapObserver.observe(mapStageEl);
+  } else {
+    startTelemetry();
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      stopTelemetry();
+    } else {
+      startTelemetry();
+    }
+  });
 
   // Filter Buttons
   document.querySelectorAll<HTMLButtonElement>('.map-filter-btn').forEach(btn => {
@@ -627,6 +675,20 @@ const continentPaths = [
   .radar-sweep-beam {
     transform-origin: 500px 250px;
     animation: radarSweep 9s linear infinite;
+    will-change: transform;
+  }
+
+  @media (max-width: 768px) {
+    .map-3d-stage {
+      perspective: none !important;
+    }
+    .map-3d-viewport {
+      transform: none !important;
+      box-shadow: 0 8px 24px -6px rgba(0,0,0,0.3) !important;
+    }
+    .radar-sweep-beam {
+      display: none !important;
+    }
   }
 
   /* Canvas Ocean styling in Dark vs Light */
