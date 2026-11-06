@@ -552,8 +552,8 @@ function isActive(href: string): boolean {
             <span>SOS</span>
           </a>
 
-          <!-- Language selector (desktop top bar) -->
-          <div class="hidden lg:flex items-center gap-0.5 bg-white/5 border border-white/10 rounded-xl p-0.5">
+          <!-- Language selector (desktop & tablet top bar) -->
+          <div class="hidden sm:flex items-center gap-0.5 bg-white/5 border border-white/10 rounded-xl p-0.5">
             <a href={`/en${pathname.replace(/^\/(en|ru)/, '')}`} class={`text-xs px-2.5 py-1 rounded-lg font-semibold transition-all ${currentLang === 'en' ? 'bg-ds-accent/20 text-ds-accent' : 'text-ds-text2 hover:text-ds-text'}`}>EN</a>
             <a href={`/ru${pathname.replace(/^\/(en|ru)/, '')}`} class={`text-xs px-2.5 py-1 rounded-lg font-semibold transition-all ${currentLang === 'ru' ? 'bg-ds-accent/20 text-ds-accent' : 'text-ds-text2 hover:text-ds-text'}`}>RU</a>
           </div>

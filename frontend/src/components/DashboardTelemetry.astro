@@ -411,7 +411,7 @@ const feedItems = [
         <div class="absolute inset-2 rounded-full border border-ds-accent/25 animate-spin-reverse"></div>
         
         <!-- Futuristic Chest graphic -->
-        <svg class="w-16 h-16 text-ds-cyber filter drop-shadow-[0_0_12px_rgba(72,214,232,0.6)] group-hover:scale-110 transition-transform duration-300" viewBox="0 0 64 64" fill="none">
+        <svg class="cyber-chest-graphic w-16 h-16 text-ds-cyber filter drop-shadow-[0_0_12px_rgba(72,214,232,0.6)] group-hover:scale-110 transition-transform duration-300" viewBox="0 0 64 64" fill="none">
           <!-- Chest base -->
           <path d="M12 24 L52 24 L48 48 L16 48 Z" fill="#182347" stroke="#48D6E8" stroke-width="2"/>
           <!-- Chest Lid -->
@@ -426,15 +426,21 @@ const feedItems = [
         <h4 class="font-heading font-extrabold text-sm text-ds-text mb-1">{labels.chestTitle}</h4>
         <p class="text-[11px] text-ds-text2 mb-3 leading-snug">{labels.chestSubtitle}</p>
         
-        <a
-          href={`/${currentLang}/academy/`}
-          class="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-ds-cyber to-ds-accent text-white font-heading font-bold text-xs shadow-glow-cyber hover:scale-105 active:scale-95 transition-all cursor-pointer"
-        >
-          <span>{labels.claimBonus}</span>
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-          </svg>
-        </a>
+        <div class="relative inline-block">
+          <button
+            type="button"
+            id="claim-chest-btn"
+            class="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-ds-cyber to-ds-accent text-white font-heading font-bold text-xs shadow-glow-cyber hover:scale-105 active:scale-95 transition-all cursor-pointer"
+          >
+            <span id="claim-chest-text">{labels.claimBonus}</span>
+            <svg id="claim-chest-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+          </button>
+          <div id="chest-reward-toast" class="hidden absolute -top-8 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 font-black text-[11px] px-2.5 py-0.5 rounded-full whitespace-nowrap shadow-lg animate-bounce z-20">
+            +50 Defense XP! 🎉
+          </div>
+        </div>
       </div>
     </div>
 
@@ -468,5 +474,67 @@ const feedItems = [
         area.setAttribute('d', paths[idx].area);
       }
     });
+  });
+
+  // ── Daily Cyber Chest claiming logic ──
+  const claimBtn = document.getElementById('claim-chest-btn');
+  const claimText = document.getElementById('claim-chest-text');
+  const claimToast = document.getElementById('chest-reward-toast');
+  const chestSvg = document.querySelector('.cyber-chest-graphic');
+  const isRu = document.documentElement.lang === 'ru';
+  const currentLang = isRu ? 'ru' : 'en';
+
+  const todayKey = new Date().toISOString().slice(0, 10);
+  const storageKey = 'sig_daily_chest_' + todayKey;
+
+  function syncChestState() {
+    try {
+      const isClaimed = localStorage.getItem(storageKey) === 'true';
+      if (isClaimed && claimBtn && claimText) {
+        claimBtn.classList.remove('from-ds-cyber', 'to-ds-accent', 'hover:scale-105');
+        claimBtn.classList.add('bg-emerald-500/20', 'text-emerald-400', 'border', 'border-emerald-500/40', 'cursor-pointer');
+        claimText.textContent = isRu ? '✓ Забрано (+50 XP) • В Академию' : '✓ Claimed (+50 XP) • Go to Academy';
+        const icon = document.getElementById('claim-chest-icon');
+        if (icon) {
+          icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>';
+        }
+      }
+    } catch {}
+  }
+
+  syncChestState();
+
+  claimBtn?.addEventListener('click', () => {
+    try {
+      if (localStorage.getItem(storageKey) === 'true') {
+        window.location.href = `/${currentLang}/academy/`;
+        return;
+      }
+
+      localStorage.setItem(storageKey, 'true');
+
+      // Update active user profile XP if present
+      const savedProfile = localStorage.getItem('sig_active_profile');
+      if (savedProfile) {
+        const p = JSON.parse(savedProfile);
+        p.xp = (p.xp || 1200) + 50;
+        localStorage.setItem('sig_active_profile', JSON.stringify(p));
+        window.dispatchEvent(new CustomEvent('sig:profile-updated', { detail: p }));
+      }
+    } catch {}
+
+    syncChestState();
+
+    if (chestSvg) {
+      chestSvg.classList.add('scale-125');
+      setTimeout(() => chestSvg.classList.remove('scale-125'), 400);
+    }
+
+    if (claimToast) {
+      claimToast.classList.remove('hidden');
+      setTimeout(() => {
+        claimToast.classList.add('hidden');
+      }, 3500);
+    }
   });
 </script>
